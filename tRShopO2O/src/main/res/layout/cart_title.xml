@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:gravity="center_vertical"
+                android:padding="5dp"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+    <CheckBox
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:background="@color/white"
+        android:id="@+id/gocart_market_all"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/CheckBoxTheme"
+        android:text="@null"
+        />
+
+    <TextView
+        android:layout_centerInParent="true"
+        android:id="@+id/gocart_lv_title"
+        android:gravity="center_vertical"
+        android:layout_toRightOf="@id/gocart_market_all"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="万能居超市"
+        android:textColor="@color/mainColor"
+        android:textSize="16sp"
+        />
+
+    <TextView
+        android:layout_alignBottom="@id/gocart_market_all"
+        android:layout_centerInParent="true"
+        android:id="@+id/goods_chang"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:layout_alignParentRight="true"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:textSize="16sp"
+        android:text="编辑"
+        android:textColor="@color/mainColor"
+
+        />
+
+</RelativeLayout>

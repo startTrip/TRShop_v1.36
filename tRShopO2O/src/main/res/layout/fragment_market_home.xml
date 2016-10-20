@@ -1,0 +1,232 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+              android:orientation="vertical"
+             tools:context="shop.trqq.com.supermarket.fragments.MarketHomeFragment"
+    >
+
+    <!-- 顶部的标题栏 -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:id="@+id/home_location"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawableLeft="@mipmap/location"
+            android:gravity="center"
+            android:text=" 湛江市"
+            />
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:text="万能居超市"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#000000"
+            android:textSize="20dp"
+            />
+
+        <ImageView
+            android:id="@+id/market_home_search"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:src="@mipmap/search1"
+            />
+    </FrameLayout>
+    <!-- 分割线-->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/gray_1"
+        />
+    <com.vlonjatg.progressactivity.ProgressActivity xmlns:android="http://schemas.android.com/apk/res/android"
+                                                    xmlns:progressActivity="http://schemas.android.com/apk/res-auto"
+                                                    android:id="@+id/market_home_progress"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="match_parent"
+                                                    progressActivity:emptyContentTextColor="@color/black_text_color"
+                                                    progressActivity:emptyTitleTextColor="@color/black_text_color"
+                                                    progressActivity:errorButtonTextColor="#FFFFFF"
+                                                    progressActivity:errorContentTextColor="@color/black_text_color"
+                                                    progressActivity:errorTitleTextColor="@color/black_text_color"
+                                                    progressActivity:loadingBackgroundColor="#FFFFFF"
+                                                    progressActivity:emptyBackgroundColor="#FFFFFF"
+                                                    progressActivity:errorBackgroundColor="#FFFFFF">
+
+    <!-- 内容区 下拉刷新-->
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/home_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/marketbg"
+        >
+        <!-- ScrollView 进行整体的滑动 -->
+        <shop.trqq.com.supermarket.view.NoScrollScrollview
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+                <!-- 头部滑动的 ViewPager-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    >
+                    <android.support.v4.view.ViewPager
+                        android:id="@+id/home_pager"
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp"
+                        >
+
+                    </android.support.v4.view.ViewPager>
+
+                    <!-- 用与存储小圆点 -->
+                    <LinearLayout
+                        android:id="@+id/home_dot_indicator_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:orientation="horizontal"
+                        >
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <!-- 分割线-->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/gray_1"
+                    />
+
+                <!--  中间分类模块 -->
+                <android.support.v7.widget.RecyclerView
+
+                    android:id="@+id/home_classify"
+                    android:background="@color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    >
+                </android.support.v7.widget.RecyclerView>
+
+
+                <!-- 推荐商品 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp"
+                    >
+                    <View
+                        android:layout_width="5dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/mainColor"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:text="推荐商品"
+                        android:textColor="@color/mainColor"
+                        android:textSize="18sp"
+
+                        />
+
+                </LinearLayout>
+
+                <shop.trqq.com.widget.MyGridView
+                    android:id="@+id/market_home_recommend"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+
+
+                </shop.trqq.com.widget.MyGridView>
+
+                <!-- 新品推荐 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp"
+                    >
+                    <View
+                        android:layout_width="5dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/mainColor"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:text="新品推荐"
+                        android:textColor="@color/mainColor"
+                        android:textSize="18sp"
+
+                        />
+
+                </LinearLayout>
+
+                <shop.trqq.com.widget.MyGridView
+                    android:id="@+id/market_home_new"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+
+                </shop.trqq.com.widget.MyGridView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:background="@color/app_background"
+                        android:visibility="invisible" />
+
+                    <TextView
+                        android:id="@+id/market_home_all"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:background="@color/red_text_color"
+                        android:gravity="center"
+                        android:text="全部商品"
+                        android:textColor="@color/white_text_color"
+                        android:textSize="20sp" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:background="@color/app_background"
+                        android:visibility="invisible" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </shop.trqq.com.supermarket.view.NoScrollScrollview>
+
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    </com.vlonjatg.progressactivity.ProgressActivity>
+</LinearLayout>

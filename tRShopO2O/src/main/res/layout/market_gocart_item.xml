@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:padding="2dp"
+              android:gravity="center_horizontal"
+              android:descendantFocusability="blocksDescendants"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+
+    <CheckBox
+        android:layout_gravity="center_vertical"
+        android:id="@+id/cb_item_check"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        style="@style/CheckBoxTheme"
+        android:text="@null"/>
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/iv_item_icon"/>
+        <TextView
+            android:layout_margin="5dp"
+            android:id="@+id/tv_item_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="万能居超市隆重开业，欢迎新老客户光临，哈哈"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:layout_toRightOf="@id/iv_item_icon"/>
+        <Button
+            android:id="@+id/bt_item_add"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:text="+"
+            android:background="@drawable/selector_btn_press"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"/>
+        <TextView
+            android:id="@+id/tv_item_count"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@id/bt_item_add"
+            android:layout_width="40dp"
+            android:layout_height="30dp"
+            android:background="@drawable/shape_cart_count"
+            android:text="1"
+            android:gravity="center"/>
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/bt_item_sub"
+            android:gravity="center"
+            android:background="@drawable/selector_btn_press"
+            android:text="-"
+            android:textSize="18sp"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@id/tv_item_count"
+            />
+
+    </RelativeLayout>
+
+        <!-- 显示商品的价格，重量，数量等 -->
+        <RelativeLayout
+            android:id="@+id/goods_info"
+            android:visibility="visible"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            >
+
+            <TextView
+                android:id="@+id/tv_goods_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:gravity="right"
+                android:text="1234.80"
+                android:textColor="#ffff0000"
+                android:textSize="18sp"
+                />
+
+            <TextView
+                android:id="@+id/tv_goods_weight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_goods_price"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:gravity="right"
+                android:text="4.8kg"
+                />
+
+            <TextView
+                android:id="@+id/gocart_goods_num"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_goods_weight"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:gravity="right"
+                android:text="x 1"
+                android:textSize="16dp"
+                />
+        </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/tv_goods_delete"
+        android:visibility="gone"
+        android:layout_width="50dp"
+        android:background="@drawable/selector_button_press"
+        android:text="删除"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:textColor="#ffffff"
+        android:layout_height="match_parent"/>
+</LinearLayout>

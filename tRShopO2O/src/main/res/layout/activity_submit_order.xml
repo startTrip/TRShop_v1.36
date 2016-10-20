@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="shop.trqq.com.supermarket.activitys.SubmitOrderActivity"
+    >
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        >
+
+        <ImageView
+            android:id="@+id/checkout_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:src="@mipmap/tm_actionbar_btn_back"
+            />
+
+        <TextView
+            android:layout_toRightOf="@id/checkout_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="确认订单"
+            android:textSize="17sp"
+            android:textColor="@color/black"
+            />
+
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/gray_1"
+        />
+    <com.vlonjatg.progressactivity.ProgressActivity xmlns:android="http://schemas.android.com/apk/res/android"
+                                                    xmlns:progressActivity="http://schemas.android.com/apk/res-auto"
+                                                    android:id="@+id/submitorder_progress"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="match_parent"
+                                                    progressActivity:emptyBackgroundColor="#FFFFFF"
+                                                    progressActivity:emptyContentTextColor="@color/black_text_color"
+                                                    progressActivity:emptyTitleTextColor="@color/black_text_color"
+                                                    progressActivity:errorBackgroundColor="#FFFFFF"
+                                                    progressActivity:errorButtonTextColor="#FFFFFF"
+                                                    progressActivity:errorContentTextColor="@color/black_text_color"
+                                                    progressActivity:errorTitleTextColor="@color/black_text_color"
+                                                    progressActivity:loadingBackgroundColor="#FFFFFF">
+
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:id="@+id/layout"
+        android:layout_below="@id/scrollView"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center_vertical|right"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="共"
+            android:textColor="@color/black"
+            />
+        <TextView
+            android:id="@+id/check_goods_sum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2"
+            android:textColor="@color/red"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="件,总金额"
+            />
+        <TextView
+            android:id="@+id/check_sum_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:textSize="17sp"
+            android:textColor="@color/red"
+            android:text="￥ 100.00"
+            />
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:gravity="center"
+            android:id="@+id/bt_check_submit"
+            android:background="@drawable/selector_button_press"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            android:text="提交订单"/>
+
+    </LinearLayout>
+        <View
+            android:id="@+id/line"
+            android:layout_above="@id/layout"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/gray_1"
+            />
+        <ScrollView
+            android:layout_above="@id/line"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+                <RelativeLayout
+                    android:id="@+id/check_address_layout"
+                    android:background="@drawable/selector_layout_press"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:gravity="center_vertical"
+                    >
+                    <ImageView
+                        android:id="@+id/addressicon"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:layout_centerVertical="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@mipmap/receivingaddress"
+                        />
+
+                    <ImageView
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:id="@+id/postion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/posion_to"
+                        android:paddingRight="10dp"
+                        android:paddingLeft="15dp"
+                        />
+                    <TextView
+                        android:layout_above="@id/postion"
+                        android:layout_toRightOf="@id/addressicon"
+                        android:id="@+id/receiver_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="17sp"
+                        android:text="收货人:  "
+                        android:textColor = "@color/mainTabFont"
+                        />
+                    <TextView
+                        android:id="@+id/phone_number"
+                        android:layout_above="@id/postion"
+                        android:layout_toLeftOf="@id/postion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="18369956280"
+                        />
+                    <TextView
+                        android:id="@+id/address_info"
+                        android:layout_below="@id/postion"
+                        android:layout_toRightOf="@id/addressicon"
+                        android:layout_toLeftOf="@id/postion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="收货地址:"
+                        />
+
+                </RelativeLayout>
+                <RelativeLayout
+                    android:id="@+id/no_address_layout"
+                    android:background="@drawable/selector_layout_press"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:gravity="center_vertical"
+                    android:visibility="gone"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:layout_marginLeft="10dp"
+                        android:text="!请填写收货地址"
+                        android:textSize="16sp"
+                        />
+                    <ImageView
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/posion_to"
+                        android:paddingRight="10dp"
+                        android:paddingLeft="15dp"
+                        />
+                </RelativeLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/addressline"
+                    />
+
+                <!-- 支付方式暂时在订单界面中去选择  -->
+                <!--<LinearLayout-->
+                <!--android:orientation="vertical"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--&gt;-->
+                <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="0.5dp"-->
+                <!--android:background="@color/gray_1"-->
+                <!--/>-->
+                <!--<TextView-->
+                <!--android:layout_margin="16dp"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="支付方式"-->
+                <!--android:textSize="18sp"-->
+                <!--android:textColor="@color/black"-->
+                <!--/>-->
+                <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="0.5dp"-->
+                <!--android:background="@color/gray_1"-->
+                <!--/>-->
+
+                <!--</LinearLayout>-->
+
+                <shop.trqq.com.widget.MyListView
+                    android:id="@+id/checkout_store_list"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    >
+
+                </shop.trqq.com.widget.MyListView>
+
+            </LinearLayout>
+        </ScrollView>
+    </com.vlonjatg.progressactivity.ProgressActivity>
+
+</LinearLayout>

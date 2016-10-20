@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:padding="2dp"
+              android:background="@color/background"
+              android:gravity="center_horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_marginLeft="10dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/iv_item_icon"/>
+        <TextView
+            android:layout_margin="5dp"
+            android:id="@+id/tv_item_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="万能居超市隆重开业，欢迎新老客户光临，哈哈"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:layout_toRightOf="@id/iv_item_icon"/>
+
+    </RelativeLayout>
+
+    <!-- 显示商品的价格，重量，数量等 -->
+    <RelativeLayout
+        android:id="@+id/goods_info"
+        android:visibility="visible"
+        android:layout_width="80dp"
+        android:layout_height="match_parent"
+        >
+
+        <TextView
+            android:id="@+id/tv_goods_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:gravity="right"
+            android:text="1234.80"
+            android:textColor="#ffff0000"
+            android:textSize="16sp"
+            />
+
+        <TextView
+            android:id="@+id/tv_goods_weight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_goods_price"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:gravity="right"
+            android:text="4.8kg"
+            />
+
+        <TextView
+            android:id="@+id/tv_goods_num"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_goods_weight"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:gravity="right"
+            android:text="x 1"
+            android:textSize="16dp"
+            />
+    </RelativeLayout>
+
+</LinearLayout>
