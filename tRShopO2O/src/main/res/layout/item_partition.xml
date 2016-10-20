@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <View
+        style="@style/horizontal_cut_line"
+        android:layout_width="match_parent" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@color/app_background" />
+
+    <View
+        style="@style/horizontal_cut_line"
+        android:layout_width="match_parent" />
+
+</LinearLayout>

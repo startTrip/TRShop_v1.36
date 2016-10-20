@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<litepal>
+
+    <dbname value="trshop_im"></dbname>
+
+    <version value="1"></version>
+
+    <list>
+
+        <mapping class="shop.trqq.com.im.bean.getmsgBean"></mapping>
+
+        <mapping class="shop.trqq.com.im.bean.UserBean"></mapping>
+    </list>
+
+</litepal>

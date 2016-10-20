@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <com.vlonjatg.progressactivity.ProgressActivity xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:progressActivity="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/shop_progress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        progressActivity:emptyContentTextColor="@color/black_text_color"
+        progressActivity:emptyTitleTextColor="@color/black_text_color"
+        progressActivity:errorButtonTextColor="#FFFFFF"
+        progressActivity:errorContentTextColor="@color/black_text_color"
+        progressActivity:errorTitleTextColor="@color/black_text_color"
+        progressActivity:loadingBackgroundColor="#FFFFFF">
+
+        <!-- xmlns:ptr="http://schemas.android.com/apk/res-auto" -->
+
+        <!--         <org.lucasr.twowayview.widget.TwoWayView
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/cart_reclist_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:scrollbars="vertical"
+                    app:twowayview_layoutManager="ListLayoutManager" /> -->
+
+        <com.handmark.pulltorefresh.library.PullToRefreshRecyclerView
+            android:id="@+id/shop_pullToRefreshListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:scrollbars="vertical"
+            android:fadingEdge="none"
+            android:fastScrollEnabled="false"
+            android:footerDividersEnabled="false"
+            android:headerDividersEnabled="false"
+            android:smoothScrollbar="true" />
+
+        <ImageView
+            android:id="@+id/float_imageButton"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/up"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true" />
+    </com.vlonjatg.progressactivity.ProgressActivity>
+
+</LinearLayout>

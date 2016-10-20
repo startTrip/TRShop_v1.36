@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/item_title_bar" />
+
+    <LinearLayout
+        android:id="@+id/store_search_layout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="5dp"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/store_search_edit"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="2.0"
+            android:hint="搜索店内商品" />
+
+        <TextView
+            android:id="@+id/store_search_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="1.0"
+            android:background="@color/orange"
+            android:gravity="center"
+            android:text="店内搜索"
+            android:textColor="@color/white_text_color" />
+    </LinearLayout>
+
+    <include layout="@layout/item_shop_top" />
+
+    <LinearLayout
+        android:id="@+id/fragment"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal" />
+    <!--
+        <com.vlonjatg.progressactivity.ProgressActivity
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:progressActivity="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/shop_progress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            progressActivity:emptyContentTextColor="@color/black_text_color"
+            progressActivity:emptyTitleTextColor="@color/black_text_color"
+            progressActivity:errorButtonTextColor="#FFFFFF"
+            progressActivity:errorContentTextColor="@color/black_text_color"
+            progressActivity:errorTitleTextColor="@color/black_text_color"
+            progressActivity:loadingBackgroundColor="#FFFFFF" >
+
+            xmlns:ptr="http://schemas.android.com/apk/res-auto"
+
+            <org.lucasr.twowayview.widget.TwoWayView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/cart_reclist_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:scrollbars="vertical"
+                app:twowayview_layoutManager="ListLayoutManager" />
+
+                 <com.handmark.pulltorefresh.library.PullToRefreshRecyclerView
+                android:id="@+id/shop_pullToRefreshListView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:scrollbars="vertical"
+                android:fadingEdge="none"
+                android:fastScrollEnabled="false"
+                android:footerDividersEnabled="false"
+                android:headerDividersEnabled="false"
+                android:smoothScrollbar="true"
+                />
+                <ImageView
+                android:id="@+id/float_imageButton"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginRight="16dp"
+                android:src="@drawable/go_top_icon"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"/>
+        </com.vlonjatg.progressactivity.ProgressActivity>
+     -->
+</LinearLayout>

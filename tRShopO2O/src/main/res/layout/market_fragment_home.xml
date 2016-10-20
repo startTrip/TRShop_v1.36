@@ -1,0 +1,192 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+              android:orientation="vertical"
+             tools:context="market.fragments.HomeFragment"
+    >
+
+    <!-- 顶部的标题栏 -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:id="@+id/home_location"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawableLeft="@mipmap/location"
+            android:gravity="center"
+            android:text=" 深圳市"
+            />
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:text="首 页"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#000000"
+            android:textSize="20dp"
+            />
+
+        <ImageView
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:src="@mipmap/search1"
+            />
+    </FrameLayout>
+    <!-- 分割线-->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/gray_1"
+        />
+
+    <!-- 内容区 下拉刷新-->
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/home_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <!-- ScrollView 进行整体的滑动 -->
+        <com.mihua.market.view.NoScrollScrollview
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+                    <!-- 头部滑动的 ViewPager-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    >
+                    <android.support.v4.view.ViewPager
+                        android:id="@+id/home_pager"
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp"
+                        >
+
+                    </android.support.v4.view.ViewPager>
+
+                    <!-- 用与存储小圆点 -->
+                    <LinearLayout
+                        android:id="@+id/home_dot_indicator_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:orientation="horizontal"
+                        >
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <!-- 分割线-->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/gray_1"
+                    />
+
+                <!--  中间分类模块 -->
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/home_classify"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+                </android.support.v7.widget.RecyclerView>
+
+                    <!-- 限时抢购-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp"
+                    >
+
+                    <TextView
+                        android:id="@+id/tv_home_flash_sale"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="限时抢购"
+                        android:textColor="#2B2B2B"
+                        />
+
+                    <TextView
+                        android:id="@+id/home_flash_notice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="剩余"
+                        android:textColor="#9ACA27"
+                        />
+
+                    <TextView
+                        android:id="@+id/home_flash_hour"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/shape_count_down_bg"
+                        android:text="11"
+                        android:textColor="#FFFFFF"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=":"
+                        android:textColor="#9ACA27"
+                        />
+
+                    <TextView
+                        android:id="@+id/home_flash_minute"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/shape_count_down_bg"
+                        android:text="11"
+                        android:textColor="#FFFFFF"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=":"
+                        android:textColor="#9ACA27"
+                        />
+
+                    <TextView
+                        android:id="@+id/home_flash_second"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/shape_count_down_bg"
+                        android:text="11"
+                        android:textColor="#FFFFFF"
+                        />
+                </LinearLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/home_flash_sale"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="7dp"
+                    />
+
+
+            </LinearLayout>
+        </com.mihua.market.view.NoScrollScrollview>
+
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+</LinearLayout>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/item_title_bar" />
+    <LinearLayout
+        android:id="@+id/search_history"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/medium_text_size"
+        android:background="@color/white"
+        android:padding="10dp"
+        android:text="搜索历史"/>
+    <co.lujun.androidtagview.TagContainerLayout xmlns:AndroidTagView="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/tagcontainerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        AndroidTagView:container_background_color="@color/white"
+        AndroidTagView:container_border_color="@color/white"
+        AndroidTagView:container_border_radius="0dp"
+        AndroidTagView:container_border_width="4dp"
+        AndroidTagView:container_enable_drag="true"
+        AndroidTagView:horizontal_interval="10dp"
+        AndroidTagView:tag_clickable="true"
+        AndroidTagView:tag_max_length="8"
+        AndroidTagView:tag_theme="random"
+        AndroidTagView:vertical_interval="10dp" />
+    </LinearLayout>
+    <com.vlonjatg.progressactivity.ProgressActivity xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:progressActivity="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/search_progress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        progressActivity:emptyContentTextColor="@color/black_text_color"
+        progressActivity:emptyTitleTextColor="@color/black_text_color"
+        progressActivity:errorButtonTextColor="#FFFFFF"
+        progressActivity:errorContentTextColor="@color/black_text_color"
+        progressActivity:errorTitleTextColor="@color/black_text_color"
+        progressActivity:loadingBackgroundColor="#FFFFFF">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/medium_text_size"
+            android:padding="10dp"
+            android:text="热门搜索"/>
+        <!-- xmlns:ptr="http://schemas.android.com/apk/res-auto" -->
+        <co.lujun.androidtagview.TagContainerLayout xmlns:AndroidTagView="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/search_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            AndroidTagView:container_background_color="@color/white"
+            AndroidTagView:container_border_color="@color/white"
+            AndroidTagView:container_border_radius="0dp"
+            AndroidTagView:container_border_width="4dp"
+            AndroidTagView:container_enable_drag="true"
+            AndroidTagView:horizontal_interval="10dp"
+            AndroidTagView:tag_clickable="true"
+            AndroidTagView:tag_max_length="8"
+            AndroidTagView:tag_theme="random"
+            AndroidTagView:vertical_interval="10dp" />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/search_voice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:background="@color/gray_bg_color"
+            android:padding="10dp"
+            android:gravity="center"
+            android:layout_marginBottom="10dp"
+            android:drawablePadding="10dp"
+            android:drawableLeft="@drawable/microphone"
+            android:text="点击 说出你想要的宝贝"
+            />
+        <!--
+             <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null" >
+        -->
+
+<!--        <shop.trqq.com.search.KeywordsFlow
+            android:id="@+id/frameLayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/linearLayout1"></shop.trqq.com.search.KeywordsFlow>-->
+
+        <!--
+                 <LinearLayout
+                android:id="@+id/linearLayout1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true" >
+
+                <Button
+                    android:id="@+id/button1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:background="#ffffff"
+                    android:text="上一批" />
+
+                <Button
+                    android:id="@+id/button2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:background="#ffffff"
+                    android:text="手气不错" />
+            </LinearLayout>
+        -->
+        <!-- </RelativeLayout> -->
+    </com.vlonjatg.progressactivity.ProgressActivity>
+
+</LinearLayout>

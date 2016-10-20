@@ -1,0 +1,36 @@
+# 忽略配置文件 带有 / 的是目录
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Eclipse project
+.project
+.classpath
+.settings/
+
+# Gradle project
+.gradle/
+build/
+
+# Android files
+bin/
+gen/
+out/
+local.properties
+
+# Temp files
+*.bak
+*.tmp
+*.temp
+Thumbs.db
+.DS_Store
+
+
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures

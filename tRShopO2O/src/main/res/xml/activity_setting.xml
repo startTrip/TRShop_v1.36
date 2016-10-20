@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <PreferenceCategory android:title="常用设置">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="Notification_switch"
+            android:title="是否显示系统消息通知" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="update_switch"
+            android:summary="每次启动APP是否自动检查版本更新？"
+            android:title="启动是否自动更新" />
+    </PreferenceCategory>
+    <!--
+    <RingtonePreference
+        android:key="ring"
+        android:title="铃声选择" />
+
+    <PreferenceCategory android:title="In-line preferences" >
+        <CheckBoxPreference
+            android:key="checkbox_preference"
+            android:summary="这是一个复选框"
+            android:title="复选框设置" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Dialog-based preferences" >
+        <EditTextPreference
+            android:dialogTitle="请输入你最喜欢的种族"
+            android:key="edittext_preference"
+            android:summary="一个使用了编辑文本对话框的例子"
+            android:title="请输入你最喜欢的种族" />
+
+        <ListPreference
+            android:dialogTitle="请选择一项"
+            android:entries="@array/feedback_type"
+            android:entryValues="@array/feedback_type"
+            android:key="list_preferenc"
+            android:summary="一个使用了列表对话框的例子"
+            android:title="请选择一项" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Launch preferences" >
+
+        This PreferenceScreen tag serves as a screen break (similar to page break in word processing). Like for other preference types, we assign a key here so it is able to save and restore its instance state.
+        <PreferenceScreen
+            android:key="screen_preference"
+            android:summary="展示另一个首选项配置页面"
+            android:title="页面首选项" >
+
+            你可以在这里放置更多的首选项内容，将被在下一个页面呈现出来
+            <CheckBoxPreference
+                android:key="next_screen_checkbox_preference"
+                android:summary="在另一个页面展示但出于同一个层级的首选项配置"
+                android:title="复选框设置" />
+        </PreferenceScreen>
+       
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Preference attributes" >
+        <CheckBoxPreference
+            android:key="parent_checkbox_preference"
+            android:summary="这是一个可见的父类"
+            android:title="父类复选框首选项" />
+        子类的可见类型是由样式属性定义的
+        <CheckBoxPreference
+            android:dependency="parent_checkbox_preference"
+            android:key="child_checkbox_preference"
+            android:layout="?android:attr/preferenceLayoutChild"
+            android:summary="这是一个可见的子类"
+            android:title="子类复选框首选项" />
+    </PreferenceCategory>
+
+
+    -->
+    <PreferenceCategory android:title="更多设置">
+        <Preference
+            android:key="cache"
+            android:summary="内容"
+            android:title="清除缓存" />
+        <Preference
+            android:key="searchcache"
+            android:title="清除搜索记录" />
+        <PreferenceScreen
+            android:summary="访问泰润商城官网"
+            android:title="泰润商城">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="http://shop.trqq.com" />
+        </PreferenceScreen>
+
+        <Preference
+            android:key="about"
+            android:title="关于" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

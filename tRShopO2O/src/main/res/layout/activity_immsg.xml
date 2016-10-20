@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cn.dreamtobe.kpswitch.widget.KPSwitchRootLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/item_title_bar" />
+    <!-- android:cacheColorHint="#00000000" -->
+
+
+    <!--  -->
+
+    <ListView
+        android:id="@+id/msg_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#f0eff4"
+        android:divider="#000"
+        android:listSelector="#f0eff4"></ListView>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/app_background"
+        android:gravity="center_vertical"
+        android:minHeight="50.0dip"
+        android:orientation="horizontal"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
+
+        <Button
+            android:id="@+id/btn_chat_emo"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="6dp"
+            android:background="@drawable/chat_emo_normal"
+            android:gravity="center" />
+
+        <shop.trqq.com.widget.EmoticonsEditText
+            android:id="@+id/edit_user_comment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_weight="1.0"
+            android:background="@drawable/base_edit_input"
+            android:minHeight="40dp"
+            android:padding="5dp" />
+
+        <Button
+            android:id="@+id/btn_chat_send"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/chat_send_n"
+            android:gravity="center"
+            android:textColor="#3e3e39"></Button>
+    </LinearLayout>
+    <cn.dreamtobe.kpswitch.widget.KPSwitchPanelLinearLayout
+        android:id="@+id/panel_root"
+        style="@style/Panel"
+        android:visibility="gone">
+
+        <GridView
+            android:id="@+id/GridView_chat_emo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:numColumns="6"
+            android:layout_marginTop="10dip"
+            android:verticalSpacing="10dip"/>
+    </cn.dreamtobe.kpswitch.widget.KPSwitchPanelLinearLayout>
+
+</cn.dreamtobe.kpswitch.widget.KPSwitchRootLinearLayout>

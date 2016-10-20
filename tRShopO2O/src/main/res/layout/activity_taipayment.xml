@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:background="@color/app_background"
+    android:orientation="vertical">
+
+    <include layout="@layout/item_title_bar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/TaiPay_sn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="实物订单交易号："
+            android:textSize="@dimen/text_big_size" />
+
+        <TextView
+            android:id="@+id/TaiPay_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="人民币总金额："
+            android:textSize="@dimen/text_big_size" />
+
+        <TextView
+            android:id="@+id/TaiPayorder_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="实付总金额："
+            android:textSize="@dimen/text_big_size" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="请输入支付密码:"
+            android:textSize="@dimen/text_big_size" />
+
+        <EditText
+            android:id="@+id/TaiPay_Password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:hint="输入支付密码"
+            android:ems="10"
+            android:inputType="textPassword">
+
+            <requestFocus />
+        </EditText>
+
+        <Button
+            android:id="@+id/TaiPay_Submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/red_text_color"
+            android:padding="10dp"
+            android:text="  确定   "
+            android:textColor="@color/white_text_color"
+            android:textSize="@dimen/large_text_size" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+     <RelativeLayout
+         android:id="@+id/rl_classify_right"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:clickable="true"
+         android:background="@color/background"
+         >
+         <TextView
+             android:id="@+id/tv_classify_right"
+             android:padding="10dp"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_centerVertical="true"
+             android:text="进口专区"
+             android:textSize="15sp"
+             />
+         <ImageView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_alignParentRight="true"
+             android:layout_centerVertical="true"
+             android:paddingRight="20dp"
+             android:src="@mipmap/right_arrow"
+             />
+     </RelativeLayout>
+
+     <android.support.v7.widget.RecyclerView
+         android:background="@color/white"
+         android:id="@+id/rv_classify_item"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+
+         >
+
+     </android.support.v7.widget.RecyclerView>
+</LinearLayout>

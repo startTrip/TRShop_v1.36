@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="10dp">
+
+    <!--
+         <View
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:layout_margin="5dp"
+        android:background="@drawable/line" />
+
+    -->
+
+    <View
+        style="@style/horizontal_cut_line"
+        android:layout_width="match_parent"
+        android:layout_margin="5dp" />
+
+    <LinearLayout
+        android:id="@+id/grid_specLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/title_spec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="颜色："
+            android:textSize="20dp" />
+
+        <shop.trqq.com.widget.MyGridView
+            android:id="@+id/grid_spec"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="20dp"
+            android:gravity="center"
+            android:horizontalSpacing="25dp"
+            android:listSelector="@android:color/transparent"
+            android:numColumns="2"
+            android:verticalSpacing="10dp" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/geval_frommembername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="评论"
+        android:textColor="@color/black_text"
+        android:textSize="17sp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="评分："
+            android:textColor="@color/black_text"
+            android:textSize="17sp" />
+
+        <RatingBar
+            android:id="@+id/geval_scores"
+            style="@style/roomRatingBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:rating="4.5"
+            android:stepSize="0.5" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/geval_addtime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2015-11-10 14:36"
+        android:textColor="@color/gray"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/geval_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="心得："
+        android:textColor="@color/black_text"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/geval_explain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="商家解释“："
+        android:textColor="@color/black_text"
+        android:textSize="17sp"
+        android:visibility="gone" />
+
+</LinearLayout>

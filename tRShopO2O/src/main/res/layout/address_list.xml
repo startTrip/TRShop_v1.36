@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background"
+    android:orientation="vertical">
+
+    <include layout="@layout/item_title_bar" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+
+        <com.vlonjatg.progressactivity.ProgressActivity xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:progressActivity="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/Addresslist_progress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            progressActivity:emptyBackgroundColor="#FFFFFF"
+            progressActivity:emptyContentTextColor="@color/black_text_color"
+            progressActivity:emptyTitleTextColor="@color/black_text_color"
+            progressActivity:errorBackgroundColor="#FFFFFF"
+            progressActivity:errorButtonTextColor="#FFFFFF"
+            progressActivity:errorContentTextColor="@color/black_text_color"
+            progressActivity:errorTitleTextColor="@color/black_text_color"
+            progressActivity:loadingBackgroundColor="#FFFFFF">
+
+            <com.roamer.slidelistview.SlideListView xmlns:slide="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/address_manage_list"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginBottom="70dp"
+                android:background="@drawable/body_cont_bg"
+                android:divider="#c4c4c4"
+                android:dividerHeight="0.1dp"
+                android:footerDividersEnabled="false"
+                android:headerDividersEnabled="false"
+                slide:slideAnimationTime="200"
+                slide:slideLeftAction="scroll"
+                slide:slideMode="both" />
+        </com.vlonjatg.progressactivity.ProgressActivity>
+
+        <LinearLayout
+            android:id="@+id/layout_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="10dp"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/address_add"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@color/red_text_color"
+                android:gravity="center"
+                android:text="添加地址"
+                android:textColor="@color/white_text_color"
+                android:textSize="24dp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

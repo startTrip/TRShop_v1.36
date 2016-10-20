@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background"
+    android:orientation="vertical">
+
+    <include layout="@layout/item_title_bar" />
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <com.roamer.slidelistview.MySlideListView xmlns:slide="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/address_manage_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/body_cont_bg"
+                    android:divider="#c4c4c4"
+                    android:dividerHeight="0.1dp"
+                    android:footerDividersEnabled="false"
+                    android:headerDividersEnabled="false"
+                    slide:slideAnimationTime="200"
+                    slide:slideLeftAction="scroll"
+                    slide:slideMode="both" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="添加发票："
+                    android:textSize="18sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/body_cont_bg"
+                    android:orientation="vertical"
+                    android:paddingBottom="20dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RadioGroup
+                            android:id="@+id/invoice_RadioGroup"
+                            android:layout_width="80dip"
+                            android:layout_height="wrap_content"
+                            android:checkedButton="@+id/b1"
+                            android:orientation="vertical">
+
+                            <!-- 默认选中b1 -->
+
+                            <RadioButton
+                                android:id="@+id/invoice_person"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:singleLine="true"
+                                android:text="个人" />
+
+                            <RadioButton
+                                android:id="@+id/invoice_company"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:singleLine="true"
+                                android:text="公司" />
+                        </RadioGroup>
+
+                        <EditText
+                            android:id="@+id/invoice_company_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:text="" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="发票内容：" />
+
+                    <Spinner
+                        android:id="@+id/invoice_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/spinner_normal"
+                        android:entries="@array/feedback_type"
+                        android:focusable="true"
+                        android:paddingLeft="10dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/invoice_save"
+                            android:layout_width="120dip"
+                            android:layout_height="50dip"
+                            android:background="@color/red_text_color"
+                            android:singleLine="true"
+                            android:text="保存发票信息"
+                            android:textColor="@color/white_text_color" />
+
+                        <Button
+                            android:id="@+id/invoice_no"
+                            android:layout_width="120dip"
+                            android:layout_height="50dip"
+                            android:layout_marginLeft="10dp"
+                            android:background="@color/sky_blue"
+                            android:singleLine="true"
+                            android:text="不需要发票"
+                            android:textColor="@color/white_text_color" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <ImageView
+            android:id="@+id/address_list_bg"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#ffffff"
+            android:visibility="gone" />
+    </FrameLayout>
+
+</LinearLayout>
