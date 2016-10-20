@@ -73,7 +73,7 @@ public class HomeNewAdapter extends BaseAdapter{
                         .into(viewHolder.mImageView);
             }
             viewHolder.name.setText(newGoodsListBean.getGoods_name());
-            viewHolder.price.setText("ï¿½ï¿½"+newGoodsListBean.getGoods_price());
+            viewHolder.price.setText("£¤"+newGoodsListBean.getGoods_price());
         }
         return view;
     }

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -48,6 +49,7 @@ import shop.trqq.com.adapter.Vr_Order_listAdapter;
 import shop.trqq.com.bean.OrderGroupHomeListBean;
 import shop.trqq.com.bean.Vr_Order_listBean;
 import shop.trqq.com.event.EventUpdateOrder;
+import shop.trqq.com.supermarket.view.MyPopupWindow;
 import shop.trqq.com.ui.Base.BaseActivity;
 import shop.trqq.com.util.HttpUtil;
 import shop.trqq.com.util.ToastUtils;
@@ -57,6 +59,7 @@ import shop.trqq.com.util.YkLog;
  * 订单界面
  */
 public class OrderActivity extends BaseActivity implements OrderAdapter.onClickAliPay {
+
     private static final int SDK_PAY_FLAG = 1;
     private Context mContext;
     private OrderAdapter orderAdapter;
@@ -78,6 +81,7 @@ public class OrderActivity extends BaseActivity implements OrderAdapter.onClickA
     private boolean isEnabledScrollLast = true;
 
     private boolean isResume = true;
+    private MyPopupWindow mMyPopup;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -135,6 +139,9 @@ public class OrderActivity extends BaseActivity implements OrderAdapter.onClickA
     }
 
     private void initViews() {
+
+        mMyPopup = MyPopupWindow.getInstance();
+
         mOrderPullToRefreshListView = (PullToRefreshListView) findViewById(R.id.order_pullToRefreshListView);
         orderAdapter = new OrderAdapter(handler, mContext, filter);
         mVr_Order_cellAdapter = new Vr_Order_listAdapter(handler, mContext,
@@ -431,7 +438,7 @@ public class OrderActivity extends BaseActivity implements OrderAdapter.onClickA
                         ("测试的商品", // 商品名称
                                 "该测试商品的详细描述", // 商品描述
                                 "0.01",pay_sn);// 商品价格
-
+        Log.d("orderInfo",orderInfo);
         /**
          * 特别注意，这里的签名逻辑需要放在服务端，切勿将私钥泄露在代码中！
          */
@@ -493,9 +500,9 @@ public class OrderActivity extends BaseActivity implements OrderAdapter.onClickA
                     String resultStatus = payResult.getResultStatus();
                     // 判断resultStatus 为“9000”则代表支付成功，具体状态码代表含义可参考接口文档
                     if (TextUtils.equals(resultStatus, "9000")) {
-                        Toast.makeText(OrderActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
+                        showPayResultSuccess();
                     } else {
-                        // 判断resultStatus 为非"9000"则代表可能支付失败
+                        // 判断resultStastus 为非"9000"则代表可能支付失败
                         // "8000"代表支付结果因为支付渠道原因或者系统原因还在等待支付结果确认，最终交易是否成功以服务端异步通知为准（小概率状态）
                         if (TextUtils.equals(resultStatus, "8000")) {
                             Toast.makeText(OrderActivity.this, "支付结果确认中", Toast.LENGTH_SHORT).show();
@@ -505,7 +512,6 @@ public class OrderActivity extends BaseActivity implements OrderAdapter.onClickA
                             Toast.makeText(OrderActivity.this, "支付失败", Toast.LENGTH_SHORT).show();
                         }
                     }
-                    finish();
                     break;
                 }
                 default:
@@ -513,4 +519,19 @@ public class OrderActivity extends BaseActivity implements OrderAdapter.onClickA
             }
         };
     };
+    /**
+     * 支付成功的弹框
+     */
+    private void showPayResultSuccess() {
+
+        View viewPop = LayoutInflater.from(mContext).inflate(R.layout.popup_pay_succes, null);
+        mMyPopup.showPopupWindowFronCenter(this, viewPop);
+        viewPop.findViewById(R.id.tv_pay_know).setOnClickListener(
+                new OnClickListener() {
+                    @Override
+                    public void onClick(View arg0) {
+                        mMyPopup.cancel();
+                    }
+                });
+    }
 }

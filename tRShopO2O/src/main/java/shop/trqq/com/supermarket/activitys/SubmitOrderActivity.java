@@ -79,10 +79,10 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
                         mGoodsSum.setText(size+"");
                     }
 
-                    // ï¿½ï¿½ï¿½Ãµï¿½Ö·ï¿½ï¿½Ï¢
+                    // ÉèÖÃµØÖ·ÐÅÏ¢
                     JSONObject add_js = jsonObject
                             .optJSONObject("address_info");
-                    // ï¿½Ñ¾ï¿½ï¿½Ðµï¿½Ö·ï¿½ï¿½Ï¢
+                    // ÒÑ¾­ÓÐµØÖ·ÐÅÏ¢
                     if (add_js!=null){
                         address_id = add_js.optString("address_id");
                         city_id = add_js.optString("city_id");
@@ -172,22 +172,22 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
                 finish();
             }
         });
-        // ï¿½ï¿½ï¿½ï¿½á½»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        // µã»÷Ìá½»¶©µ¥¸¶¿î
         mCheckSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // ï¿½Ð¶Ïµï¿½Ö·ï¿½Ç·ï¿½Îªï¿½ï¿½
+                // ÅÐ¶ÏµØÖ·ÊÇ·ñÎª¿Õ
                 if (address_id == "" || address_id == null) {
-                    ToastUtils.showMessage(SubmitOrderActivity.this, "ï¿½Ë¶ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Äµï¿½Ö·ï¿½ï¿½Ï¢");
+                    ToastUtils.showMessage(SubmitOrderActivity.this, "ºË¶ÔÒ»ÏÂÄúµÄµØÖ·ÐÅÏ¢");
                 }else {
-                    //  TODO  ï¿½á½»ï¿½ï¿½ï¿½ï¿½
-                    ToastUtils.showMessage(SubmitOrderActivity.this,"ï¿½á½»ï¿½ï¿½ï¿½ï¿½Ö§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
+                    //  TODO  Ìá½»¶©µ¥
+                    ToastUtils.showMessage(SubmitOrderActivity.this,"Ìá½»¶©µ¥Ö§¸¶´ýÍê³É");
                 }
 
             }
         });
 
-        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·
+        // µã»÷¸ü»»µØÖ·
         mChangeAdressLayout.setOnClickListener(this);
         mNoAddressLayout.setOnClickListener(this);
     }
@@ -201,7 +201,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
 
         requestParams.add("key",key);
 
-        requestParams.add("cart_id", mCart_id);     // ï¿½ï¿½Æ·ï¿½ï¿½ id ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        requestParams.add("cart_id", mCart_id);     // ÉÌÆ·µÄ id ºÍ ÊýÁ¿
         requestParams.add("ifcart", mIfcart);
 
         HttpUtil.post(HttpUtil.URL_BUY_STEP1, requestParams, new AsyncHttpResponseHandler() {
@@ -211,9 +211,9 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
                 try {
                     JSONObject jsonObject1 = new JSONObject(string);
                     JSONObject jsonObjects = jsonObject1.optJSONObject(("datas"));
-                    //ï¿½ï¿½Æ±ï¿½ï¿½Ï¢Hash
+                    //·¢Æ±ÐÅÏ¢Hash
                     vat_hash = jsonObjects.optString("vat_hash");
-                    // ï¿½Ë·ï¿½ Hash, Ñ¡ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Îªï¿½á½»
+                    // ÔË·Ñ Hash, Ñ¡ÔñµØÇøÊ±×÷ÎªÌá½»
                     freight_hash = jsonObjects
                             .optString("freight_hash");
 
@@ -232,9 +232,9 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
                 Drawable errorDrawable = getResources()
                         .getDrawable(R.drawable.wifi_off);
                 mProgressActivity.showError(errorDrawable,
-                        "ï¿½ï¿½ï¿½ç¿ªï¿½ï¿½Ð¡ï¿½ï¿½",
-                        "ï¿½ï¿½ï¿½Ó²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ç£¬ï¿½ï¿½È·ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ç¿ªï¿½Ø£ï¿½ï¿½ï¿½ï¿½ß·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¦ï¿½ï¿½ï¿½ï¿½ï¿½Ôºï¿½ï¿½ï¿½ï¿½ï¿½",
-                        "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", new View.OnClickListener() {
+                        "ÍøÂç¿ªÁËÐ¡²î",
+                        "Á¬½Ó²»ÉÏÍøÂç£¬ÇëÈ·ÈÏÒ»ÏÂÄúµÄÍøÂç¿ª¹Ø£¬»òÕß·þÎñÆ÷ÍøÂçÕýÃ¦£¬ÇëÉÔºóÔÙÊÔ",
+                        "ÖØÐÂÁ¬½Ó", new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 // TODO Auto-generated method
@@ -250,7 +250,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // ï¿½ï¿½Ö·ï¿½Ø´ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
+        // µØÖ·»Ø´«µÄÐÅÏ¢
          if(requestCode==0&&resultCode== Activity.RESULT_OK){
 
              mNoAddressLayout.setVisibility(View.GONE);
@@ -271,16 +271,16 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
         switch (view.getId()) {
             case R.id.no_address_layout:
                 Intent intent = new Intent(SubmitOrderActivity.this, address_listActivity.class);
-                // ï¿½Ë·ï¿½
+                // ÔË·Ñ
                 intent.putExtra("freight_hash", freight_hash);
-                // ï¿½Ø´ï¿½ï¿½ï¿½ï¿½
+                // »Ø´«½á¹û
                 startActivityForResult(intent, 0);
                 break;
             case R.id.check_address_layout:
                 Intent intent1 = new Intent(SubmitOrderActivity.this, address_listActivity.class);
-                // ï¿½Ë·ï¿½
+                // ÔË·Ñ
                 intent1.putExtra("freight_hash", freight_hash);
-                // ï¿½Ø´ï¿½ï¿½ï¿½ï¿½
+                // »Ø´«½á¹û
                 startActivityForResult(intent1, 0);
                 break;
         }
