@@ -180,8 +180,9 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
                 if (address_id == "" || address_id == null) {
                     ToastUtils.showMessage(SubmitOrderActivity.this, "核对一下您的地址信息");
                 }else {
-                    //  TODO  提交订单
-                    ToastUtils.showMessage(SubmitOrderActivity.this,"提交订单支付待完成");
+                    // 跳转到确认订单支付界面
+                    Intent intent = new Intent(SubmitOrderActivity.this,ComfirmPayOrderActivity.class);
+                    startActivity(intent);
                 }
 
             }

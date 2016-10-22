@@ -523,6 +523,8 @@
         </activity>
         <activity android:name=".ui.Fragment.PersonalActivity">
         </activity>
+        <activity android:name=".supermarket.activitys.ComfirmPayOrderActivity">
+        </activity>
     </application>
 
 </manifest>
