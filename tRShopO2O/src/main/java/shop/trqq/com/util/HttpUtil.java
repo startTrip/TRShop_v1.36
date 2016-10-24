@@ -12,7 +12,7 @@ public class HttpUtil {
 
     // 正式的 shop.trqq.com
     // 测试的 shop.wushi3.com
-    public static final String HOST = "http://shop.wushi3.com/mobile/index.php";
+    public static final String HOST = "http://shop.trqq.com/mobile/index.php";
     //public static final String HOST ="http://192.168.191.1/late_shop/mobile/index.php";
 
     //public static final String HOST = "http://192.168.23.1/haoshop/mobile/index.php";

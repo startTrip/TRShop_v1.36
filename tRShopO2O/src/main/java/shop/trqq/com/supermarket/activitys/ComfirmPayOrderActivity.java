@@ -64,10 +64,12 @@ public class ComfirmPayOrderActivity extends AppCompatActivity implements View.O
             case R.id.iv_alipay_select:
                 mIvAlipay.setSelected(true);
                 mIvWeChat.setSelected(false);
+                mBtPay.setEnabled(true);
                 break;
             case R.id.iv_wechat_select:
                 mIvWeChat.setSelected(true);
                 mIvAlipay.setSelected(false);
+                mBtPay.setEnabled(true);
                 break;
         }
     }

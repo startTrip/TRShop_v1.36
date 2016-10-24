@@ -52,7 +52,9 @@ public class CheckOrderStoreAdapter extends ListViewBaseAdapter<GoodsInfo> {
             if(!TextUtils.isEmpty(goods_weight_all)){
                 holder.mGoodsInfo.setText("共"+goodsNum+"件商品，总重"+goods_weight_all+"kg  小计:");
             }else {
-                holder.mGoodsInfo.setText("共"+goodsNum+"件商品，总重"+4.8*goodsInfo.getGoods_list().size()+"kg  小计:");
+                double v = 4.8 * goodsInfo.getGoods_list().size();
+                String weight = String.format("%.1f",v);
+                holder.mGoodsInfo.setText("共"+goodsNum+"件商品，总重"+ weight +"kg  小计:");
             }
             String freight = goodsInfo.getStore_shipping();
             if(!TextUtils.isEmpty(freight)){

@@ -38,7 +38,7 @@ public class GridviewGoodsAdapter extends CommonAdapter<GoodsBean> {
         TextView goodsTitle = (TextView) holder.getView(R.id.gridgoods_title);
         TextView goodsPrice = (TextView) holder.getView(R.id.gridgoods_price);
         goodsTitle.setText(Bean.getGoods_name());
-        goodsPrice.setText("ï¿½ï¿½" + Bean.getGoods_promotion_price());
+        goodsPrice.setText("£¤" + Bean.getGoods_promotion_price());
         String imageUrl;
         if (TYPE == TYPE_STOREGOODS) {
             imageUrl = Bean.getUrl();

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -70,7 +71,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
                         JSONObject jsonObject1 = store_cart_list.optJSONObject("126");
                         String string1 = jsonObject1.optString("store_goods_total");
                         String string2 = jsonObject1.optString("store_shipping");
-                        if (string2 != null) {
+                        if (!TextUtils.isEmpty(string2)) {
                             Float i = Float.parseFloat(string1) + Float.parseFloat(string2);
                             mCheckMoney.setText(String.format("%.2f",i));
                         }else {
