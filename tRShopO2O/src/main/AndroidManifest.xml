@@ -521,9 +521,11 @@
 
         <activity android:name=".supermarket.activitys.SubmitOrderActivity">
         </activity>
-        <activity android:name=".ui.Fragment.PersonalActivity">
+        <activity android:name=".ui.PersonalActivity">
         </activity>
         <activity android:name=".supermarket.activitys.ComfirmPayOrderActivity">
+        </activity>
+        <activity android:name=".supermarket.activitys.MarketGoCartActivity">
         </activity>
     </application>
 

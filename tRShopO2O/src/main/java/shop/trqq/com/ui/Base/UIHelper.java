@@ -27,6 +27,7 @@ import shop.trqq.com.bean.AddressBean;
 import shop.trqq.com.im.ui.IMMsgActivity;
 import shop.trqq.com.im.ui.MainIMActivity;
 import shop.trqq.com.supermarket.MarketMainActivity;
+import shop.trqq.com.supermarket.activitys.MarketGoCartActivity;
 import shop.trqq.com.ui.AboutActivity;
 import shop.trqq.com.ui.CartActivity;
 import shop.trqq.com.ui.CheckOutActivity;
@@ -38,6 +39,7 @@ import shop.trqq.com.ui.Indate_code_listActivity;
 import shop.trqq.com.ui.MainTabActivity;
 import shop.trqq.com.ui.OrderActivity;
 import shop.trqq.com.ui.Payment_wapActivity;
+import shop.trqq.com.ui.PersonalActivity;
 import shop.trqq.com.ui.RegisterActivity;
 import shop.trqq.com.ui.SearchActivity;
 import shop.trqq.com.ui.SettingsActivity;
@@ -97,6 +99,19 @@ public class UIHelper {
 
         context.startActivity(intent);
     }
+
+    // 跳转到超市购物车界面
+    public static void showMarketCart(Context context) {
+        Intent intent = new Intent(context, MarketGoCartActivity.class);
+        context.startActivity(intent);
+    }
+
+    // 跳转到注册登录界面
+    public static void showPersonalActivity(Context context) {
+        Intent intent = new Intent(context, PersonalActivity.class);
+        context.startActivity(intent);
+    }
+
     /**
      * 显示商品列表界面
      *
@@ -575,4 +590,6 @@ public class UIHelper {
             }
         });
     }
+
+
 }

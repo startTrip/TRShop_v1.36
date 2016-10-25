@@ -22,14 +22,14 @@ import shop.trqq.com.util.ToastUtils;
 import shop.trqq.com.util.YkLog;
 
 /**
- * Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ & WebViewÍ¨ï¿½Ã¼ï¿½ï¿½ï¿½Activity
+ * Í¼ÎÄÏêÇé & WebViewÍ¨ÓÃ¼ÓÔØActivity
  */
 public class product_infoActivity extends BaseActivity {
     private WebView webView;
     private boolean flag = false;
     private String goods_id;
     private String mobile_body;
-    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    // ±êÌâÀ¸±êÌâ
     private TextView mHeadTitleTextView;
 
     private Context mContext;
@@ -46,10 +46,10 @@ public class product_infoActivity extends BaseActivity {
         // mobile_body="";
         webView = (WebView) findViewById(R.id.product_info_webView);
         WebSettings settings = webView.getSettings();
-        // ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½ï¿½Ö§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        // ÉèÖÃ¿ÉÒÔÖ§³ÖËõ·Å
         settings.setSupportZoom(true);
         //webView.getSettings().setBuiltInZoomControls(false);
-        //ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½Ä»
+        //×ÔÊÊÓ¦ÆÁÄ»
 
 
         if (goods_id.equals("")) {
@@ -69,7 +69,7 @@ public class product_infoActivity extends BaseActivity {
                     WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
             webView.loadUrl("file:///android_asset/cooperate.html");
         } else {
-            // ï¿½ï¿½ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¹ï¿½ï¿½ï¿½,ï¿½Å´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½htmlï¿½Ì¶ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½Ä»ï¿½ï¿½
+            // ÉèÖÃ³öÏÖËõ·Å¹¤¾ß,·Å´óºó»á±ä»ØÊÊÓ¦ÆÁÄ»£¬¹À¼ÆÍ¼ÎÄÏêÇéhtml¹Ì¶¨ÊÊÓ¦ÆÁÄ»¡£
             settings.setUseWideViewPort(true);
             settings.setLoadWithOverviewMode(true);
             settings.setBuiltInZoomControls(true);
@@ -82,14 +82,14 @@ public class product_infoActivity extends BaseActivity {
         }
         webView.setWebChromeClient(new WebChromeClient() {
             /**
-             * ï¿½ï¿½ï¿½ï¿½JavaScript Alertï¿½Â¼ï¿½
+             * ´¦ÀíJavaScript AlertÊÂ¼þ
              */
             @Override
             public boolean onJsAlert(WebView view, String url, String message,
                                      final JsResult result) {
-
+                // ÓÃAndroid×é¼þÌæ»»
                 new AlertDialog.Builder(product_infoActivity.this)
-                        .setTitle("JSï¿½ï¿½Ê¾")
+                        .setTitle("JSÌáÊ¾")
                         .setMessage(message)
                         .setPositiveButton(android.R.string.ok,
                                 new AlertDialog.OnClickListener() {
@@ -119,7 +119,7 @@ public class product_infoActivity extends BaseActivity {
                         YkLog.t("loadOnlineproduct_info", css);
                         webView.loadDataWithBaseURL(null, css, "text/html",
                                 "utf-8", "");
-                        //webView.loadData(css,"text/html","utf-8");//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+                        //webView.loadData(css,"text/html","utf-8");//²»¿ÉÐÐ
                         //webView.loadUrl("file:///android_asset/wap.html");
                     }
 
@@ -127,7 +127,7 @@ public class product_infoActivity extends BaseActivity {
                     public void onFailure(int statusCode, Header[] headers,
                                           byte[] responseBody, Throwable error) {
                         // TODO Auto-generated method stub
-                        ToastUtils.showMessage(mContext, "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý»ï¿½È¡Ê§ï¿½ï¿?");
+                        ToastUtils.showMessage(mContext, "ÍøÂçÊý¾Ý»ñÈ¡Ê§°Ü");
                     }
                 });
     }
@@ -135,15 +135,16 @@ public class product_infoActivity extends BaseActivity {
     private void initTitleBarView() {
         mHeadTitleTextView = (TextView) findViewById(R.id.head_title_textView);
         if (goods_id.equals("")) {
-            mHeadTitleTextView.setText("ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½Ð­ï¿½ï¿½");
+            mHeadTitleTextView.setText("ÓÃ»§·þÎñÐ­Òé");
         } else if (goods_id.equals("explain")) {
-            mHeadTitleTextView.setText("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
+            mHeadTitleTextView.setText("¹ØÓÚÎÒÃÇ");
         } else if (goods_id.equals("contactme")) {
-            mHeadTitleTextView.setText("ï¿½ï¿½Ïµï¿½ï¿½ï¿½ï¿½");
+            mHeadTitleTextView.setText("ÁªÏµÎÒÃÇ");
         } else if (goods_id.equals("cooperate")) {
-            mHeadTitleTextView.setText("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¢Ì¸");
+            mHeadTitleTextView.setText("ºÏ×÷ÓëÇ¢Ì¸");
         } else {
-            mHeadTitleTextView.setText("Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
+            mHeadTitleTextView.setText("Í¼ÎÄÏêÇé");
         }
     }
 }
+

@@ -73,6 +73,7 @@ public class Goods_DetaillActivity extends BaseFragmentActivity {
         initTitleBarView();
         //设置viewpager保留多少个显示界面
         pager.setOffscreenPageLimit(3);
+      ;
     }
 
 

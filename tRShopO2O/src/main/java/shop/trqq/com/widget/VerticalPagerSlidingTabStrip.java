@@ -43,14 +43,14 @@ import shop.trqq.com.R;
 import shop.trqq.com.widget.VerticalViewPager.OnPageChangeListener;
 
 /**
- * »¬¶¯Ö¸Ê¾Æ÷pstsindicatorcolorÑÕÉ« ÔÚÊÓÍ¼µÄµ×²¿µÄÈ«¿í¶ÈµÄÏßpstsunderlinecolorÑÕÉ«
- * Ñ¡Ïî¿¨Ö®¼äµÄ·Ö¸ôpstsdividercolorÑÕÉ« »¬¶¯Ö¸Ê¾Æ÷pstsindicatorheightheight
- * ÔÚÊÓÍ¼µÄµ×²¿µÄÈ«¿í¶ÈµÄÏßpstsunderlineheight¸ß¶È pstsdividerpadding¶¥²¿ºÍµ×²¿Ìî³äµÄ·ÖÆµÆ÷
- * pststabpaddingleftright×ó¡¢ÓÒÌî³äÃ¿¸öÑ¡Ïî¿¨ pstsscrolloffset¾íÖá±»Ñ¡ÔñµÄ±êÇ©µÄÆ«ÒÆ
- * pststabbackground±³¾°»æÖÆµÄÃ¿¸ö±êÇ©£¬Ó¦¸ÃÊÇÒ»¸östatelistdrawable
- * pstsshouldexpandÈç¹ûÉèÖÃÎªTRUE£¬Ã¿¸ö±êÇ©¶¼¸øÓèÍ¬ÑùµÄÖØÁ¿£¬Ä¬ÈÏÎªfalse
- * pststextallcapsÈç¹ûÎªÕæ£¬ËùÓÐÑ¡Ïî¿¨±êÌâ¶¼ÊÇ´óÐ´£¬Ä¬ÈÏÎªtrue À©Õ¹4¸öÊôÐÔ £¬ ·Ö±ðÊÇ Ä¬ÈÏµÄ×ÖÌå´óÐ¡ ºÍÑÕÉ« £¬ºÍÑ¡ÖÐºóµÄ
- * ×ÖÌå´óÐ¡ºÍÑÕÉ«
+ * ï¿½ï¿½ï¿½ï¿½Ö¸Ê¾ï¿½ï¿½pstsindicatorcolorï¿½ï¿½É« ï¿½ï¿½ï¿½ï¿½Í¼ï¿½Äµ×²ï¿½ï¿½ï¿½È«ï¿½ï¿½Èµï¿½ï¿½ï¿½pstsunderlinecolorï¿½ï¿½É«
+ * Ñ¡ï¿½î¿¨Ö®ï¿½ï¿½Ä·Ö¸ï¿½pstsdividercolorï¿½ï¿½É« ï¿½ï¿½ï¿½ï¿½Ö¸Ê¾ï¿½ï¿½pstsindicatorheightheight
+ * ï¿½ï¿½ï¿½ï¿½Í¼ï¿½Äµ×²ï¿½ï¿½ï¿½È«ï¿½ï¿½Èµï¿½ï¿½ï¿½pstsunderlineheightï¿½ß¶ï¿½ pstsdividerpaddingï¿½ï¿½ï¿½ï¿½ï¿½Íµ×²ï¿½ï¿½ï¿½ï¿½Ä·ï¿½Æµï¿½ï¿½
+ * pststabpaddingleftrightï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½Ñ¡ï¿½î¿¨ pstsscrolloffsetï¿½ï¿½ï¿½á±»Ñ¡ï¿½ï¿½Ä±ï¿½Ç©ï¿½ï¿½Æ«ï¿½ï¿½
+ * pststabbackgroundï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æµï¿½Ã¿ï¿½ï¿½ï¿½ï¿½Ç©ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½statelistdrawable
+ * pstsshouldexpandï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÎªTRUEï¿½ï¿½Ã¿ï¿½ï¿½ï¿½ï¿½Ç©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¬ï¿½ï¿½Îªfalse
+ * pststextallcapsï¿½ï¿½ï¿½Îªï¿½æ£¬ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½î¿¨ï¿½ï¿½ï¿½â¶¼ï¿½Ç´ï¿½Ð´ï¿½ï¿½Ä¬ï¿½ï¿½Îªtrue ï¿½ï¿½Õ¹4ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö±ï¿½ï¿½ï¿½ Ä¬ï¿½Ïµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ ï¿½ï¿½ï¿½ï¿½É« ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½Ðºï¿½ï¿½
+ * ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½É«
  */
 
 public class VerticalPagerSlidingTabStrip extends HorizontalScrollView {
@@ -81,24 +81,24 @@ public class VerticalPagerSlidingTabStrip extends HorizontalScrollView {
     private Paint rectPaint;
     private Paint dividerPaint;
 
-    private int indicatorColor = 0xFFFF7676;
-    // ÏÂ»®ÏßÑÕ??
+    private int indicatorColor = 0xFFFF0000;
+    // ï¿½Â»ï¿½ï¿½ï¿½ï¿½ï¿½??
     private int underlineColor = 0x1A000000;
-    // ·Ö¸îÏßÑÕ??
+    // ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½??
     private int dividerColor = 0x1A000000;
 
     private boolean shouldExpand = true;
     private boolean textAllCaps = true;
 
     private int scrollOffset = 52;
-    private int indicatorHeight = 6;
+    private int indicatorHeight = 3;
     private int underlineHeight = 1;
     private int dividerPadding = 12;
     private int tabPadding = 24;
     private int dividerWidth = 1;
 
     private int tabTextSize = 14;
-    // tabÎÄ±¾ÑÕÉ«
+    // tabï¿½Ä±ï¿½ï¿½ï¿½É«
     private int tabTextColor = 0xFF666666;
     private Typeface tabTypeface = null;
     private int tabTypefaceStyle = Typeface.BOLD;
@@ -461,7 +461,7 @@ public class VerticalPagerSlidingTabStrip extends HorizontalScrollView {
         invalidate();
     }
 
-    public int getIndicatorColor() {
+    public int getIndicatorColor(int color) {
         return this.indicatorColor;
     }
 

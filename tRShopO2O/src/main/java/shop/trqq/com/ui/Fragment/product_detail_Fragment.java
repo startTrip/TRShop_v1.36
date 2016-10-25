@@ -161,8 +161,8 @@ public class product_detail_Fragment extends Fragment implements OnClickListener
     @Override
     public void onDestroy() {
         super.onDestroy();
-        // Unregister  
-        //EventBus.getDefault().unregister(this);  
+        // Unregister
+        //EventBus.getDefault().unregister(this);
     }
 
     /**
@@ -279,7 +279,12 @@ public class product_detail_Fragment extends Fragment implements OnClickListener
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                UIHelper.showCart(mContext);
+                // 如果是超市的商品就跳转到商品界面
+                if(store_id.equals("126")){
+                    UIHelper.showMarketCart(mContext);
+                }else {
+                    UIHelper.showCart(mContext);
+                }
             }
         });
 
@@ -575,7 +580,11 @@ public class product_detail_Fragment extends Fragment implements OnClickListener
                         store_Layout.setOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                UIHelper.showStore(mContext, store_id);
+                                if(store_id.equals("126")){
+                                    UIHelper.showMarket(mContext);
+                                }else {
+                                    UIHelper.showStore(mContext, store_id);
+                                }
                             }
                         });
                         // 进入店铺
@@ -583,7 +592,11 @@ public class product_detail_Fragment extends Fragment implements OnClickListener
                                 .setOnClickListener(new OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        UIHelper.showStore(mContext, store_id);
+                                        if(store_id.equals("126")){
+                                            UIHelper.showMarket(mContext);
+                                        }else {
+                                            UIHelper.showStore(mContext, store_id);
+                                        }
                                     }
                                 });
                         // 店铺搜索
@@ -607,7 +620,7 @@ public class product_detail_Fragment extends Fragment implements OnClickListener
                                             member_name);
                                 } else {
                                     ToastUtils.showMessage(mContext, "请登录");
-                                    SkipMainPersonal();
+                                    UIHelper.showPersonalActivity(mContext);
                                 }
                             }
                         });
@@ -688,7 +701,7 @@ public class product_detail_Fragment extends Fragment implements OnClickListener
                                         }
                                     } else {
                                         ToastUtils.showMessage(mContext, "请登录");
-                                        SkipMainPersonal();
+                                        UIHelper.showPersonalActivity(mContext);
                                     }
                                 }
                             });
@@ -704,7 +717,7 @@ public class product_detail_Fragment extends Fragment implements OnClickListener
                                     add_cart();
                                 } else {
                                     ToastUtils.showMessage(mContext, "请登录");
-                                    SkipMainPersonal();
+                                    UIHelper.showPersonalActivity(mContext);
                                 }
                             }
                         });
@@ -742,11 +755,6 @@ public class product_detail_Fragment extends Fragment implements OnClickListener
             }
 
         });
-    }
-
-    private void SkipMainPersonal(){
-        Intent intent = new Intent(getActivity(), PersonalActivity.class);
-        getActivity().startActivity(intent);
     }
 
     OnClickListener errorClickListener = new OnClickListener() {
