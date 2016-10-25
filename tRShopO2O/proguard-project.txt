@@ -86,15 +86,8 @@
 #-libraryjars libs/pushservice-4.6.0.68.jar
 -dontwarn com.baidu.**
 -keep class com.baidu.**{*; }
-##---------------Begin: proguard configuration for alipaysdk  ----------
-#-libraryjars libs/alipaySDK-20160120.jar
 
--keep class com.alipay.android.app.IAlixPay{*;}
--keep class com.alipay.android.app.IAlixPay$Stub{*;}
--keep class com.alipay.android.app.IRemoteServiceCallback{*;}
--keep class com.alipay.android.app.IRemoteServiceCallback$Stub{*;}
--keep class com.alipay.sdk.app.PayTask{ public *;}
--keep class com.alipay.sdk.app.AuthTask{ public *;}
+
 
 ##---------------Begin: proguard configuration for Gson  ----------
 # Gson uses generic type information stored in a class file when working with fields. Proguard
@@ -192,7 +185,10 @@
 
 -dontwarn com.squareup.okhttp.**
 
--libraryjars libs/alipaySDK-20160825.jar
+
+##---------------Begin: proguard configuration for alipaysdk  ----------
+#jar 包会默认打包
+#-libraryjars libs/alipaySDK-20160825.jar
 
 -keep class com.alipay.android.app.IAlixPay{*;}
 -keep class com.alipay.android.app.IAlixPay$Stub{*;}
