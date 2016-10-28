@@ -1,7 +1,5 @@
 package com.alipay.pay;
 
-import android.util.Log;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -14,76 +12,75 @@ import java.util.Random;
  */
 public class AlipayHelper {
 
-    // ï¿½Ì»ï¿½PID  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 2088 ï¿½ï¿½Í·
+    // ÉÌ»§PID  ±ØÐëÒÔ 2088 ¿ªÍ·
     public static final String PARTNER = "2088111278561763";
-    // ï¿½Õ¿ï¿½ï¿½Ë£ï¿½Ö§ï¿½ï¿½ï¿½ï¿½ï¿½ËºÅ£ï¿½ï¿½Ëºï¿½ï¿½Ç¹Ì¶ï¿½ï¿½Ä£ï¿½Ò»ï¿½ï¿½ï¿½Ì»ï¿½Ò»ï¿½ï¿½ï¿½Ëºï¿½
+    // ÊÕ¿îÈË£¬Ö§¸¶±¦ÕËºÅ£¬ÕËºÅÊÇ¹Ì¶¨µÄ£¬Ò»¸öÉÌ»§Ò»¸öÕËºÅ
     public static final String SELLER = "gaoyandingzhi@126.com";
-    // ï¿½Í»ï¿½ï¿½ï¿½Ê¹ï¿½Ãµï¿½Ë½Ô¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ã¹ï¿½Ô¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¤
+    // ¿Í»§¶ËÊ¹ÓÃµÄË½Ô¿£¬¶ÔÓÚÇëÇó½øÐÐÊý×ÖÇ©Ãû£¬´«¸ø·þÎñÆ÷£¬·þÎñÆ÷Ê¹ÓÃ¹«Ô¿½øÐÐÑéÖ¤
     public static final String RSA_PRIVATE = "MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBANEClM9ja39OuhbiFcPYG8nUt19TIGvnBjC2CGMV3BKY2pTolVuicMfM0yyxvwtewe7Wkk+06Zl8fjgIWZS8SsfOeznQZbJq236CbcFYIhDsorDllDwQ0Uk409WSjaOCDJamOjGeQjYqy3D7v+z+Z48ZvCOPleX2h415mHQeHWVdAgMBAAECgYB6FrHqOr7uTIRzHXltPu1shi7fJeWIYhjBl3NqvbghvNvho8KrFkYez8yDDQj1kVJjOz+YA6t4lrn77RS2xw4+fRJgBy/LD9ILectaThysuFt84yKooSuFAv1AQKMeVXkpnFuzzBFtxyuRPtPUYXftSvEm/9BapFHGEVCuT7RvAQJBAP9yq18VFhPQAfngld9n0NwmCO33kdbFYqVIWBNKZdvVZIqwIvnmTqsgQacrvWutsWauukKT7VzySkht/uE63j0CQQDRdjgqx4H7SfMjkaZK5nJ6ptuFgR19HkakOJZSIM78Ot3PzfHcnfYuCRjs8lIEWmhYqj2FE+BcZ9cejphGuTWhAkB0XimBXBq9ldGAonXD2whDcbQ5q8EtJKgmgUlWKFs0hQaTQ1/7lZYa0Mv3uq5EwlCBZXGGaNsFr351dl5Y/jdFAkA6D2DmSsL22rqwo1DK9jHJWbMDwJRh+CBwqNbSERIOzGprjZR7KLXycMcd9tVRK5Y87YN7/dR1CLuSVshS4kfBAkAW6ls9/RlBA6gOpDuq+Qn4CZUng3h7OJsDgzCY95RtuMISJNuVFcGC/XVKB+urkyfhR/H7I8HIPXQtNJenH9f2";
 
-    // Ö§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¿
+    // Ö§¸¶±¦¹«Ô¿
     public static final String RSA_PUBLIC = "";
 
     /**
-     * create the order info. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
+     * create the order info. ´´½¨¶©µ¥ÐÅÏ¢
      *
      */
     public static String getOrderInfo(String subject, String body, String price,String pay_sn) {
 
-        // Ç©Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ID
+        // Ç©Ô¼ºÏ×÷ÕßÉí·ÝID
         String orderInfo = "partner=" + "\"" + PARTNER + "\"";
 
-        // Ç©Ô¼ï¿½ï¿½ï¿½ï¿½Ö§ï¿½ï¿½ï¿½ï¿½ï¿½Ëºï¿½
+        // Ç©Ô¼Âô¼ÒÖ§¸¶±¦ÕËºÅ
         orderInfo += "&seller_id=" + "\"" + SELLER + "\"";
 
-        // ï¿½Ì»ï¿½ï¿½ï¿½Õ¾Î¨Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-        // TODO ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½á¹©ï¿½Ä£ï¿½
+        // ÉÌ»§ÍøÕ¾Î¨Ò»¶©µ¥ºÅ
+        // TODO Õâ¸ö¶©µ¥ºÅ£¬ÊÇÎÒÃÇ×Ô¼º·þÎñÆ÷Ìá¹©µÄ£»
         orderInfo += "&out_trade_no=" + "\"" + pay_sn + "\"";
 
-        Log.d("getOrder", "getOrderInfo: "+ pay_sn);
-        // ï¿½ï¿½Æ·ï¿½ï¿½ï¿½
+        // ÉÌÆ·Ãû³Æ
         orderInfo += "&subject=" + "\"" + subject + "\"";
 
-        // ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½
+        // ÉÌÆ·ÏêÇé
         orderInfo += "&body=" + "\"" + body + "\"";
 
-        // ï¿½ï¿½Æ·ï¿½ï¿½ï¿½
+        // ÉÌÆ·½ð¶î
         orderInfo += "&total_fee=" + "\"" + price + "\"";
 
-        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ì²½Í¨ÖªÒ³ï¿½ï¿½Â·ï¿½ï¿½
-        // ï¿½ï¿½Ö§ï¿½ï¿½ï¿½ï¿½Ö§ï¿½ï¿½ï¿½É¹ï¿½ï¿½ï¿½Ö§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Çµï¿½ï¿½Ì³ï¿½Ö§ï¿½ï¿½ï¿½Ç·ï¿½É¹ï¿½
-        orderInfo += "&notify_url=" + "\"" + "http://shop.wushi3.com/mobile/index.php?act=wnj_payment&op=notify_url" + "\"";
+        // ·þÎñÆ÷Òì²½Í¨ÖªÒ³ÃæÂ·¾¶
+        // µ±Ö§¸¶±¦Ö§¸¶³É¹¦£¬Ö§¸¶±¦·þÎñÆ÷»á×Ô¶¯µ÷ÓÃÕâ¸öÍøÖ·¸æËßÎÒÃÇµÄÉÌ³ÇÖ§¸¶ÊÇ·ñ³É¹¦
+        orderInfo += "&notify_url=" + "\"" +  "http://shop.wushi3.com/mobile/index.php?act=wnj_payment&op=notify_url" + "\"";
 
-        // ï¿½ï¿½ï¿½ï¿½Ó¿ï¿½ï¿½ï¿½Æ£ï¿½ ï¿½Ì¶ï¿½Öµ
+        // ·þÎñ½Ó¿ÚÃû³Æ£¬ ¹Ì¶¨Öµ
         orderInfo += "&service=\"mobile.securitypay.pay\"";
 
-        // Ö§ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½ ï¿½Ì¶ï¿½Öµ
+        // Ö§¸¶ÀàÐÍ£¬ ¹Ì¶¨Öµ
         orderInfo += "&payment_type=\"1\"";
 
-        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë£¬ ï¿½Ì¶ï¿½Öµ
+        // ²ÎÊý±àÂë£¬ ¹Ì¶¨Öµ
         orderInfo += "&_input_charset=\"utf-8\"";
 
-        // ï¿½ï¿½ï¿½ï¿½Î´ï¿½ï¿½ï¿½î½»ï¿½×µÄ³ï¿½Ê±Ê±ï¿½ï¿½
-        // Ä¬ï¿½ï¿½30ï¿½ï¿½ï¿½Ó£ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ã±Ê½ï¿½ï¿½×¾Í»ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½Ø±Õ¡ï¿½
-        // È¡Öµï¿½ï¿½Î§ï¿½ï¿½1mï¿½ï¿½15dï¿½ï¿½
-        // m-ï¿½ï¿½ï¿½Ó£ï¿½h-Ð¡Ê±ï¿½ï¿½d-ï¿½ì£¬1c-ï¿½ï¿½ï¿½ì£¨ï¿½ï¿½ï¿½Û½ï¿½ï¿½×ºï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½0ï¿½ï¿½Ø±Õ£ï¿½ï¿½ï¿½
-        // ï¿½Ã²ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ã£¬ï¿½ï¿½1.5hï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½Îª90mï¿½ï¿½
+        // ÉèÖÃÎ´¸¶¿î½»Ò×µÄ³¬Ê±Ê±¼ä
+        // Ä¬ÈÏ30·ÖÖÓ£¬Ò»µ©³¬Ê±£¬¸Ã±Ê½»Ò×¾Í»á×Ô¶¯±»¹Ø±Õ¡£
+        // È¡Öµ·¶Î§£º1m¡«15d¡£
+        // m-·ÖÖÓ£¬h-Ð¡Ê±£¬d-Ìì£¬1c-µ±Ìì£¨ÎÞÂÛ½»Ò×ºÎÊ±´´½¨£¬¶¼ÔÚ0µã¹Ø±Õ£©¡£
+        // ¸Ã²ÎÊýÊýÖµ²»½ÓÊÜÐ¡Êýµã£¬Èç1.5h£¬¿É×ª»»Îª90m¡£
         orderInfo += "&it_b_pay=\"30m\"";
 
-        // extern_tokenÎªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¨ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½alipay_open_id,ï¿½ï¿½ï¿½Ï´Ë²ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½ï¿½È¨ï¿½ï¿½ï¿½Ë»ï¿½ï¿½ï¿½ï¿½ï¿½Ö§ï¿½ï¿½
+        // extern_tokenÎª¾­¹ý¿ìµÇÊÚÈ¨»ñÈ¡µ½µÄalipay_open_id,´øÉÏ´Ë²ÎÊýÓÃ»§½«Ê¹ÓÃÊÚÈ¨µÄÕË»§½øÐÐÖ§¸¶
         // orderInfo += "&extern_token=" + "\"" + extern_token + "\"";
 
-        // Ö§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ó£¬µï¿½Ç°Ò³ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½Ì»ï¿½Ö¸ï¿½ï¿½Ò³ï¿½ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½É¿ï¿½
+        // Ö§¸¶±¦´¦ÀíÍêÇëÇóºó£¬µ±Ç°Ò³ÃæÌø×ªµ½ÉÌ»§Ö¸¶¨Ò³ÃæµÄÂ·¾¶£¬¿É¿Õ
         orderInfo += "&return_url=\"m.alipay.com\"";
 
         return orderInfo;
     }
 
     /**
-     * get the out_trade_no for an order. ï¿½ï¿½ï¿½ï¿½Ì»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å£ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½Ì»ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½Î¨Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½Ê½ï¿½æ·¶ï¿½ï¿½
+     * get the out_trade_no for an order. Éú³ÉÉÌ»§¶©µ¥ºÅ£¬¸ÃÖµÔÚÉÌ»§¶ËÓ¦±£³ÖÎ¨Ò»£¨¿É×Ô¶¨Òå¸ñÊ½¹æ·¶£©
      *
      */
-    public static String getOutTradeNo() {
+    private String getOutTradeNo() {
         SimpleDateFormat format = new SimpleDateFormat("MMddHHmmss", Locale.getDefault());
         Date date = new Date();
         String key = format.format(date);
@@ -95,21 +92,20 @@ public class AlipayHelper {
     }
 
     /**
-     * sign the order info. ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½Ç©ï¿½ï¿½
+     * sign the order info. ¶Ô¶©µ¥ÐÅÏ¢½øÐÐÇ©Ãû
      *
      * @param content
-     *            ï¿½ï¿½Ç©ï¿½ï¿½ï¿½ï¿½Ï¢
+     *            ´ýÇ©Ãû¶©µ¥ÐÅÏ¢
      */
     public static String sign(String content) {
         return SignUtils.sign(content, RSA_PRIVATE);
     }
 
     /**
-     * get the sign type we use. ï¿½ï¿½È¡Ç©ï¿½ï¿½Ê½
+     * get the sign type we use. »ñÈ¡Ç©Ãû·½Ê½
      *
      */
     public static String getSignType() {
         return "sign_type=\"RSA\"";
     }
-
 }

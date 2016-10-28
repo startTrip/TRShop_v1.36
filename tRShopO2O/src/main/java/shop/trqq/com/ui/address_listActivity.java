@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -20,6 +21,7 @@ import com.roamer.slidelistview.SlideListView;
 import com.vlonjatg.progressactivity.ProgressActivity;
 
 import org.apache.http.Header;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -33,7 +35,6 @@ import shop.trqq.com.ui.Base.BaseActivity;
 import shop.trqq.com.ui.Base.UIHelper;
 import shop.trqq.com.util.HttpUtil;
 import shop.trqq.com.util.ToastUtils;
-import shop.trqq.com.util.YkLog;
 
 /**
  * ï¿½ï¿½Ö·ï¿½Ð±ï¿½
@@ -52,6 +53,8 @@ public class address_listActivity extends BaseActivity {
     private Gson gson;
     private Boolean flag = false;
     private String freight_hash;
+    private String mIfcart;
+    private String mCart_id;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,7 +68,10 @@ public class address_listActivity extends BaseActivity {
         listView = (SlideListView) findViewById(R.id.address_manage_list);
         addressAdapter = new ListViewAddressAdapter(mContext, addressList);
         address_add = (TextView) findViewById(R.id.address_add);
-        freight_hash = getIntent().getStringExtra("freight_hash");
+        Intent intent = getIntent();
+        freight_hash =intent.getStringExtra("freight_hash");
+        mIfcart = intent.getStringExtra("ifcart");
+        mCart_id = intent.getStringExtra("cart_id");
         listView.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
@@ -76,21 +82,18 @@ public class address_listActivity extends BaseActivity {
                 if (freight_hash.equals("")) {
                     // ToastUtils.showMessage(mContext, "ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½");
                 } else {
-                    // ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½ï¿½Ã»ï¿½ï¿½Õ»ï¿½ï¿½Äµï¿½Ö?
                     ChangeAddressListData(position);
                 }
             }
         });
-        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÂµÄµï¿½Ö·ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½Ö·Ñ¡ï¿½ï¿½ï¿½ï¿½ï¿?
-        address_add.setOnClickListener(new OnClickListener () {
+        address_add.setOnClickListener(new OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 UIHelper.showAddressNew(mContext);
             }
         });
 
-        Drawable drawable = getResources().getDrawable(R.drawable.selector_layout_press);
-        listView.setSelector(drawable);
     }
 
     @Override
@@ -120,7 +123,6 @@ public class address_listActivity extends BaseActivity {
         mHeadTitleTextView.setText("ÊÕ»õµØÖ·¹ÜÀí");
     }
 
-    // ï¿½ï¿½È¡ï¿½ï¿½Ö·ï¿½Ð±ï¿½ï¿½ï¿½Ï¢
     private void loadingAddressListData() {
         progressActivity.showLoading();
         RequestParams requestParams = new RequestParams();
@@ -191,10 +193,15 @@ public class address_listActivity extends BaseActivity {
     }
 
     private void ChangeAddressListData(final int position) {
+
         RequestParams requestParams = new RequestParams();
         String key = UserManager.getUserInfo().getKey();
         requestParams.add("key", key);
         requestParams.add("freight_hash", freight_hash);
+        if(!TextUtils.isEmpty(mIfcart)&&!TextUtils.isEmpty(mCart_id)){
+            requestParams.add("ifcart",mIfcart);
+            requestParams.add("cart_id",mCart_id);
+        }
         requestParams.add("city_id", addressList.get(position).getCity_id());
         requestParams.add("area_id", addressList.get(position).getArea_id());
         String uri = HttpUtil.URL_UPDATE_ADDRESS;
@@ -202,34 +209,39 @@ public class address_listActivity extends BaseActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers,
                                   byte[] responseBody) {
+
                 try {
                     String jsonString = new String(responseBody);
-                    try {
-                        JSONObject jsonObject = new JSONObject(jsonString)
-                                .getJSONObject("datas");
-                        String errStr = jsonObject.getString("error");
-                        if (errStr != null) {
-                            ToastUtils.showMessage(mContext, errStr);
-                        }
-                    } catch (Exception e) {
-                        YkLog.t("ChangeAddressListData",
-                                jsonString);
 
+                    JSONObject jsonObject = new JSONObject(jsonString)
+                            .getJSONObject("datas");
+                    String errStr = jsonObject.optString("error");
+                    if (!TextUtils.isEmpty(errStr)) {
+                        ToastUtils.showMessage(mContext, errStr);
+                    }{
                         ToastUtils.showMessage(mContext, "ÐÞ¸Ä³É¹¦");
+                        JSONObject jsonObject1 = jsonObject.optJSONObject("content");
+                        String ship = jsonObject1.optString("126");
                         Intent it = new Intent();
-                        it.putExtra("address_id", addressList.get(position).getAddress_id());
-                        it.putExtra("city_id", addressList.get(position).getCity_id());
-                        it.putExtra("area_id", addressList.get(position).getArea_id());
-                        it.putExtra("true_name", addressList.get(position).getTrue_name());
-                        it.putExtra("area_info", addressList.get(position).getArea_info());
-                        it.putExtra("address", addressList.get(position).getAddress());
-                        it.putExtra("mob_phone", addressList.get(position).getMob_phone());
+                        Bundle bundle = new Bundle();
+                        bundle.putString("ship",ship);
+                        bundle.putString("address_id", addressList.get(position).getAddress_id());
+                        bundle.putString("city_id", addressList.get(position).getCity_id());
+                        bundle.putString("area_id", addressList.get(position).getArea_id());
+                        bundle.putString("true_name", addressList.get(position).getTrue_name());
+                        bundle.putString("area_info", addressList.get(position).getArea_info());
+                        bundle.putString("address", addressList.get(position).getAddress());
+                        bundle.putString("mob_phone", addressList.get(position).getMob_phone());
+                        it.putExtras(bundle);
                         setResult(Activity.RESULT_OK, it);
                         finish();
                     }
-                } catch (Exception e) {
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+
             }
+
 
             @Override
             public void onFailure(int statusCode, Header[] headers,
@@ -245,7 +257,9 @@ public class address_listActivity extends BaseActivity {
             @Override
             public void onFinish() {
                 super.onFinish();
+
             }
         });
     }
+
 }

@@ -54,7 +54,7 @@ public class OrderAdapter extends CommonAdapter<OrderGroupHomeListBean> {
     public OrderAdapter(Handler handler, Context context, String filter) {
         super(context, new ArrayList<OrderGroupHomeListBean>(),
                 R.layout.list_order);
-        YkLog.i(TAG, "¶©µ¥ÊÊÅäÆ÷¹¹Ôì·½·¨");
+
         this.handler = handler;
         this.filter = filter;
 
@@ -95,18 +95,18 @@ public class OrderAdapter extends CommonAdapter<OrderGroupHomeListBean> {
                     Button ok = (Button) holder.getView(R.id.trade_item_ok);
                     ok.setText("¶©µ¥Ö§¸¶(" + bean.getPay_amount() + ")Ôª");
 
-                    // Ö§¸¶±àºÅ
+                    // Ö§ï¿½ï¿½ï¿½ï¿½ï¿?
                     final String pay_sn = bean.getPay_sn();
-                    // Ö§¸¶µÄ×Ü½ð¶î
+                    // Ö§ï¿½ï¿½ï¿½ï¿½ï¿½Ü½ï¿½ï¿?
                     final String pay_amount = bean.getPay_amount();
                     ok.setOnClickListener(new OnClickListener() {
 
                         @Override
                         public void onClick(View v) {
 
-                            //  TODO :µã»÷Ö§¸¶
-                            // µã»÷Ö§¸¶
-                            // £¡£¡£¡£¡£¡£¡£¡£¡£¡£¡µã»÷¶©µ¥Ö§¸¶°´Å¥
+                            //  TODO :ï¿½ï¿½ï¿½Ö§ï¿½ï¿?
+                            // ï¿½ï¿½ï¿½Ö§ï¿½ï¿?
+                            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö§ï¿½ï¿½ï¿½ï¿½Å?
                             Payment_List(pay_sn, pay_amount);
                         }
                     });
@@ -122,15 +122,15 @@ public class OrderAdapter extends CommonAdapter<OrderGroupHomeListBean> {
     }
 
     /**
-     *  µã»÷¶©µ¥Ö§¸¶µÃµ½ Ö§¸¶ÁÐ±í
-     * @param pay_sn   ¶©µ¥Ö§¸¶±àºÅ
-     * @param pay_amount   ¶©µ¥Ö§¸¶½ð¶î
+     *  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö§ï¿½ï¿½ï¿½Ãµï¿?Ö§ï¿½ï¿½ï¿½Ð±ï¿½
+     * @param pay_sn   ï¿½ï¿½ï¿½ï¿½Ö§ï¿½ï¿½ï¿½ï¿½ï¿?
+     * @param pay_amount   ï¿½ï¿½ï¿½ï¿½Ö§ï¿½ï¿½ï¿½ï¿½ï¿?
      */
     private void Payment_List(final String pay_sn, final String pay_amount) {
 
         RequestParams requestParams = new RequestParams();
         String key = UserManager.getUserInfo().getKey();
-        requestParams.add("key", key);         // ·ÃÎÊÁîÅÆ
+        requestParams.add("key", key);         // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         HttpUtil.post(HttpUtil.URL_ORDER_PAYMENT_LIST, requestParams,
                 new AsyncHttpResponseHandler() {
                     @Override
@@ -157,15 +157,15 @@ public class OrderAdapter extends CommonAdapter<OrderGroupHomeListBean> {
                                 } else if (payment_list.contains("alipay")) {
                                     final String[] mItems = {"Ö§¸¶±¦"};
 
-//                                            "Ì©¸¶±¦",
-//                                            "Ïû·Ñ»ý·Ö¶Ò»»", "²úÆ·»ý·Ö¶Ò»»", "Í¨ÓÃ»ý·Ö¶Ò»»"};
-                                    // appcompatÖ÷Ìâ´úÌæÏµÍ³Ö÷Ìâ£¬±ÜÃâÏµÍ³°æ±¾²»Ö§³Ö
+//                                            "Ì©ï¿½ï¿½ï¿½ï¿½",
+//                                            "ï¿½ï¿½Ñ»ï¿½Ö¶Ò»ï¿½", "ï¿½ï¿½Æ·ï¿½ï¿½Ö¶Ò»ï¿?, "Í¨ï¿½Ã»ï¿½Ö¶Ò»ï¿?};
+                                    // appcompatï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÏµÍ³ï¿½ï¿½ï¿½â£¬ï¿½ï¿½ï¿½ï¿½ÏµÍ³ï¿½æ±¾ï¿½ï¿½Ö§ï¿½ï¿?
                                     AlertDialog.Builder builder = new AlertDialog.Builder(
                                             new ContextThemeWrapper(
                                                     mContext,
                                                     android.support.v7.appcompat.R.style.Base_V21_Theme_AppCompat_Light_Dialog));
 //													android.support.v7.appcompat.R.style.Theme_AppCompat_Light_DialogWhenLarge));
-                                    //builder.setTitle("Ñ¡ÔñÖ§¸¶·½Ê½");
+                                    //builder.setTitle("Ñ¡ï¿½ï¿½Ö§ï¿½ï¿½ï¿½ï¿½Ê½");
 
                                     builder.setItems(
                                             mItems,
@@ -173,17 +173,17 @@ public class OrderAdapter extends CommonAdapter<OrderGroupHomeListBean> {
                                                 public void onClick(
                                                         DialogInterface dialog,
                                                         int which) {
-                                                    // µã»÷ºóµ¯³ö´°¿ÚÑ¡ÔñÁËµÚ¼¸Ïî
+                                                    // ï¿½ï¿½ï¿½ï¿½óµ¯³ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½ËµÚ¼ï¿½ï¿½ï¿?
                                                     switch (which) {
                                                         case 0:
-//                                                             Ìø×ªµ½Ö§¸¶±¦½çÃæ
+//                                                             ï¿½ï¿½×ªï¿½ï¿½Ö§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //                                                            UIHelper.showPayment_wap(
 //                                                                    mContext,
 //                                                                    pay_sn, "r");
                                                             mOnClickAliPay.clickAlipay(pay_sn);
                                                             break;
                                                         case 1:
-                                                            // Ìø×ªµ½Ì©¸¶±¦
+                                                            // ï¿½ï¿½×ªï¿½ï¿½Ì©ï¿½ï¿½ï¿½ï¿½
                                                             UIHelper.showTaiPayment_wap(
                                                                     mContext,
                                                                     pay_sn,
@@ -191,7 +191,7 @@ public class OrderAdapter extends CommonAdapter<OrderGroupHomeListBean> {
                                                                     "taifubao");
                                                             break;
 
-                                                        // Ïû·Ñ»ý·Ö
+                                                        // ï¿½ï¿½Ñ»ï¿½ï¿½
                                                         case 2:
                                                             UIHelper.showTaiPayment_wap(
                                                                     mContext,
@@ -200,7 +200,7 @@ public class OrderAdapter extends CommonAdapter<OrderGroupHomeListBean> {
                                                                     "consumepay");
                                                             break;
                                                         case 3:
-                                                            // ²úÆ·»ý·Ö
+                                                            // ï¿½ï¿½Æ·ï¿½ï¿½ï¿?
                                                             UIHelper.showTaiPayment_wap(
                                                                     mContext,
                                                                     pay_sn,
@@ -208,7 +208,7 @@ public class OrderAdapter extends CommonAdapter<OrderGroupHomeListBean> {
                                                                     "productpay");
                                                             break;
                                                         case 4:
-                                                            // ÆÕÍ¨»ý·Ö
+                                                            // ï¿½ï¿½Í¨ï¿½ï¿½ï¿?
                                                             UIHelper.showTaiPayment_wap(
                                                                     mContext,
                                                                     pay_sn,
@@ -277,7 +277,7 @@ public class OrderAdapter extends CommonAdapter<OrderGroupHomeListBean> {
         });
     }
 
-    /* Ê±¼ä´Á×ª»»³É×Ö·û´® */
+    /* Ê±ï¿½ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿?*/
     public static String getDateToString(long time) {
         Date d = new Date(time);
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm");

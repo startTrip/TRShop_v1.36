@@ -30,6 +30,7 @@ import shop.trqq.com.R;
 import shop.trqq.com.UserManager;
 import shop.trqq.com.supermarket.adapters.CheckOrderStoreAdapter;
 import shop.trqq.com.supermarket.bean.GoodsInfo;
+import shop.trqq.com.supermarket.bean.OrderBuy2Data;
 import shop.trqq.com.ui.address_listActivity;
 import shop.trqq.com.util.HttpUtil;
 import shop.trqq.com.util.ToastUtils;
@@ -69,13 +70,13 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
                         mCheckOrderStoreAdapter.addDatas(mStoreData);
 
                         JSONObject jsonObject1 = store_cart_list.optJSONObject("126");
-                        String string1 = jsonObject1.optString("store_goods_total");
+                        mStoreGoodsTotal = jsonObject1.optString("store_goods_total");
                         String string2 = jsonObject1.optString("store_shipping");
                         if (!TextUtils.isEmpty(string2)) {
-                            Float i = Float.parseFloat(string1) + Float.parseFloat(string2);
+                            Float i= Float.parseFloat(mStoreGoodsTotal) + Float.parseFloat(string2);
                             mCheckMoney.setText(String.format("%.2f",i));
                         }else {
-                            mCheckMoney.setText(string1);
+                            mCheckMoney.setText(mStoreGoodsTotal);
                         }
                         mGoodsSum.setText(size+"");
                     }
@@ -101,7 +102,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
                     if (mProgressActivity.isLoading()){
                         mProgressActivity.showContent();
                     }
-
+                    ChangeAddressListData();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -118,6 +119,9 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
     private Gson mGson;
     private ProgressActivity mProgressActivity;
     private RelativeLayout mNoAddressLayout;
+    private String mOffpay_hash;
+    private String mOffpay_hash_batch;
+    private String mStoreGoodsTotal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,7 +167,47 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
 
         mStoreListView.setAdapter(mCheckOrderStoreAdapter);
 
+
+        mProgressActivity.showLoading();
         loadOnlineBuyStep1Data();
+
+    }
+
+    private void ChangeAddressListData() {
+        RequestParams requestParams = new RequestParams();
+        String key = UserManager.getUserInfo().getKey();
+        requestParams.add("key", key);
+        requestParams.add("freight_hash", freight_hash);
+        requestParams.add("ifcart", mIfcart);
+        requestParams.add("cart_id", mCart_id);
+        requestParams.add("city_id", city_id);
+        requestParams.add("area_id", area_id);
+        String uri = HttpUtil.URL_UPDATE_ADDRESS;
+        HttpUtil.post(uri, requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                 String string = new String(responseBody);
+                try {
+                    JSONObject jsonObject = new JSONObject(string);
+                    JSONObject jsonObject1 = jsonObject.optJSONObject("datas");
+                    String errStr = jsonObject1.optString("error");
+
+                    if (!TextUtils.isEmpty(errStr)) {
+                        ToastUtils.showMessage(SubmitOrderActivity.this, errStr);
+                    }else {
+                        mOffpay_hash = jsonObject1.optString("offpay_hash");
+                        mOffpay_hash_batch = jsonObject1.optString("offpay_hash_batch");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+            }
+        });
     }
 
     private void setListener() {
@@ -178,12 +222,12 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onClick(View v) {
                 // 判断地址是否为空
-                if (address_id == "" || address_id == null) {
+                if (TextUtils.isEmpty(address_id)) {
                     ToastUtils.showMessage(SubmitOrderActivity.this, "核对一下您的地址信息");
                 }else {
-                    // 跳转到确认订单支付界面
-                    Intent intent = new Intent(SubmitOrderActivity.this,ComfirmPayOrderActivity.class);
-                    startActivity(intent);
+                    // 提交订单
+                    SubmitOrder();
+
                 }
 
             }
@@ -194,15 +238,78 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
         mNoAddressLayout.setOnClickListener(this);
     }
 
+    // 提交订单
+    private void SubmitOrder() {
+
+        RequestParams requestParams = new RequestParams();
+        String key = UserManager.getUserInfo().getKey();
+        requestParams.add("key", key);      // 令牌
+        requestParams.add("cart_id", mCart_id);  // 购物车中商品的 id和对应的数量
+        requestParams.add("ifcart", mIfcart);   // 是否是从购物车中来的
+        requestParams.add("address_id", address_id); // 地址
+        requestParams.add("vat_hash", vat_hash);
+        requestParams.add("offpay_hash", mOffpay_hash);
+        requestParams.add("offpay_hash_batch", mOffpay_hash_batch);
+        requestParams.add("pay_name", "online");
+        requestParams.add("invoice_id", "");
+        requestParams.add("voucher","");// 代金券，voucher_t_id|store_id|voucher_price，多个店铺用逗号分割
+        requestParams.add("pd_pay", "0");// 是否使用预存款支付 1-使用 0-不使用
+        requestParams.add("rcb_pay", "0");// 是否使用充值卡支付 1-使用 0-不使用
+        requestParams.add("fcode","");
+        HttpUtil.post(HttpUtil.URL_BUY_STEP2, requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                 String string = new String(responseBody);
+                try {
+                    JSONObject jsonObject = new JSONObject(string);
+                    JSONObject jsonObject1 = jsonObject.optJSONObject("datas");
+                    String error = jsonObject1.optString("error");
+                    if (!TextUtils.isEmpty(error)) {
+                        ToastUtils.showMessage(SubmitOrderActivity.this,error);
+                    }else {
+                        String order_sn = jsonObject1.optString("order_sn");
+                        String pay_sn = jsonObject1.optString("pay_sn");
+                        if(!TextUtils.isEmpty(order_sn)){
+                            OrderBuy2Data orderBuy2Data = mGson.fromJson(jsonObject1.toString(), OrderBuy2Data.class);
+                            // 跳转到确认订单支付界面
+                            Intent intent = new Intent(SubmitOrderActivity.this,ConfirmPayOrderActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("orderInfo",orderBuy2Data);
+                            bundle.putString("state","0");
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                        }else {
+                            Intent intent = new Intent(SubmitOrderActivity.this,ConfirmPayOrderActivity.class);
+                            String checkMoney = mCheckMoney.getText().toString();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("state","1");
+                            bundle.putString("checkMoney",checkMoney);
+                            bundle.putString("pay_sn",pay_sn);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                        }
+                        // 销毁生成订单页面
+                        finish();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+            }
+        });
+    }
+
     private void loadOnlineBuyStep1Data(){
 
-        mProgressActivity.showLoading();
 
         RequestParams requestParams = new RequestParams();
         String key = UserManager.getUserInfo().getKey();
 
         requestParams.add("key",key);
-
         requestParams.add("cart_id", mCart_id);     // 商品的 id 和 数量
         requestParams.add("ifcart", mIfcart);
 
@@ -254,7 +361,6 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // 地址回传的信息
          if(requestCode==0&&resultCode== Activity.RESULT_OK){
-
              mNoAddressLayout.setVisibility(View.GONE);
              mChangeAdressLayout.setVisibility(View.VISIBLE);
              Bundle bundle = data.getExtras();
@@ -265,6 +371,17 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
              mAddress_info.setText(bundle.getString("area_info") + " "
                      + bundle.getString("address"));
              mPhoneNumber.setText("  " + bundle.getString("mob_phone"));
+             String ship = bundle.getString("ship");
+             if (!TextUtils.isEmpty(ship)) {
+                 Float i = Float.parseFloat(mStoreGoodsTotal) + Float.parseFloat(ship);
+                 mCheckMoney.setText(String.format("%.2f",i));
+                 for(int j = 0; j < mStoreData.size(); j++){
+                     GoodsInfo goodsInfo = mStoreData.get(j);
+                     goodsInfo.setStore_shipping(ship);
+                 }
+                 mCheckOrderStoreAdapter.addDatas(mStoreData);
+                 mCheckOrderStoreAdapter.notifyDataSetChanged();
+             }
          }
     }
 
@@ -272,16 +389,13 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.no_address_layout:
-                Intent intent = new Intent(SubmitOrderActivity.this, address_listActivity.class);
-                // 运费
-                intent.putExtra("freight_hash", freight_hash);
-                // 回传结果
-                startActivityForResult(intent, 0);
-                break;
-            case R.id.check_address_layout:
+                case R.id.check_address_layout:
+
                 Intent intent1 = new Intent(SubmitOrderActivity.this, address_listActivity.class);
                 // 运费
                 intent1.putExtra("freight_hash", freight_hash);
+                intent1.putExtra("cart_id",mCart_id);
+                intent1.putExtra("ifcart",mIfcart);
                 // 回传结果
                 startActivityForResult(intent1, 0);
                 break;

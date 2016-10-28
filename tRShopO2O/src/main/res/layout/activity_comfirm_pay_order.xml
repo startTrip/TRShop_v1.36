@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="shop.trqq.com.supermarket.activitys.ComfirmPayOrderActivity"
+    tools:context=".supermarket.activitys.ConfirmPayOrderActivity"
     >
 
     <!-- 标题栏 -->
@@ -47,6 +47,34 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                >
+                <TextView
+                    android:id="@+id/order_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingLeft="16dp"
+                    android:text="支付金额："
+                    android:layout_centerVertical="true"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    />
+                <TextView
+                    android:id="@+id/order_money"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:textColor="@color/black"
+                    android:layout_toRightOf="@id/order_amount"
+                    android:textSize="22sp"
+                    android:text="￥ 128"
+                    />
+            </RelativeLayout>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="20dp"

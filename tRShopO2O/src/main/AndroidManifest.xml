@@ -523,7 +523,7 @@
         </activity>
         <activity android:name=".ui.PersonalActivity">
         </activity>
-        <activity android:name=".supermarket.activitys.ComfirmPayOrderActivity">
+        <activity android:name=".supermarket.activitys.ConfirmPayOrderActivity">
         </activity>
         <activity android:name=".supermarket.activitys.MarketGoCartActivity">
         </activity>

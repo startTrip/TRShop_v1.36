@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -15,6 +16,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import shop.trqq.com.R;
 import shop.trqq.com.supermarket.bean.HomeTopImage;
 import shop.trqq.com.util.YkLog;
 
@@ -93,12 +95,12 @@ public class HomePagerAdapter extends PagerAdapter implements ViewPager.OnPageCh
             }
             String img_url = dataBean.getImg_url();
 
-            if (img_url != null) {
+            if (!TextUtils.isEmpty(img_url)) {
                 Picasso.with(mContext).load(img_url)
-                        .config(Bitmap.Config.RGB_565).resize(mWidthPixels, (int) (180*mDensity)).centerCrop()
+                        .config(Bitmap.Config.RGB_565).placeholder(R.mipmap.load_default).resize(mWidthPixels, (int) (180*mDensity)).centerCrop()
                         .into(imageView);
             }
-
+            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             imageView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -106,7 +108,7 @@ public class HomePagerAdapter extends PagerAdapter implements ViewPager.OnPageCh
                     switch (motionEvent.getAction()) {
                         case MotionEvent.ACTION_DOWN:
                             YkLog.i("lunbo","iDown");
-                            // 按下
+                            // 按下s
                             if (mOnBannerImageClickListener != null) {
                                 mOnBannerImageClickListener.onBannerImageClick(0);
                             }
@@ -129,7 +131,6 @@ public class HomePagerAdapter extends PagerAdapter implements ViewPager.OnPageCh
                 @Override
                 public void onClick(View v) {
                     int i = mList.indexOf(v);
-
 
                     Log.d("AAA", "onClick:" + i);
 //                    Intent intent = new Intent(mContext, BannerDetailActivity.class);

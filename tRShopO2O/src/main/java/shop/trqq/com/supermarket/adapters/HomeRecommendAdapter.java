@@ -71,7 +71,7 @@ public class HomeRecommendAdapter extends BaseAdapter{
             if (!TextUtils.isEmpty(url)) {
                 Picasso.with(mContext).load(url).
                         resize(mWidthPixels/2,mWidthPixels/2)
-                        .centerCrop().placeholder(R.drawable.icon_downloading)
+                        .centerCrop().placeholder(R.mipmap.load_default)
                         .config(Bitmap.Config.RGB_565)
                         .into(viewHolder.mImageView);
             }

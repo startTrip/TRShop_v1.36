@@ -469,8 +469,6 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
                     public void onFailure(int statusCode, Header[] headers,
                                           byte[] responseBody, Throwable error) {
 
-                        try {
-                            if (store_Cart_List.size() == 0) {
                                 Drawable errorDrawable = getResources()
                                         .getDrawable(R.drawable.wifi_off);
                                 progressActivity.showError(errorDrawable,
@@ -487,11 +485,6 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
                                             }
                                         });
                             }
-                        } catch (Exception e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        }
-                    }
 
                     @Override
                     public void onFinish() {
@@ -530,7 +523,7 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
             fcode = fcode_EditText.getText().toString();
         }
         requestParams.add("fcode", fcode);
-        YkLog.t("pay_name", pay_name);
+        YkLog.t("requestParams", requestParams.toString());
         HttpUtil.post(HttpUtil.URL_BUY_STEP2, requestParams,
                 new AsyncHttpResponseHandler() {
                     @Override
