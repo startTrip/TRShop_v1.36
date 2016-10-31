@@ -62,7 +62,8 @@ public class CheckOrderStoreAdapter extends ListViewBaseAdapter<GoodsInfo> {
                 Float i = Float.parseFloat(freight) + Float.parseFloat(store_goods_total);;
                 holder.mSum_money.setText("гд "+i);
             }else {
-                holder.mSum_money.setText("гд "+store_goods_total);
+                Float i= Float.parseFloat(store_goods_total)+10;
+                holder.mSum_money.setText("гд "+i);
             }
             List<GoodsInfo.GoodsListBean> goods_list = goodsInfo.getGoods_list();
             mCheckOrderGoodsAdapter = new CheckOrderGoodsAdapter(mContext,goods_list);

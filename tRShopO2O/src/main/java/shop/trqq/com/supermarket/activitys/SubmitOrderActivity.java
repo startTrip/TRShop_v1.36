@@ -71,12 +71,13 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
 
                         JSONObject jsonObject1 = store_cart_list.optJSONObject("126");
                         mStoreGoodsTotal = jsonObject1.optString("store_goods_total");
-                        String string2 = jsonObject1.optString("store_shipping");
-                        if (!TextUtils.isEmpty(string2)) {
-                            Float i= Float.parseFloat(mStoreGoodsTotal) + Float.parseFloat(string2);
-                            mCheckMoney.setText(String.format("%.2f",i));
+                        String store_shipping = jsonObject1.optString("store_shipping");
+                        if (!TextUtils.isEmpty(store_shipping)) {
+                            Float i= Float.parseFloat(mStoreGoodsTotal) + Float.parseFloat(store_shipping);
+                            mCheckMoney.setText("гд"+String.format("%.2f",i));
                         }else {
-                            mCheckMoney.setText(mStoreGoodsTotal);
+                            Float i= Float.parseFloat(mStoreGoodsTotal)+10;
+                            mCheckMoney.setText("гд"+String.format("%.2f",i));
                         }
                         mGoodsSum.setText(size+"");
                     }
@@ -280,7 +281,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
                             startActivity(intent);
                         }else {
                             Intent intent = new Intent(SubmitOrderActivity.this,ConfirmPayOrderActivity.class);
-                            String checkMoney = mCheckMoney.getText().toString();
+                            String checkMoney = mCheckMoney.getText().toString().substring(1);
                             Bundle bundle = new Bundle();
                             bundle.putString("state","1");
                             bundle.putString("checkMoney",checkMoney);

@@ -46,7 +46,7 @@ public class OrderAdapter extends CommonAdapter<OrderGroupHomeListBean> {
     }
 
     public interface onClickAliPay{
-        void clickAlipay(String pay_sn);
+        void clickAlipay(String pay_sn, String pay_amount);
     }
 
     private onClickAliPay mOnClickAliPay;
@@ -107,7 +107,8 @@ public class OrderAdapter extends CommonAdapter<OrderGroupHomeListBean> {
                             //  TODO :ï¿½ï¿½ï¿½Ö§ï¿½ï¿?
                             // ï¿½ï¿½ï¿½Ö§ï¿½ï¿?
                             // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö§ï¿½ï¿½ï¿½ï¿½Å?
-                            Payment_List(pay_sn, pay_amount);
+//                            Payment_List(pay_sn, pay_amount);
+                            mOnClickAliPay.clickAlipay(pay_sn,pay_amount);
                         }
                     });
                     // total.setText(bean.getPay_amount());
@@ -180,7 +181,7 @@ public class OrderAdapter extends CommonAdapter<OrderGroupHomeListBean> {
 //                                                            UIHelper.showPayment_wap(
 //                                                                    mContext,
 //                                                                    pay_sn, "r");
-                                                            mOnClickAliPay.clickAlipay(pay_sn);
+                                                            mOnClickAliPay.clickAlipay(pay_sn, pay_amount);
                                                             break;
                                                         case 1:
                                                             // ï¿½ï¿½×ªï¿½ï¿½Ì©ï¿½ï¿½ï¿½ï¿½

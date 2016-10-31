@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -49,6 +50,7 @@ import shop.trqq.com.adapter.Vr_Order_listAdapter;
 import shop.trqq.com.bean.OrderGroupHomeListBean;
 import shop.trqq.com.bean.Vr_Order_listBean;
 import shop.trqq.com.event.EventUpdateOrder;
+import shop.trqq.com.supermarket.activitys.ConfirmPayOrderActivity;
 import shop.trqq.com.supermarket.view.MyPopupWindow;
 import shop.trqq.com.ui.Base.BaseActivity;
 import shop.trqq.com.util.HttpUtil;
@@ -413,9 +415,16 @@ public class OrderActivity extends BaseActivity implements OrderAdapter.onClickA
 
     // 点击支付按钮回调方法
     @Override
-    public void clickAlipay(String pay_sn) {
+    public void clickAlipay(String pay_sn, String pay_amount) {
 
-        zhifuboPay(pay_sn);
+        Intent intent = new Intent(mContext,ConfirmPayOrderActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("state","1");
+        bundle.putString("checkMoney",pay_amount);
+        bundle.putString("pay_sn",pay_sn);
+        intent.putExtras(bundle);
+        startActivity(intent);
+        finish();
     }
 
     // 支付宝付款

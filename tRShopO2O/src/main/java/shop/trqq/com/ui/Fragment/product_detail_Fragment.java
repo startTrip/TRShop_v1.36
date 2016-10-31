@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -318,9 +319,12 @@ public class product_detail_Fragment extends Fragment implements OnClickListener
                     YkLog.longe(TAG, jsonString);
                     try {
                         String errStr = jsonObject.getString("error");
-                        if (errStr != null) {
+                        if (!TextUtils.isEmpty(errStr)) {
                             ToastUtils.showMessage(mContext, errStr);
-                            getActivity().finish();
+                            if(errStr.equals("ÇëµÇÂ¼")){
+                                UIHelper.showPersonalActivity(getActivity());
+                                getActivity().finish();
+                            }
                         }
                     } catch (Exception erre) {
                         String gooddata = jsonObject.optString("goods_info");
