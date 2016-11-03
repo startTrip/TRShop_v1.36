@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -161,6 +162,8 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
 
         mGson = new Gson();
 
+        initShopAddress();
+
         mStoreData = new ArrayList<>();
         mList = new ArrayList<>();
 
@@ -171,6 +174,12 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
 
         mProgressActivity.showLoading();
         loadOnlineBuyStep1Data();
+
+    }
+
+    private void initShopAddress() {
+        LatLng marketLatLng = new LatLng(21.281833, 110.396756);
+
 
     }
 
@@ -218,7 +227,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
                 finish();
             }
         });
-        // 点击提交订单付款
+        // ?????????????
         mCheckSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -311,7 +320,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
         String key = UserManager.getUserInfo().getKey();
 
         requestParams.add("key",key);
-        requestParams.add("cart_id", mCart_id);     // 商品的 id 和 数量
+        requestParams.add("cart_id", mCart_id);   // 商品的 id 和 数量
         requestParams.add("ifcart", mIfcart);
 
         HttpUtil.post(HttpUtil.URL_BUY_STEP1, requestParams, new AsyncHttpResponseHandler() {
@@ -393,11 +402,11 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
                 case R.id.check_address_layout:
 
                 Intent intent1 = new Intent(SubmitOrderActivity.this, address_listActivity.class);
-                // 运费
+                    // 运费
                 intent1.putExtra("freight_hash", freight_hash);
                 intent1.putExtra("cart_id",mCart_id);
                 intent1.putExtra("ifcart",mIfcart);
-                // 回传结果
+                    // 回传结果
                 startActivityForResult(intent1, 0);
                 break;
         }

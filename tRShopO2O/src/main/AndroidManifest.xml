@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest package="shop.trqq.com"
           xmlns:android="http://schemas.android.com/apk/res/android"
-          android:versionCode="1"
-          android:versionName="1.36"
+          android:versionCode="2"
+          android:versionName="1.37"
     >
 
     <uses-sdk
@@ -517,7 +517,7 @@
             >
         </activity>
 
-        <!-- 支付宝 demo activity 重要 包含支付入口 -->
+        <!-- 支付宝 重要 包含支付入口 -->
 
         <activity android:name=".supermarket.activitys.SubmitOrderActivity">
         </activity>

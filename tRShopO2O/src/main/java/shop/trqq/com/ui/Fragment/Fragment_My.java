@@ -41,6 +41,7 @@ import shop.trqq.com.UserManager;
 import shop.trqq.com.event.EventIM_UnRead;
 import shop.trqq.com.im.bean.UserBean;
 import shop.trqq.com.ui.Base.UIHelper;
+import shop.trqq.com.ui.PersonalActivity;
 import shop.trqq.com.util.HttpUtil;
 import shop.trqq.com.util.ToastUtils;
 import shop.trqq.com.util.UpdateManager;
@@ -106,72 +107,72 @@ public class Fragment_My extends Fragment implements OnClickListener,SwipeRefres
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-       // if (rootView == null) {
-            rootView = inflater.inflate(R.layout.fragment_my, container, false);
-            //ButterKnife绑定
-            ButterKnife.bind(this, rootView);
-            mContext = getActivity();
-            login = (Button) rootView.findViewById(R.id.login_button);
-            register = (Button) rootView.findViewById(R.id.register_button);
-            // 未登录的布局
-            mUnLoginRelativeLayout = (RelativeLayout) rootView
-                    .findViewById(R.id.unlogin_relativeLayout);
+        // if (rootView == null) {
+        rootView = inflater.inflate(R.layout.fragment_my, container, false);
+        //ButterKnife绑定
+        ButterKnife.bind(this, rootView);
+        mContext = getActivity();
+        login = (Button) rootView.findViewById(R.id.login_button);
+        register = (Button) rootView.findViewById(R.id.register_button);
+        // 未登录的布局
+        mUnLoginRelativeLayout = (RelativeLayout) rootView
+                .findViewById(R.id.unlogin_relativeLayout);
 
-            // 登陆以后的布局
-            mLoginRelativeLayout = (RelativeLayout) rootView
-                    .findViewById(R.id.login_relativeLayout);
-            // 注销
-            mLogoffLayout = (LinearLayout) rootView
-                    .findViewById(R.id.logoff_layout);
-            mUpdateLayout = (LinearLayout) rootView
-                    .findViewById(R.id.item_update_Layout);
-            mAboutLayout = (LinearLayout) rootView
-                    .findViewById(R.id.item_about_Layout);
-            mSysMsgLayout = (LinearLayout) rootView
-                    .findViewById(R.id.item_info_Layout);
-            mUserIconImageView = (ImageView) rootView
-                    .findViewById(R.id.userIcon_imageView);
-            mNicknameTextView = (TextView) rootView
-                    .findViewById(R.id.nickname_textView);
-            mpointTextView = (TextView) rootView.findViewById(R.id.point);
-            mpredepoitTextView = (TextView) rootView
-                    .findViewById(R.id.predepoit);
-            orderLayout = (LinearLayout) rootView
-                    .findViewById(R.id.order_layout);
-            vr_orderLayout = (LinearLayout) rootView
-                    .findViewById(R.id.vr_order_layout);
-            mVoucherLayout = (LinearLayout) rootView
-                    .findViewById(R.id.item_voucher_Layout);
-            mStoreLayout = (LinearLayout) rootView
-                    .findViewById(R.id.item_store_Layout);
-            imchat = (ImageView) rootView.findViewById(R.id.im_chat);
-            Favorites = (TextView) rootView.findViewById(R.id.My_Favorites);
-            History = (TextView) rootView.findViewById(R.id.My_History);
-            address = (TextView) rootView.findViewById(R.id.My_Address);
-            mSuggestLayout = (LinearLayout) rootView
-                    .findViewById(R.id.item_Suggest_Layout);
+        // 登陆以后的布局
+        mLoginRelativeLayout = (RelativeLayout) rootView
+                .findViewById(R.id.login_relativeLayout);
+        // 注销
+        mLogoffLayout = (LinearLayout) rootView
+                .findViewById(R.id.logoff_layout);
+        mUpdateLayout = (LinearLayout) rootView
+                .findViewById(R.id.item_update_Layout);
+        mAboutLayout = (LinearLayout) rootView
+                .findViewById(R.id.item_about_Layout);
+        mSysMsgLayout = (LinearLayout) rootView
+                .findViewById(R.id.item_info_Layout);
+        mUserIconImageView = (ImageView) rootView
+                .findViewById(R.id.userIcon_imageView);
+        mNicknameTextView = (TextView) rootView
+                .findViewById(R.id.nickname_textView);
+        mpointTextView = (TextView) rootView.findViewById(R.id.point);
+        mpredepoitTextView = (TextView) rootView
+                .findViewById(R.id.predepoit);
+        orderLayout = (LinearLayout) rootView
+                .findViewById(R.id.order_layout);
+        vr_orderLayout = (LinearLayout) rootView
+                .findViewById(R.id.vr_order_layout);
+        mVoucherLayout = (LinearLayout) rootView
+                .findViewById(R.id.item_voucher_Layout);
+        mStoreLayout = (LinearLayout) rootView
+                .findViewById(R.id.item_store_Layout);
+        imchat = (ImageView) rootView.findViewById(R.id.im_chat);
+        Favorites = (TextView) rootView.findViewById(R.id.My_Favorites);
+        History = (TextView) rootView.findViewById(R.id.My_History);
+        address = (TextView) rootView.findViewById(R.id.My_Address);
+        mSuggestLayout = (LinearLayout) rootView
+                .findViewById(R.id.item_Suggest_Layout);
 /*
             wallet_Taifubao = (TextView) rootView.findViewById(R.id.wallet_Taifubao);
             wallet_consumepay = (TextView) rootView.findViewById(R.id.wallet_consumepay);
             wallet_productpay = (TextView) rootView.findViewById(R.id.wallet_productpay);
 */
 
-            refresh_layout = (SwipeRefreshLayout) rootView
-                    .findViewById(R.id.refresh_layout);
-            refresh_layout.setColorSchemeResources(
-                    android.R.color.holo_blue_light,
-                    android.R.color.holo_red_light,
-                    android.R.color.holo_orange_light,
-                    android.R.color.holo_green_light);
-            refresh_layout.setOnRefreshListener(this);
+        refresh_layout = (SwipeRefreshLayout) rootView
+                .findViewById(R.id.refresh_layout);
+        refresh_layout.setColorSchemeResources(
+                android.R.color.holo_blue_light,
+                android.R.color.holo_red_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_green_light);
+        refresh_layout.setOnRefreshListener(this);
 
-            imBadge = new BadgeView(mContext, imchat);
-            msgBadge = new BadgeView(mContext, mSysMsgLayout);
+        imBadge = new BadgeView(mContext, imchat);
+        msgBadge = new BadgeView(mContext, mSysMsgLayout);
 
-            // 注册广播
-            generalReceiver = new MymsgBroadcastReceiver();
-            mContext.registerReceiver(generalReceiver, new IntentFilter(
-                    ACTION_GENERAL_SEND));
+        // 注册广播
+        generalReceiver = new MymsgBroadcastReceiver();
+        mContext.registerReceiver(generalReceiver, new IntentFilter(
+                ACTION_GENERAL_SEND));
             /*
 			 * Daifukuan= (TextView) rootView.findViewById(R.id.daifukuan);
 			 * Daishouhuo= (TextView) rootView.findViewById(R.id.daishouhuo);
@@ -181,22 +182,22 @@ public class Fragment_My extends Fragment implements OnClickListener,SwipeRefres
 			 * Daifukuan.setOnClickListener(this);
 			 * Daipingjia.setOnClickListener(this);
 			 */
-            Favorites.setOnClickListener(this);
-            History.setOnClickListener(this);
-            mSysMsgLayout.setOnClickListener(this);
-            address.setOnClickListener(this);
-            mSuggestLayout.setOnClickListener(this);
-            mUpdateLayout.setOnClickListener(this);
-            mAboutLayout.setOnClickListener(this);
-            orderLayout.setOnClickListener(this);
-            vr_orderLayout.setOnClickListener(this);
-            register.setOnClickListener(this);
-            login.setOnClickListener(this);
-            mVoucherLayout.setOnClickListener(this);
-            mStoreLayout.setOnClickListener(this);
-            imchat.setOnClickListener(this);
-            SystemBarHelper.immersiveStatusBar(getActivity(),0);
-            //mUserIcon.setOnClickListener(this);
+        Favorites.setOnClickListener(this);
+        History.setOnClickListener(this);
+        mSysMsgLayout.setOnClickListener(this);
+        address.setOnClickListener(this);
+        mSuggestLayout.setOnClickListener(this);
+        mUpdateLayout.setOnClickListener(this);
+        mAboutLayout.setOnClickListener(this);
+        orderLayout.setOnClickListener(this);
+        vr_orderLayout.setOnClickListener(this);
+        register.setOnClickListener(this);
+        login.setOnClickListener(this);
+        mVoucherLayout.setOnClickListener(this);
+        mStoreLayout.setOnClickListener(this);
+        imchat.setOnClickListener(this);
+        SystemBarHelper.immersiveStatusBar(getActivity(),0);
+        //mUserIcon.setOnClickListener(this);
        /* }
         // 缓存的rootView需要判断是否已经被加过parent，如果有parent需要从parent删除，要不然会发生这个rootview已经有parent的错误。
         ViewGroup parent = (ViewGroup) rootView.getParent();
@@ -585,13 +586,16 @@ public class Fragment_My extends Fragment implements OnClickListener,SwipeRefres
                 UIHelper.showLoginDialog(mContext);
                 break;
             case R.id.register_button:// 注册
+                if(mContext.getClass().equals(PersonalActivity.class)){
+                    ((PersonalActivity)mContext).finish();
+                }
                 UIHelper.showRegister(mContext);
                 break;
             case R.id.item_logoff_text:// 注销
                 loginOut();
                 UserManager.setUserInfo(false);
                 UserManager.cleanInfo(mContext);
-                AppContext mAppContext = (AppContext) mContext
+                AppContext mAppContext = (AppContext)mContext
                         .getApplicationContext();
                 mAppContext.clearIMJS();
                 wallet_Taifubao.setText("0.00\n泰付宝");

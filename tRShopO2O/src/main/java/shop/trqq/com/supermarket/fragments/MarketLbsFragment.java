@@ -56,6 +56,7 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
     private GeoCoder mSearch;
     private ImageView mMarketReLocation;
     private LatLng mMarketLatLng;
+    private LatLng mLatLng;
 
     public MarketLbsFragment() {
         // Required empty public constructor
@@ -199,7 +200,6 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
     @Override
     public void onReceiveLocation(BDLocation bdLocation) {
 
-
         mLocationClient.stop();
         int locType = bdLocation.getLocType();
 
@@ -209,8 +209,8 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
             case BDLocation.TypeGpsLocation:
             case BDLocation.TypeNetWorkLocation:
             case BDLocation.TypeOffLineLocation:
-                String address1 = bdLocation.getAddrStr();
 
+                String address1 = bdLocation.getAddrStr();
                 Address address = bdLocation.getAddress();
                 String city = address.city;
                 String district = address.district;
@@ -230,13 +230,13 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
 
                 YkLog.i("jinweidu",latitude+"/"+longitude);
 
-                LatLng latLng = new LatLng(latitude, longitude);
+                mLatLng = new LatLng(latitude, longitude);
 
-                setDistance(latLng);
+                setDistance(mLatLng);
                 // 被点击定位到自己的位置
                 if(isClickLoc){
                     // 点击定位到自己的位置，定位成功 更新地图
-                    MapStatusUpdate update = MapStatusUpdateFactory.newLatLngZoom(latLng,16);
+                    MapStatusUpdate update = MapStatusUpdateFactory.newLatLngZoom(mLatLng,16);
                     mBaiduMap.animateMapStatus(update);
 
                     isClickLoc = false;
@@ -252,7 +252,7 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
 
                 }else {
                     // 移动标注物
-                    currentLocationMarker.setPosition(latLng);
+                    currentLocationMarker.setPosition(mLatLng);
                 }
                 break;
 
@@ -272,13 +272,13 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
 
         Log.d("result",result);
 
-            mMyAddress.setText(" 距超市 "+result+" km");
+            mMyAddress.setText("距超市 "+ result +" km");
         }
     }
     private void initMarketLocation() {
         // 设定万能居超市的地址
         mMarketLatLng = new LatLng(21.281833,110.396756);
-        Marker marker = addMarker(21.281833, 110.39675, 0);
+        Marker marker = addMarker(21.281833, 110.39675,0);
         marker.setTitle("万能居超市");
 
         //定义地图状态

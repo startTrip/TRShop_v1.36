@@ -57,6 +57,7 @@ public class MarketMainActivity extends AppCompatActivity implements RadioGroup.
             transaction.add(R.id.main_container,fragment);
             transaction.hide(fragment);
         }
+
         transaction.show(mList.get(0));
         mRadioGroup.check(R.id.main_tab_home);
         transaction.commit();

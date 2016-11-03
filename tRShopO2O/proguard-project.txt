@@ -196,3 +196,12 @@
 -keep class com.alipay.android.app.IRemoteServiceCallback$Stub{*;}
 -keep class com.alipay.sdk.app.PayTask{ public *;}
 -keep class com.alipay.sdk.app.AuthTask{ public *;}
+
+
+# 百度地图
+-keep class com.baidu.** {*;}
+-keep class vi.com.** {*;}
+-dontwarn com.baidu.**
+
+-keep class shop.trqq.com.supermarket.bean.** { *; }
+-keep class shop.trqq.com.supermarket.config.** { *; }

@@ -45,7 +45,7 @@ public class RegisterActivity extends BaseActivity {
     private EditText code_edittext;
     private CheckBox mAgreement;
     private TextView mAgreement_Text;
-    //标题栏标题
+    //鏍囬鏍忔爣棰?
     private TextView mHeadTitleTextView;
     private EditText mVerify_code;
     private TextView mGetCode;
@@ -351,7 +351,7 @@ public class RegisterActivity extends BaseActivity {
         super.onDestroy();
     }
 
-    // 验证手机号是否正确
+    // 锟斤拷证锟街伙拷锟斤拷欠锟斤拷锟饺?
 //    public static boolean isMobileNO(String mobiles) {
 //        Pattern p = Pattern
 //                .compile("^(13[0-9]|15[012356789]|17[0678]|18[0-9]|14[57])\\d{8}$");

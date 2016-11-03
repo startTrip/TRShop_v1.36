@@ -52,6 +52,7 @@ import shop.trqq.com.bean.Mansong_RulesBean;
 import shop.trqq.com.bean.SpecBean;
 import shop.trqq.com.bean.Store_CreditBean;
 import shop.trqq.com.event.EventGoodmInfo;
+import shop.trqq.com.supermarket.activitys.SubmitOrderActivity;
 import shop.trqq.com.ui.Base.UIHelper;
 import shop.trqq.com.ui.CheckOutActivity;
 import shop.trqq.com.util.HttpUtil;
@@ -692,16 +693,30 @@ public class product_detail_Fragment extends Fragment implements OnClickListener
 										}*/ else {
                                             //add_cart();常规立即购买
                                             // 跳转到 结算页面
-                                            Intent localIntent = new Intent(mContext,
-                                                    CheckOutActivity.class);
-                                            // 商品的 id 和 购买的数量
-                                            String cart_id = goods_id + "|" + pop_num.getText()
-                                                    .toString();
-                                            localIntent.putExtra("cart_id", cart_id);
-                                            // 直接结算标识为0
-                                            localIntent.putExtra("ifcart", "0");
-                                            //localIntent.putExtra("buystep_flag", "0");
-                                            startActivity(localIntent);
+
+                                            if(store_id.equals("126")){
+                                                Intent localIntent = new Intent(mContext,
+                                                        SubmitOrderActivity.class);
+                                                // 商品的 id 和 购买的数量
+                                                String cart_id = goods_id + "|" + pop_num.getText()
+                                                        .toString();
+                                                localIntent.putExtra("cart_id", cart_id);
+                                                // 直接结算标识为0
+                                                localIntent.putExtra("ifcart", "0");
+                                                //localIntent.putExtra("buystep_flag", "0");
+                                                startActivity(localIntent);
+                                            }else {
+                                                Intent localIntent = new Intent(mContext,
+                                                        CheckOutActivity.class);
+                                                // 商品的 id 和 购买的数量
+                                                String cart_id = goods_id + "|" + pop_num.getText()
+                                                        .toString();
+                                                localIntent.putExtra("cart_id", cart_id);
+                                                // 直接结算标识为0
+                                                localIntent.putExtra("ifcart", "0");
+                                                //localIntent.putExtra("buystep_flag", "0");
+                                                startActivity(localIntent);
+                                            }
                                         }
                                     } else {
                                         ToastUtils.showMessage(mContext, "请登录");

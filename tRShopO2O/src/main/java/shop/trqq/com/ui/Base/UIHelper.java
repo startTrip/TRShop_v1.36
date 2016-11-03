@@ -532,8 +532,12 @@ public class UIHelper {
                                         // 将数据插入本地配置，成功就跳转到主界面
                                         if (UserManager.jsonToBean(context,
                                                 userInfo)) {
-
+//                                                UIHelper.showMain(context);
+                                            if (context.getClass().equals(PersonalActivity.class)){
+                                                ((PersonalActivity)context).finish();
+                                            }else {
                                                 UIHelper.showMain(context);
+                                            }
                                             dialog.dismiss();
                                             UserManager.setUserInfo(true);
                                             ToastUtils.showMessage(context,

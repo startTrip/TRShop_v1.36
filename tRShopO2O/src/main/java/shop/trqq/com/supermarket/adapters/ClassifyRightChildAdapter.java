@@ -66,7 +66,7 @@ public class ClassifyRightChildAdapter extends RecyclerView.Adapter<ClassifyRigh
             holder.mTextView.setText(sonItemsBean1.getType());
             holder.mImageView.setMinimumWidth(mWidthPixels*5/21);
             Picasso.with(mContext)
-                    .load(sonItemsBean1.getPhoto()).resize(mWidthPixels*5/21,mWidthPixels*5/21).centerCrop().placeholder(R.mipmap.load_default)
+                    .load(sonItemsBean1.getPhoto()).resize(mWidthPixels*5/21,mWidthPixels*5/21).centerCrop().placeholder(R.drawable.icon_downloading)
                     .config(Bitmap.Config.RGB_565).into(holder.mImageView);
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
