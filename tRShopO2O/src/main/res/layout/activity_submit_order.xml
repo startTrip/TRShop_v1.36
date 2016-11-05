@@ -188,9 +188,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:drawableLeft="@mipmap/receivingaddress"
                         android:gravity="center"
                         android:layout_marginLeft="10dp"
-                        android:text="!请填写收货地址"
+                        android:text="  请填写收货地址"
                         android:textSize="16sp"
                         />
                     <ImageView

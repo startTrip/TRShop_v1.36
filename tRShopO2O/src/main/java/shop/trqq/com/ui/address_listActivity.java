@@ -154,7 +154,7 @@ public class address_listActivity extends BaseActivity {
 					    skipIds.add(R.id.layout_bottom);*/
                         Drawable emptyDrawable = getResources().getDrawable(
                                 R.drawable.ic_empty);
-                        progressActivity.showEmpty(emptyDrawable, "地址为空","你还没有添加收货地址");
+                        progressActivity.showEmpty(emptyDrawable,"地址为空","你还没有添加收货地址");
                     }
                 } catch (Exception e) {
                 }
@@ -219,12 +219,16 @@ public class address_listActivity extends BaseActivity {
                     if (!TextUtils.isEmpty(errStr)) {
                         ToastUtils.showMessage(mContext, errStr);
                     }{
-                        ToastUtils.showMessage(mContext, "修改成功");
+//                        ToastUtils.showMessage(mContext, "修改成功");
                         JSONObject jsonObject1 = jsonObject.optJSONObject("content");
                         String ship = jsonObject1.optString("126");
+                        String offpay_hash = jsonObject.optString("offpay_hash");
+                        String offpay_hash_batch = jsonObject.optString("offpay_hash_batch");
                         Intent it = new Intent();
                         Bundle bundle = new Bundle();
                         bundle.putString("ship",ship);
+                        bundle.putString("offpay_hash",offpay_hash);
+                        bundle.putString("offpay_hash_batch",offpay_hash_batch);
                         bundle.putString("address_id", addressList.get(position).getAddress_id());
                         bundle.putString("city_id", addressList.get(position).getCity_id());
                         bundle.putString("area_id", addressList.get(position).getArea_id());

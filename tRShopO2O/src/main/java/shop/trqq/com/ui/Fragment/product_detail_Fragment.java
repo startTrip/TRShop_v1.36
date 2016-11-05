@@ -1,14 +1,12 @@
 package shop.trqq.com.ui.Fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources.NotFoundException;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -52,9 +50,8 @@ import shop.trqq.com.bean.Mansong_RulesBean;
 import shop.trqq.com.bean.SpecBean;
 import shop.trqq.com.bean.Store_CreditBean;
 import shop.trqq.com.event.EventGoodmInfo;
-import shop.trqq.com.supermarket.activitys.SubmitOrderActivity;
 import shop.trqq.com.ui.Base.UIHelper;
-import shop.trqq.com.ui.CheckOutActivity;
+import shop.trqq.com.ui.Goods_DetaillActivity;
 import shop.trqq.com.util.HttpUtil;
 import shop.trqq.com.util.ToastUtils;
 import shop.trqq.com.util.YkLog;
@@ -62,13 +59,14 @@ import shop.trqq.com.widget.MyGridView;
 import shop.trqq.com.widget.MyListView;
 
 public class product_detail_Fragment extends Fragment implements OnClickListener {
+
     private static final String TAG = "product_detail_Fragment";
     // 标题栏标题
     private TextView mHeadTitleTextView;
     private TextView product_price;
     private TextView product_name;
-    private TextView product_focus;
-    private TextView product_cart;
+
+
     private TextView goods_storage;
     private TextView goods_jingle;
     private TextView goods_marketprice;
@@ -88,10 +86,10 @@ public class product_detail_Fragment extends Fragment implements OnClickListener
     private TextView goods_service;
     private TextView promotion_price;
     private TextView product_price_text;
-    private TextView cart_add;
-    private TextView cart_buy;
+
+
     private Context mContext;
-    private Drawable focusdrawableTop;
+
     // 店铺评分
     private TextView store_desccredit;
     private TextView store_desccredit_credit;
@@ -139,7 +137,7 @@ public class product_detail_Fragment extends Fragment implements OnClickListener
     private String store_id;
     private String store_name;
     private String storage;
-    private Boolean isFavoritesFlag = false;
+
     private View rootView;// 缓存Fragment view
 
     private ProgressActivity progressActivity;
@@ -183,8 +181,7 @@ public class product_detail_Fragment extends Fragment implements OnClickListener
                 .findViewById(R.id.indicator_good_image);
         product_name = (TextView) rootView.findViewById(R.id.product_name);
         product_price = (TextView) rootView.findViewById(R.id.product_price);
-        product_focus = (TextView) rootView.findViewById(R.id.product_focus);
-        product_cart = (TextView) rootView.findViewById(R.id.product_cart);
+
         goods_storage = (TextView) rootView.findViewById(R.id.goods_storage);
         goods_jingle = (TextView) rootView.findViewById(R.id.goods_jingle);
         goods_salenum = (TextView) rootView.findViewById(R.id.goods_salenum);
@@ -214,10 +211,7 @@ public class product_detail_Fragment extends Fragment implements OnClickListener
                 .findViewById(R.id.promotion_price);
         product_price_text = (TextView) rootView
                 .findViewById(R.id.product_price_text);
-        cart_add = (TextView) rootView.findViewById(R.id.cart_add);
-        cart_buy = (TextView) rootView.findViewById(R.id.cart_buy);
-        focusdrawableTop = getResources().getDrawable(
-                R.drawable.nearby_focus_on);
+
         pop_reduce = (TextView) rootView.findViewById(R.id.pop_reduce);
         pop_num = (EditText) rootView.findViewById(R.id.pop_num);
         pop_add = (TextView) rootView.findViewById(R.id.pop_add);
@@ -262,37 +256,8 @@ public class product_detail_Fragment extends Fragment implements OnClickListener
             }
         });
 
-        // 关注点击监听事件
-        product_focus.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                if (isFavoritesFlag) {
-                    delFaavoritesData();
-                } else {
-                    addFaavoritesData();
-                }
 
-            }
-        });
 
-        // 购物车点击事件的监听
-        product_cart.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                // 如果是超市的商品就跳转到商品界面
-                if(store_id.equals("126")){
-                    UIHelper.showMarketCart(mContext);
-                }else {
-                    UIHelper.showCart(mContext);
-                }
-            }
-        });
-
-        if (UserManager.isLogin()) {
-            isFavorites();
-        }
         progressActivity = (ProgressActivity) rootView
                 .findViewById(R.id.progress);
         progressActivity.showLoading();
@@ -653,93 +618,20 @@ public class product_detail_Fragment extends Fragment implements OnClickListener
                                 || goodinfo.getPromotion_type().equals(
                                 "groupbuy")
                                 || goodinfo.getIs_fcode().equals("1")) {
-                            cart_add.setVisibility(View.GONE);
+//                            cart_add.setVisibility(View.GONE);
                         }
                         // 已经参加过抢购
-                        if (goodinfo.getPromotion_type().equals("groupbuy")
-                                && IsHaveBuy == 1) {
-                            cart_buy.setText("你已参加本商品抢购活动");
-                            cart_buy.setBackgroundColor(Color.GRAY);
-                            cart_buy.setOnClickListener(null);
-                        } else {
-                            // 点击立即购买
-                            cart_buy.setOnClickListener(new OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    if (UserManager.isLogin()) {
-                                        //虚拟物品购买
-                                        if (is_virtual.equals("1")) {
-                                            // cart_add.setText("立即购买");
-                                            loadVrBuyStep1Data();
-                                        } /*else if (goodinfo.getPromotion_type()//抢购或F码
-												.equals("groupbuy")
-												|| goodinfo.getIs_fcode()
-														.equals("1")) {
+//                        if (goodinfo.getPromotion_type().equals("groupbuy")
+//                                && IsHaveBuy == 1) {
+////                            cart_buy.setText("你已参加本商品抢购活动");
+////                            cart_buy.setBackgroundColor(Color.GRAY);
+////                            cart_buy.setOnClickListener(null);
+//                        } else {
+//
+//                        }
 
-											// cart_add.setText("立即购买");
-											Intent localIntent = new Intent(
-													mContext,
-													CheckOutActivity.class);
-											localIntent
-													.putExtra(
-															"cart_id",
-															goods_id
-																	+ "|"
-																	+ pop_num
-																			.getText()
-																			.toString());
-											localIntent.putExtra("ifcart", "0");
-											startActivity(localIntent);
-										}*/ else {
-                                            //add_cart();常规立即购买
-                                            // 跳转到 结算页面
-
-                                            if(store_id.equals("126")){
-                                                Intent localIntent = new Intent(mContext,
-                                                        SubmitOrderActivity.class);
-                                                // 商品的 id 和 购买的数量
-                                                String cart_id = goods_id + "|" + pop_num.getText()
-                                                        .toString();
-                                                localIntent.putExtra("cart_id", cart_id);
-                                                // 直接结算标识为0
-                                                localIntent.putExtra("ifcart", "0");
-                                                //localIntent.putExtra("buystep_flag", "0");
-                                                startActivity(localIntent);
-                                            }else {
-                                                Intent localIntent = new Intent(mContext,
-                                                        CheckOutActivity.class);
-                                                // 商品的 id 和 购买的数量
-                                                String cart_id = goods_id + "|" + pop_num.getText()
-                                                        .toString();
-                                                localIntent.putExtra("cart_id", cart_id);
-                                                // 直接结算标识为0
-                                                localIntent.putExtra("ifcart", "0");
-                                                //localIntent.putExtra("buystep_flag", "0");
-                                                startActivity(localIntent);
-                                            }
-                                        }
-                                    } else {
-                                        ToastUtils.showMessage(mContext, "请登录");
-                                        UIHelper.showPersonalActivity(mContext);
-                                    }
-                                }
-                            });
-                        }
-                        // 添加到购物车 点击事件的监听
-                        cart_add.setOnClickListener(new OnClickListener() {
-
-                            @Override
-                            public void onClick(View v) {
-                                // TODO Auto-generated method stub
-                                if (UserManager.isLogin()) {
-                                    // 添加到购物车
-                                    add_cart();
-                                } else {
-                                    ToastUtils.showMessage(mContext, "请登录");
-                                    UIHelper.showPersonalActivity(mContext);
-                                }
-                            }
-                        });
+                        String number = pop_num.getText().toString();
+                        ((Goods_DetaillActivity)mContext).deliverGoodMessage(store_id, number);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -886,197 +778,6 @@ public class product_detail_Fragment extends Fragment implements OnClickListener
                 });
     }
 
-    // 添加到购物车!!!!!!
-    private void add_cart() {
-        RequestParams requestParams = new RequestParams();
-        String key = UserManager.getUserInfo().getKey();
-        requestParams.add("key", key);
-        requestParams.add("goods_id", goods_id);
-        requestParams.add("quantity", pop_num.getText().toString());
-        HttpUtil.post(HttpUtil.URL_ADD_CART, requestParams,
-                new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers,
-                                          byte[] responseBody) {
-                        try {
-                            String jsonString = new String(responseBody);
-                            // TestUtils.println_err(TAG,jsonString);
-                            try {
-                                JSONObject jsonObject = new JSONObject(
-                                        jsonString).getJSONObject("datas");
-                                String errStr = jsonObject.getString("error");
-                                if (errStr != null) {
-                                    ToastUtils.showMessage(mContext, errStr);
-                                }
-                            } catch (Exception e) {
-                                if (new JSONObject(jsonString).getString(
-                                        "datas").equals("1")) {
-                                    ToastUtils.showMessage(mContext, "已加入购物车");
-                                }
-                            }
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers,
-                                          byte[] responseBody, Throwable error) {
-                        // TODO Auto-generated method stub
-                        ToastUtils.showMessage(mContext, R.string.get_informationData_failure);
-                    }
-                });
-    }
-
-    // 添加到收藏夹
-    private void addFaavoritesData() {
-        RequestParams requestParams = new RequestParams();
-        String key = UserManager.getUserInfo().getKey();
-        requestParams.add("key", key);
-        requestParams.add("goods_id", goods_id);
-        HttpUtil.post(HttpUtil.URL_ADD_FAVORITES, requestParams,
-                new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers,
-                                          byte[] responseBody) {
-                        try {
-                            String jsonString = new String(responseBody);
-                            // TestUtils.println_err(TAG,jsonString);
-                            try {
-                                JSONObject jsonObject = new JSONObject(
-                                        jsonString).getJSONObject("datas");
-                                String errStr = jsonObject.getString("error");
-                                if (errStr != null) {
-                                    ToastUtils.showMessage(mContext, errStr);
-                                }
-                            } catch (Exception e) {
-                                if (new JSONObject(jsonString).getString(
-                                        "datas").equals("1")) {
-                                    ToastUtils.showMessage(mContext, "成功收藏");
-                                    product_focus
-                                            .setCompoundDrawablesWithIntrinsicBounds(
-                                                    null, focusdrawableTop,
-                                                    null, null);
-                                    product_focus.setText("已关注");
-                                    isFavoritesFlag = true;
-                                }
-                            }
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers,
-                                          byte[] responseBody, Throwable error) {
-                        // TODO Auto-generated method stub
-                        ToastUtils.showMessage(mContext, R.string.get_informationData_failure);
-                    }
-                });
-    }
-
-    // 删除收藏夹
-    private void delFaavoritesData() {
-        RequestParams requestParams = new RequestParams();
-        String key = UserManager.getUserInfo().getKey();
-        requestParams.add("key", key);
-        requestParams.add("fav_id", goods_id);
-        HttpUtil.post(HttpUtil.URL_FAVORITES_DELETE, requestParams,
-                new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers,
-                                          byte[] responseBody) {
-                        try {
-                            String jsonString = new String(responseBody);
-                            YkLog.t(TAG, jsonString + goods_id);
-                            try {
-                                JSONObject jsonObject = new JSONObject(
-                                        jsonString).getJSONObject("datas");
-                                String errStr = jsonObject.getString("error");
-                                if (errStr != null) {
-                                    ToastUtils.showMessage(mContext, errStr);
-                                }
-                            } catch (Exception e) {
-                                if (new JSONObject(jsonString).getString(
-                                        "datas").equals("1")) {
-                                    ToastUtils.showMessage(mContext, "成功取消收藏");
-                                    Drawable drawableTop = ContextCompat.getDrawable(mContext, R.drawable.nearby_focus_off);
-                                    product_focus
-                                            .setCompoundDrawablesWithIntrinsicBounds(
-                                                    null, drawableTop, null,
-                                                    null);
-                                    product_focus.setText("关注");
-                                    isFavoritesFlag = false;
-                                }
-                            }
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers,
-                                          byte[] responseBody, Throwable error) {
-                        // TODO Auto-generated method stub
-                        ToastUtils.showMessage(mContext, R.string.get_informationData_failure);
-                    }
-                });
-    }
-
-    // 是否已经收藏
-    private void isFavorites() {
-
-        RequestParams requestParams = new RequestParams();
-        String key = UserManager.getUserInfo().getKey();
-        requestParams.add("key", key);
-        requestParams.add("goods_id", goods_id);
-        HttpUtil.post(HttpUtil.URL_FAVORITES_FLAG, requestParams,
-                new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers,
-                                          byte[] responseBody) {
-                        try {
-                            String jsonString = new String(responseBody);
-                            try {
-                                JSONObject jsonObject = new JSONObject(
-                                        jsonString).getJSONObject("datas");
-                                String errStr = jsonObject.getString("error");
-                                isFavoritesFlag = false;
-                                if (errStr != null) {
-                                    // ToastUtils.showMessage(mContext, errStr);
-                                }
-                            } catch (Exception e) {
-                                if (new JSONObject(jsonString).getString(
-                                        "datas").equals("1")) {
-                                    // ToastUtils.showMessage(mContext, "已经关注");
-                                    Drawable focusdrawableTop = getResources()
-                                            .getDrawable(
-                                                    R.drawable.nearby_focus_on);
-                                    product_focus
-                                            .setCompoundDrawablesWithIntrinsicBounds(
-                                                    null, focusdrawableTop,
-                                                    null, null);
-                                    product_focus.setText("已关注");
-                                    isFavoritesFlag = true;
-                                }
-                            }
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers,
-                                          byte[] responseBody, Throwable error) {
-                        // TODO Auto-generated method stub
-                        ToastUtils.showMessage(mContext, R.string.get_informationData_failure);
-                    }
-                });
-    }
 
     // 编辑框数量限制
     private TextWatcher textWatcher = new TextWatcher() {

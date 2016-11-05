@@ -23,7 +23,7 @@ import shop.trqq.com.util.HttpUtil;
 import shop.trqq.com.util.ToastUtils;
 
 /**
- * Ìí¼ÓÐÂµÄµØÖ·
+ * ï¿½ï¿½ï¿½ï¿½ÂµÄµï¿½Ö?
  */
 public class address_newActivity extends BaseActivity {
 
@@ -37,6 +37,65 @@ public class address_newActivity extends BaseActivity {
     private String city_id = "-1";
     private TextView mHeadTitleTextView;
     private AddressPopupWindow mAddressPopupWindow;
+
+    private void SendCityData() {
+        String ph = phone.getText().toString();
+        if(ph.trim().length()!=11){
+            ToastUtils.showMessage(mContext,"ÊÖ»úºÅÂëÊäÈëÓÐÎó");
+        }else {
+            RequestParams requestParams = new RequestParams();
+            String key = UserManager.getUserInfo().getKey();
+            requestParams.add("key", key);
+            requestParams.add("true_name", name.getText().toString());
+            requestParams.add("area_id", area_id);
+            requestParams.add("city_id", city_id);
+            requestParams.add("area_info", add_address.getText().toString());
+            requestParams.add("address", addressDetail.getText().toString());
+            requestParams.add("tel_phone", tel.getText().toString());
+            requestParams.add("mob_phone",ph);
+            // String uri
+            // ="http://shop.trqq.com/mobile/index.php?act=member_address&op=address_add";
+            HttpUtil.post(HttpUtil.URL_ADDRESS_ADD, requestParams,
+                    new AsyncHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers,
+                                              byte[] responseBody) {
+                            try {
+                                String jsonString = new String(responseBody);
+                                // System.err.println(jsonString);
+                                try {
+                                    JSONObject jsonObject = new JSONObject(
+                                            jsonString).getJSONObject("datas");
+                                    String errStr = jsonObject.getString("error");
+                                    if (errStr != null) {
+                                        ToastUtils.showMessage(mContext, errStr);
+                                    }
+                                } catch (Exception e) {
+                                    if (new JSONObject(jsonString).getJSONObject(
+                                            "datas").getString("address_id") != null) {
+                                        ToastUtils.showMessage(mContext, "Ìí¼Ó³É¹¦");
+                                        // ï¿½ï¿½Ó³É¹ï¿½ï¿½ï¿?finish activity
+                                        finish();
+                                    }
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers,
+                                              byte[] responseBody, Throwable error) {
+
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            super.onFinish();
+                        }
+                    });
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,7 +137,7 @@ public class address_newActivity extends BaseActivity {
                         // TODO Auto-generated method stub
                         add_flag = true;
                         String addResult = options1;
-                        // µÃµ½³ÇÊÐºÍµØÇøµÄid
+                        // ï¿½Ãµï¿½ï¿½ï¿½ï¿½ÐºÍµï¿½ï¿½ï¿½ï¿½id
                         city_id = option2;
                         area_id = options3;
                         ToastUtils.showMessage(mContext, addResult);
@@ -86,7 +145,7 @@ public class address_newActivity extends BaseActivity {
                     }
                 });
 
-        // µã»÷Ìí¼ÓµØÖ·°´Å¥
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½Ö·ï¿½ï¿½Å¥
         add_address_add.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -114,61 +173,5 @@ public class address_newActivity extends BaseActivity {
                 }
             }
         });
-
-    }
-
-    private void SendCityData() {
-
-        RequestParams requestParams = new RequestParams();
-        String key = UserManager.getUserInfo().getKey();
-        requestParams.add("key", key);
-        requestParams.add("true_name", name.getText().toString());
-        requestParams.add("area_id", area_id);
-        requestParams.add("city_id", city_id);
-        requestParams.add("area_info", add_address.getText().toString());
-        requestParams.add("address", addressDetail.getText().toString());
-        requestParams.add("tel_phone", tel.getText().toString());
-        requestParams.add("mob_phone", phone.getText().toString());
-        // String uri
-        // ="http://shop.trqq.com/mobile/index.php?act=member_address&op=address_add";
-        HttpUtil.post(HttpUtil.URL_ADDRESS_ADD, requestParams,
-                new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers,
-                                          byte[] responseBody) {
-                        try {
-                            String jsonString = new String(responseBody);
-                            // System.err.println(jsonString);
-                            try {
-                                JSONObject jsonObject = new JSONObject(
-                                        jsonString).getJSONObject("datas");
-                                String errStr = jsonObject.getString("error");
-                                if (errStr != null) {
-                                    ToastUtils.showMessage(mContext, errStr);
-                                }
-                            } catch (Exception e) {
-                                if (new JSONObject(jsonString).getJSONObject(
-                                        "datas").getString("address_id") != null) {
-                                    ToastUtils.showMessage(mContext, "Ìí¼Ó³É¹¦");
-                                    // Ìí¼Ó³É¹¦ºó finish activity
-                                    finish();
-                                }
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers,
-                                          byte[] responseBody, Throwable error) {
-
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        super.onFinish();
-                    }
-                });
     }
 }

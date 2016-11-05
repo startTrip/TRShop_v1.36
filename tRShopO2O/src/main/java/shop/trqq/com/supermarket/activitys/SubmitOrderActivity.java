@@ -15,7 +15,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -100,6 +99,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
                     }else {
                         mChangeAdressLayout.setVisibility(View.GONE);
                         mNoAddressLayout.setVisibility(View.VISIBLE);
+                        mCheckSubmit.setEnabled(false);
                     }
                     if (mProgressActivity.isLoading()){
                         mProgressActivity.showContent();
@@ -162,8 +162,6 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
 
         mGson = new Gson();
 
-        initShopAddress();
-
         mStoreData = new ArrayList<>();
         mList = new ArrayList<>();
 
@@ -174,12 +172,6 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
 
         mProgressActivity.showLoading();
         loadOnlineBuyStep1Data();
-
-    }
-
-    private void initShopAddress() {
-        LatLng marketLatLng = new LatLng(21.281833, 110.396756);
-
 
     }
 
@@ -203,7 +195,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
                     String errStr = jsonObject1.optString("error");
 
                     if (!TextUtils.isEmpty(errStr)) {
-                        ToastUtils.showMessage(SubmitOrderActivity.this, errStr);
+//                        ToastUtils.showMessage(SubmitOrderActivity.this, errStr);
                     }else {
                         mOffpay_hash = jsonObject1.optString("offpay_hash");
                         mOffpay_hash_batch = jsonObject1.optString("offpay_hash_batch");
@@ -381,6 +373,10 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
              mAddress_info.setText(bundle.getString("area_info") + " "
                      + bundle.getString("address"));
              mPhoneNumber.setText("  " + bundle.getString("mob_phone"));
+             mOffpay_hash = bundle.getString("offpay_hash");
+             mOffpay_hash_batch = bundle.getString("offpay_hash_batch");
+             // 可以提交订单
+             mCheckSubmit.setEnabled(true);
              String ship = bundle.getString("ship");
              if (!TextUtils.isEmpty(ship)) {
                  Float i = Float.parseFloat(mStoreGoodsTotal) + Float.parseFloat(ship);
@@ -392,6 +388,10 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
                  mCheckOrderStoreAdapter.addDatas(mStoreData);
                  mCheckOrderStoreAdapter.notifyDataSetChanged();
              }
+         }else {
+             mNoAddressLayout.setVisibility(View.VISIBLE);
+             mChangeAdressLayout.setVisibility(View.GONE);
+             mCheckSubmit.setEnabled(false);
          }
     }
 
@@ -403,7 +403,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
 
                 Intent intent1 = new Intent(SubmitOrderActivity.this, address_listActivity.class);
                     // 运费
-                intent1.putExtra("freight_hash", freight_hash);
+                intent1.putExtra("freight_hash",freight_hash);
                 intent1.putExtra("cart_id",mCart_id);
                 intent1.putExtra("ifcart",mIfcart);
                     // 回传结果

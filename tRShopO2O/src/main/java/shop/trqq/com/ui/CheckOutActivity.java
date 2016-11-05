@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -113,6 +114,7 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
     private Boolean is_pay = false;
     // 加载进度Activity
     private ProgressActivity progressActivity;
+    private RelativeLayout mNoAddressLayout;
 
     @Override
     protected void onResume() {
@@ -136,6 +138,7 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
         ifcart = getIntent().getStringExtra("ifcart");
         buystep_flag = getIntent().getStringExtra("buystep_flag");
         user = (LinearLayout) findViewById(R.id.balance_user);
+        mNoAddressLayout = (RelativeLayout) findViewById(R.id.no_address_layout);
         name = (TextView) findViewById(R.id.balance_name);
         phoneNum = (TextView) findViewById(R.id.balance_phoneNum);
         address = (TextView) findViewById(R.id.balance_address);
@@ -188,6 +191,8 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
 		 */
 
         user.setOnClickListener(this);
+        mNoAddressLayout.setOnClickListener(this);
+
         pay.setOnClickListener(this);
         // dis.setOnClickListener(this);
         invoice.setOnClickListener(this);
@@ -198,6 +203,7 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
 		 * score.setOnClickListener(this);
 		 */
         submit.setOnClickListener(this);
+
         // 使用充值卡支付
         available_rc_balance
                 .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -258,16 +264,18 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
             msg.setData(bundle);
             msg.what = 2;
             handler.sendMessage(msg);
-        }
-
-        // 回传发票信息
-         if (resultCode == 3) {
+        } else if (resultCode == 3) {  // 回传发票信息
             Bundle bundle = data.getExtras();
             // System.err.println( bundle.getString("invoice_message"));
             Message msg = new Message();
             msg.setData(bundle);
             msg.what = 3;
             handler.sendMessage(msg);
+        } else {
+            // 回传地址失败
+            mNoAddressLayout.setVisibility(View.VISIBLE);
+            user.setVisibility(View.GONE);
+            submit.setEnabled(false);
         }
     }
 
@@ -277,6 +285,7 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
         switch (v.getId()) {
 
             // 点击用户信息 Layout 布局
+            case R.id.no_address_layout:
             case R.id.balance_user:
                 // UIHelper.showAddressList(mContext, freight_hash);
                 Intent intent = new Intent(mContext, address_listActivity.class);
@@ -537,7 +546,7 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
                                     .getJSONObject("datas");
                             try {
                                 String errStr = jsonObject.getString("error");
-                                if (errStr != null) {
+                                if (errStr !=  null) {
                                     ToastUtils.showMessage(mContext, errStr);
                                 }
                             } catch (Exception e) {
@@ -597,7 +606,17 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
                                 .getJSONObject("datas");
                         String errStr = jsonObject.getString("error");
                         if (errStr != null) {
-                            ToastUtils.showMessage(mContext, errStr);
+                            store_Cart_List = new ArrayList<>();
+                            setSpeacBean(storecartlist.getJSONObject("store_cart_list"),
+                                    store_Cart_List,null,0);
+                            mListViewCheack_outAdapter = new ListViewCheack_outAdapter(
+                                    handler, mContext);
+                            mListViewCheack_outAdapter.setData(store_Cart_List);
+                            mListView.setAdapter(mListViewCheack_outAdapter);
+
+                            user.setVisibility(View.GONE);
+                            mNoAddressLayout.setVisibility(View.VISIBLE);
+                            submit.setEnabled(false);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -618,7 +637,7 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
                                 .getJSONObject("content");
                         store_Cart_List = new ArrayList<Store_Cart_ListBean>();
                         setSpeacBean(storecartlist.getJSONObject("store_cart_list"),
-                                store_Cart_List,content);
+                                store_Cart_List,content,1);
                         mListViewCheack_outAdapter = new ListViewCheack_outAdapter(
                                 handler, mContext);
                         mListViewCheack_outAdapter.setData(store_Cart_List);
@@ -733,6 +752,8 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
                             + msg.getData().getFloat("store_sumPrice"));
                     break;
                 case 2:// 更新地址信息
+                    mNoAddressLayout.setVisibility(View.GONE);
+                    user.setVisibility(View.VISIBLE);
                     Bundle bundle = msg.getData();
                     address_id = bundle.getString("address_id");
                     city_id = bundle.getString("city_id");
@@ -741,6 +762,9 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
                     address.setText(bundle.getString("area_info") + " "
                             + bundle.getString("address"));
                     phoneNum.setText("  " + bundle.getString("mob_phone"));
+                    offpay_hash = bundle.getString("offpay_hash");
+                    offpay_hash_batch = bundle.getString("offpay_hash_batch");
+                    submit.setEnabled(true);
                     break;
                 case 3:// 更新发票信息
                     Bundle bundle3 = msg.getData();
@@ -769,7 +793,7 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
 
     // 取Store_Cart_ListBean
     private void setSpeacBean(JSONObject jsonObject,
-                              ArrayList<Store_Cart_ListBean> list,JSONObject content) {
+                              ArrayList<Store_Cart_ListBean> list,JSONObject content,int j) {
         int i = 0;
         // 无序
         Iterator keyIter = jsonObject.keys();
@@ -782,7 +806,11 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
                 bean = gson.fromJson(jsonObject.optString(id),
                         new TypeToken<Store_Cart_ListBean>() {
                         }.getType());
-                bean.setStore_freight(content.getString(id));
+                if(j==1){
+                    bean.setStore_freight(content.getString(id));
+                }else if(j==0){
+                    bean.setStore_freight("0");
+                }
                 list.add(bean);
                 // System.err.println("商店名称" + list.get(i).getStore_name());
                 i++;

@@ -674,69 +674,11 @@
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="60dip"
+                    android:layout_height="20dip"
                     android:text="@null"
                     android:textSize="@dimen/medium_text_size" />
             </LinearLayout>
         </shop.trqq.com.widget.MyScrollview>
-    </LinearLayout>
-
-    <!-- 底部的布局 -->
-    <LinearLayout
-        android:id="@+id/layout_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="60dip"
-        android:layout_alignParentBottom="true">
-
-        <TextView
-            android:id="@+id/product_focus"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:background="#cf000000"
-            android:drawableTop="@drawable/nearby_focus_off"
-            android:gravity="center"
-            android:paddingTop="10dp"
-            android:text="关注"
-            android:textColor="@color/white_text_color" />
-
-        <TextView
-            android:id="@+id/product_cart"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:background="#cf000000"
-            android:drawableTop="@drawable/main_navigation_car"
-            android:gravity="center"
-            android:text="购物车"
-            android:paddingTop="5dp"
-            android:textColor="@color/white_text_color" />
-
-        <TextView
-            android:id="@+id/cart_add"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_weight="3"
-            android:background="@color/orange"
-            android:gravity="center"
-            android:singleLine="true"
-            android:text="加入购物车"
-            android:textColor="@color/white_text_color"
-            android:textSize="@dimen/small_middle_text_size" />
-
-        <TextView
-            android:id="@+id/cart_buy"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_weight="3"
-            android:background="@color/red"
-            android:gravity="center"
-            android:singleLine="true"
-            android:text="立即购买"
-            android:textColor="@color/white_text_color"
-            android:textSize="@dimen/small_middle_text_size" />
     </LinearLayout>
 
 </com.vlonjatg.progressactivity.ProgressActivity>

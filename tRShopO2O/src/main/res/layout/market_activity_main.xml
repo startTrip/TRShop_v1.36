@@ -8,7 +8,7 @@
     tools:context="shop.trqq.com.supermarket.MarketMainActivity"
     >
 
-    <!-- 容器用于存储 Fragment-->
+    <!-- 容器用于存储 Fragment -->
     <FrameLayout
         android:id="@+id/main_container"
         android:layout_width="match_parent"
@@ -56,7 +56,7 @@
 
         <RadioButton
             android:id="@+id/main_tab_personal"
-            android:text="我的"
+            android:text="定位"
             android:drawableTop="@drawable/selector_tab_personal"
             style="@style/MainTabItem"
             />
