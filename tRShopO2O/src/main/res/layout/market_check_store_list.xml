@@ -77,10 +77,9 @@
         android:orientation="horizontal"
         >
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="预计送达时间"
+            android:text="送达时间"
             android:layout_marginLeft="10dp"
             android:textColor="@color/black"
             />
@@ -91,6 +90,7 @@
             android:layout_weight="1"
             android:text="16:00"
             android:gravity="right"
+            android:textColor="@color/blue_text_color"
             android:layout_marginRight="20dp"
             />
 

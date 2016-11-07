@@ -2,7 +2,6 @@ package shop.trqq.com.supermarket.adapters;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -40,7 +39,7 @@ public class CheckOrderStoreAdapter extends ListViewBaseAdapter<GoodsInfo> {
             holder = (ViewHolder) convertView.getTag();
         }
         GoodsInfo goodsInfo = (GoodsInfo) getItem(position);
-        Log.d("bbbb",goodsInfo.getStore_name());
+
         if (goodsInfo != null) {
 
             String store_name = goodsInfo.getStore_name();
@@ -56,6 +55,7 @@ public class CheckOrderStoreAdapter extends ListViewBaseAdapter<GoodsInfo> {
                 String weight = String.format("%.1f",v);
                 holder.mGoodsInfo.setText("共"+goodsNum+"件商品，总重"+ weight +"kg  小计:");
             }
+            // 设置运费
             String freight = goodsInfo.getStore_shipping();
             if(!TextUtils.isEmpty(freight)){
                 holder.mFreight.setText("￥ "+freight);
@@ -65,6 +65,9 @@ public class CheckOrderStoreAdapter extends ListViewBaseAdapter<GoodsInfo> {
                 Float i= Float.parseFloat(store_goods_total)+10;
                 holder.mSum_money.setText("￥ "+i);
             }
+            // 设置到达时间
+//            String arrive_time = goodsInfo.getArrive_time();
+//            holder.mArrive_time.setText(arrive_time);
             List<GoodsInfo.GoodsListBean> goods_list = goodsInfo.getGoods_list();
             mCheckOrderGoodsAdapter = new CheckOrderGoodsAdapter(mContext,goods_list);
             holder.mListView.setAdapter(mCheckOrderGoodsAdapter);

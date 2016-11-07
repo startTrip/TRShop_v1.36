@@ -156,7 +156,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="17sp"
                         android:text="收货人:  "
-                        android:textColor = "@color/mainTabFont"
+                        android:textColor = "@color/black_text_color"
                         />
                     <TextView
                         android:id="@+id/phone_number"
@@ -164,6 +164,7 @@
                         android:layout_toLeftOf="@id/postion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/black_text_color"
                         android:text="18369956280"
                         />
                     <TextView
@@ -173,6 +174,7 @@
                         android:layout_toLeftOf="@id/postion"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/black_text_color"
                         android:text="收货地址:"
                         />
 
@@ -192,6 +194,7 @@
                         android:gravity="center"
                         android:layout_marginLeft="10dp"
                         android:text="  请填写收货地址"
+                        android:textColor="@color/black_text_color"
                         android:textSize="16sp"
                         />
                     <ImageView

@@ -28,8 +28,9 @@ public abstract class CommonAdapter<T> extends BaseAdapter {
     }
 
     public void setData(List<T> data) {
-        if (data != null)
+        if (data != null){
             this.mData = data;
+        }
     }
 
     @Override

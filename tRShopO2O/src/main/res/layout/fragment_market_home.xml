@@ -25,13 +25,13 @@
             />
 
         <TextView
-            android:layout_width="100dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="万能居超市"
             android:gravity="center"
             android:layout_gravity="center_horizontal"
             android:textColor="#000000"
-            android:textSize="20dp"
+            android:textSize="20sp"
             />
 
         <ImageView

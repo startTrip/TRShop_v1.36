@@ -2,6 +2,7 @@ package shop.trqq.com.supermarket.activitys;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,11 +27,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import shop.trqq.com.AppConfig;
 import shop.trqq.com.R;
 import shop.trqq.com.UserManager;
 import shop.trqq.com.supermarket.adapters.CheckOrderStoreAdapter;
 import shop.trqq.com.supermarket.bean.GoodsInfo;
 import shop.trqq.com.supermarket.bean.OrderBuy2Data;
+import shop.trqq.com.supermarket.utils.CalculateArriveTime;
 import shop.trqq.com.ui.address_listActivity;
 import shop.trqq.com.util.HttpUtil;
 import shop.trqq.com.util.ToastUtils;
@@ -57,60 +60,69 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
         public void handleMessage(Message msg) {
             if (msg.what==1){
                 JSONObject jsonObject = (JSONObject) msg.obj;
-                try {
-                    JSONObject store_cart_list = jsonObject.optJSONObject("store_cart_list");
-                    if (store_cart_list != null) {
+                JSONObject store_cart_list = jsonObject.optJSONObject("store_cart_list");
+                if (store_cart_list != null) {
 
-                        String string = store_cart_list.optString("126");
+                    String string = store_cart_list.optString("126");
 
-                        GoodsInfo goodsInfo = mGson.fromJson(string, GoodsInfo.class);
+                    GoodsInfo goodsInfo = mGson.fromJson(string, GoodsInfo.class);
 
-                        int size = goodsInfo.getGoods_list().size();
-                        mStoreData.add(goodsInfo);
-                        mCheckOrderStoreAdapter.addDatas(mStoreData);
+                    // 根据距离设置送达时间
+                    setArriveTime(goodsInfo);
 
-                        JSONObject jsonObject1 = store_cart_list.optJSONObject("126");
-                        mStoreGoodsTotal = jsonObject1.optString("store_goods_total");
-                        String store_shipping = jsonObject1.optString("store_shipping");
-                        if (!TextUtils.isEmpty(store_shipping)) {
-                            Float i= Float.parseFloat(mStoreGoodsTotal) + Float.parseFloat(store_shipping);
-                            mCheckMoney.setText("￥"+String.format("%.2f",i));
-                        }else {
-                            Float i= Float.parseFloat(mStoreGoodsTotal)+10;
-                            mCheckMoney.setText("￥"+String.format("%.2f",i));
-                        }
-                        mGoodsSum.setText(size+"");
-                    }
+                    int size = goodsInfo.getGoods_list().size();
+                    mStoreData.add(goodsInfo);
+                    mCheckOrderStoreAdapter.addDatas(mStoreData);
 
-                    // 设置地址信息
-                    JSONObject add_js = jsonObject
-                            .optJSONObject("address_info");
-                    // 已经有地址信息
-                    if (add_js!=null){
-                        address_id = add_js.optString("address_id");
-                        city_id = add_js.optString("city_id");
-                        area_id = add_js.optString("area_id");
-
-                        mName.setText(add_js.getString("true_name"));
-                        mAddress_info.setText(add_js.optString("area_info")
-                                + " " + add_js.optString("address"));
-                        mPhoneNumber.setText("  "
-                                + add_js.getString("mob_phone"));
+                    JSONObject jsonObject1 = store_cart_list.optJSONObject("126");
+                    mStoreGoodsTotal = jsonObject1.optString("store_goods_total");
+                    String store_shipping = jsonObject1.optString("store_shipping");
+                    if (!TextUtils.isEmpty(store_shipping)) {
+                        Float i= Float.parseFloat(mStoreGoodsTotal) + Float.parseFloat(store_shipping);
+                        mCheckMoney.setText("￥"+String.format("%.2f",i));
                     }else {
-                        mChangeAdressLayout.setVisibility(View.GONE);
-                        mNoAddressLayout.setVisibility(View.VISIBLE);
-                        mCheckSubmit.setEnabled(false);
+                        Float i= Float.parseFloat(mStoreGoodsTotal)+10;
+                        mCheckMoney.setText("￥"+String.format("%.2f",i));
                     }
-                    if (mProgressActivity.isLoading()){
-                        mProgressActivity.showContent();
-                    }
-                    ChangeAddressListData();
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    mGoodsSum.setText(size+"");
                 }
+
+//                    // 设置地址信息
+//                    JSONObject add_js = jsonObject
+//                            .optJSONObject("address_info");
+//                    // 已经有地址信息
+//                    if (add_js!=null){
+//                        address_id = add_js.optString("address_id");
+//                        city_id = add_js.optString("city_id");
+//                        area_id = add_js.optString("area_id");
+//
+//                        mName.setText(add_js.getString("true_name"));
+//                        mAddress_info.setText(add_js.optString("area_info")
+//                                + " " + add_js.optString("address"));
+//                        mPhoneNumber.setText("  "
+//                                + add_js.getString("mob_phone"));
+//                    }else {
+                mChangeAdressLayout.setVisibility(View.GONE);
+                mNoAddressLayout.setVisibility(View.VISIBLE);
+                mCheckSubmit.setEnabled(false);
+//                    }
+                if (mProgressActivity.isLoading()){
+                    mProgressActivity.showContent();
+                }
+                ChangeAddressListData();
             }
         }
     };
+
+    private void setArriveTime(GoodsInfo goodsInfo) {
+        SharedPreferences sharedPreferences = AppConfig.getSharedPreferences(SubmitOrderActivity.this);
+        float distance = sharedPreferences.getFloat("distance", -1.0f);
+
+        // 得到预计的送达时间
+        String arriveTime = CalculateArriveTime.calculateDateByDistance(distance);
+        goodsInfo.setArrive_time(arriveTime);
+    }
+
     private ArrayList<GoodsInfo> mStoreData;
     private CheckOrderStoreAdapter mCheckOrderStoreAdapter;
     private ArrayList<GoodsInfo> mList;
@@ -219,12 +231,12 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
                 finish();
             }
         });
-        // ?????????????
+        // 点击提交订单监听
         mCheckSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 判断地址是否为空
-                if (TextUtils.isEmpty(address_id)) {
+                if (address_id == "" || address_id == null) {
                     ToastUtils.showMessage(SubmitOrderActivity.this, "核对一下您的地址信息");
                 }else {
                     // 提交订单
@@ -312,7 +324,8 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
         String key = UserManager.getUserInfo().getKey();
 
         requestParams.add("key",key);
-        requestParams.add("cart_id", mCart_id);   // 商品的 id 和 数量
+
+        requestParams.add("cart_id", mCart_id);     // 商品的 id 和 数量
         requestParams.add("ifcart", mIfcart);
 
         HttpUtil.post(HttpUtil.URL_BUY_STEP1, requestParams, new AsyncHttpResponseHandler() {
@@ -375,7 +388,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
              mPhoneNumber.setText("  " + bundle.getString("mob_phone"));
              mOffpay_hash = bundle.getString("offpay_hash");
              mOffpay_hash_batch = bundle.getString("offpay_hash_batch");
-             // 可以提交订单
+             // 锟斤拷锟斤拷锟结交锟斤拷锟斤拷
              mCheckSubmit.setEnabled(true);
              String ship = bundle.getString("ship");
              if (!TextUtils.isEmpty(ship)) {

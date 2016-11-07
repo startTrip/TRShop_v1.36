@@ -79,8 +79,6 @@ public class HomePagerAdapter extends PagerAdapter implements ViewPager.OnPageCh
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
 
-        Log.d("AAA", position + "");
-
         ImageView imageView = mList.get(position);
 
         if (mDataBeen.size() > 0) {

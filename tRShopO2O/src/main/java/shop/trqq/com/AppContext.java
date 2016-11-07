@@ -19,7 +19,6 @@ import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-import com.tencent.bugly.crashreport.CrashReport;
 
 import org.apache.http.util.EncodingUtils;
 import org.litepal.LitePalApplication;
@@ -85,8 +84,8 @@ public class AppContext extends LitePalApplication {
         new UserManager(instance);
 
         initImageLoader(instance);
-        // 调用Bugly
-        CrashReport.initCrashReport(instance, "900013242", false);
+//        // 调用Bugly
+//        CrashReport.initCrashReport(instance, "900013242", false);
         //ButterKnife Debug
         ButterKnife.setDebug(BuildConfig.DEBUG);
         //初始化讯飞语音

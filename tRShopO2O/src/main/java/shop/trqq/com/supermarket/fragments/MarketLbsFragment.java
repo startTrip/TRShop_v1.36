@@ -35,14 +35,16 @@ import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.baidu.mapapi.utils.DistanceUtil;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import shop.trqq.com.AppConfig;
 import shop.trqq.com.R;
 import shop.trqq.com.util.YkLog;
 
 /**
- * ï¿½ï¿½Î»ï¿½ï¿½ï¿½Ðºï¿½ï¿½Ô¼ï¿½ï¿½ï¿½Î»ï¿½Ã£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ë³¬ï¿½ÐµÄ¾ï¿½ï¿½ï¿½
+ * ¶¨Î»³¬ÊÐºÍ×Ô¼ºµÄÎ»ÖÃ£¬ÃèÊö³¬ÊÐÅäËÍÇøÓòºÍ×Ô¼ºÓë³¬ÊÐµÄ¾àÀë
  */
 public class MarketLbsFragment extends Fragment implements BDLocationListener, BaiduMap.OnMarkerClickListener {
 
@@ -74,15 +76,15 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
 
         setData();
 
-        // ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½
+        // ÉèÖÃ¼àÌýÆ÷
         setListener();
         return view;
     }
 
-    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    // ÉèÖÃÊý¾Ý
     private void setData() {
 
-        mBaiduMap.getUiSettings().setCompassEnabled(false);//ï¿½ï¿½ï¿½ï¿½Ê¾Ö¸ï¿½ï¿½ï¿½ï¿½
+        mBaiduMap.getUiSettings().setCompassEnabled(false);//²»ÏÔÊ¾Ö¸ÄÏÕë
 
         mLocationClient = new LocationClient(getActivity());
 
@@ -90,24 +92,31 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
 
         LocationClientOption option = new LocationClientOption();
 
-        // ï¿½ï¿½ï¿½Ã´ï¿½GPS
+        // ÉèÖÃ´ò¿ªGPS
         option.setOpenGps(true);
 
         option.setCoorType("bd09ll");
 
-        // ï¿½Ú¶ï¿½Î»ï¿½ï¿½Ê±ï¿½ò£¬·ï¿½ï¿½Øµï¿½Ö·ï¿½ï¿½Ï¢
+        // ÔÚ¶¨Î»µÄÊ±ºò£¬·µ»ØµØÖ·ÐÅÏ¢
         option.setIsNeedAddress(true);
+        option.setIsNeedLocationDescribe(true);
 
-        // ï¿½ï¿½ï¿½Ã¶ï¿½Î»Ä£Ê½
+        option.setIsNeedLocationDescribe(true);//¿ÉÑ¡£¬Ä¬ÈÏfalse£¬ÉèÖÃÊÇ·ñÐèÒªÎ»ÖÃÓïÒå»¯½á¹û£¬¿ÉÒÔÔÚBDLocation.getLocationDescribeÀïµÃµ½£¬½á¹ûÀàËÆÓÚ¡°ÔÚ±±¾©Ìì°²ÃÅ¸½½ü¡±
+        option.setIsNeedLocationPoiList(true);//¿ÉÑ¡£¬Ä¬ÈÏfalse£¬ÉèÖÃÊÇ·ñÐèÒªPOI½á¹û£¬¿ÉÒÔÔÚBDLocation.getPoiListÀïµÃµ½
+        option.setIgnoreKillProcess(false);//¿ÉÑ¡£¬Ä¬ÈÏtrue£¬¶¨Î»SDKÄÚ²¿ÊÇÒ»¸öSERVICE£¬²¢·Åµ½ÁË¶ÀÁ¢½ø³Ì£¬ÉèÖÃÊÇ·ñÔÚstopµÄÊ±ºòÉ±ËÀÕâ¸ö½ø³Ì£¬Ä¬ÈÏ²»É±ËÀ
+        option.SetIgnoreCacheException(false);//¿ÉÑ¡£¬Ä¬ÈÏfalse£¬ÉèÖÃÊÇ·ñÊÕ¼¯CRASHÐÅÏ¢£¬Ä¬ÈÏÊÕ¼¯
+        option.setEnableSimulateGps(false);//¿ÉÑ¡£¬Ä¬ÈÏfalse£¬ÉèÖÃÊÇ·ñÐèÒª¹ýÂËGPS·ÂÕæ½á¹û£¬Ä¬ÈÏÐèÒª
+
+        // ÉèÖÃ¶¨Î»Ä£Ê½
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
 
         mLocationClient.setLocOption(option);
         mLocationClient.start();
     }
 
-    // ï¿½ï¿½Ó¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    // Ìí¼Ó¾ØÐÎÇøÓò
     private void addRange() {
-        // ï¿½ï¿½Ó¶ï¿½ï¿½ï¿½ï¿½
+        // Ìí¼Ó¶à±ßÐÎ
         LatLng pt1 = new LatLng(21.28313,110.403193);
         LatLng pt2 = new LatLng(21.315897,110.385442);
         LatLng pt3 = new LatLng(21.3229,110.375956);
@@ -145,23 +154,23 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
         mBaiduMap.addOverlay(ooPolygon);
     }
 
-    // ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½
+    // ÉèÖÃ¼àÌýÆ÷
     private void setListener() {
 
-        // ï¿½ï¿½ï¿½ï¿½ï¿½Î»ImageView ï¿½ï¿½Î»ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½Î»ï¿½ï¿½
+        // µã»÷¶¨Î»ImageView ¶¨Î»µ½×Ô¼ºµÄÎ»ÖÃ
         mReLocaation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                YkLog.i("congxin","congxindinwei");
+
                   setReLocation();
             }
         });
-        // ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ImageView ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½Î»ï¿½ï¿½
+        // µã»÷¶¨Î»µ½³¬ÊÐ ImageView ¶¨Î»µ½³¬ÊÐµÄÎ»ÖÃ
         mMarketReLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 LatLng latLng = new LatLng(21.281833,110.396756);
-                // ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½Î»ï¿½Ã£ï¿½ï¿½ï¿½Î»ï¿½É¹ï¿½ ï¿½ï¿½ï¿½Âµï¿½Í¼
+                // µã»÷¶¨Î»µ½×Ô¼ºµÄÎ»ÖÃ£¬¶¨Î»³É¹¦ ¸üÐÂµØÍ¼
                 MapStatusUpdate update = MapStatusUpdateFactory.newLatLngZoom(latLng,16);
                 mBaiduMap.animateMapStatus(update);
             }
@@ -169,19 +178,20 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
         mBaiduMap.setOnMarkerClickListener(this);
     }
 
-    // ï¿½ï¿½ï¿½Â¶ï¿½Î»ï¿½Ô¼ï¿½ï¿½ï¿½Î»ï¿½Ã²ï¿½ï¿½ï¿½ ï¿½ï¿½Í¼ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½Î»ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½
+    // ÖØÐÂ¶¨Î»×Ô¼ºµÄÎ»ÖÃ²¢ÇÒ µØÍ¼ÒÔ×Ô¼ºµÄÎ»ÖÃÎªÖÐÐÄ
     private void setReLocation() {
 
-        mMapView.setClickable(false);// ï¿½ï¿½ï¿½Ãµ×²ï¿½ï¿½mapviewï¿½Ø»ï¿½ï¿½ï¿½ï¿½Â¼ï¿½
-        isClickLoc = true;// ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½Î»
-        mLocationClient.start();// ï¿½ï¿½ï¿½Â¶ï¿½Î»Ò»ï¿½ï¿½
+        mMapView.setClickable(false);// ²»ÈÃµ×²ãµÄmapview½Ø»ñµã»÷ÊÂ¼þ
+        isClickLoc = true;// ÈÃËû³õÊ¼¶¨Î»
+        mLocationClient.start();// ÖØÐÂ¶¨Î»Ò»ÏÂ
     }
-    // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½
+    // ³õÊ¼»¯Êý¾Ý
     private void initData() {
         if (mMapView != null) {
             mBaiduMap = mMapView.getMap();
 
         }
+        mMarketLatLng = new LatLng(21.281833,110.396756);
         mSearch = GeoCoder.newInstance();
     }
 
@@ -217,82 +227,90 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
                 String street = address.street;
                 String streetNumber = address.streetNumber;
 
-                //ï¿½ï¿½Î»ï¿½É¹ï¿½ï¿½ï¿½ï¿½Ãµï¿½ ï¿½Ï·ï¿½ï¿½ï¿½ Titleï¿½ï¿½
+                //¶¨Î»³É¹¦ÉèÖÃµ½ ÉÏ·½µÄ TitleÉÏ
                 if (address1 != null && address!=null) {
 
                     mMyAddress.setText(city+district+street);
                 }
 
-                // ï¿½Ãµï¿½ï¿½ï¿½Î»ï¿½ï¿½Î³ï¿½ï¿½
+                // µÃµ½¶¨Î»µÄÎ³¶È
                 double latitude = bdLocation.getLatitude();
-                // ï¿½Ãµï¿½Î»ï¿½ÃµÄ¾ï¿½ï¿½ï¿½
+                // µÃµ½Î»ÖÃµÄ¾«¶È
                 double longitude = bdLocation.getLongitude();
 
                 YkLog.i("jinweidu",latitude+"/"+longitude);
 
-                mLatLng = new LatLng(latitude, longitude);
+                LatLng latLng = new LatLng(latitude, longitude);
 
-                setDistance(mLatLng);
-                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½Î»ï¿½ï¿½
+                setDistance(latLng);
+                // ±»µã»÷¶¨Î»µ½×Ô¼ºµÄÎ»ÖÃ
                 if(isClickLoc){
-                    // ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½Î»ï¿½Ã£ï¿½ï¿½ï¿½Î»ï¿½É¹ï¿½ ï¿½ï¿½ï¿½Âµï¿½Í¼
-                    MapStatusUpdate update = MapStatusUpdateFactory.newLatLngZoom(mLatLng,16);
+                    // µã»÷¶¨Î»µ½×Ô¼ºµÄÎ»ÖÃ£¬¶¨Î»³É¹¦ ¸üÐÂµØÍ¼
+                    MapStatusUpdate update = MapStatusUpdateFactory.newLatLngZoom(latLng,16);
                     mBaiduMap.animateMapStatus(update);
 
                     isClickLoc = false;
                 }
 
                 if (currentLocationMarker == null) {
-                    // ï¿½ï¿½Ó±ï¿½×¢ï¿½ï¿½
+                    // Ìí¼Ó±ê×¢Îï
                     currentLocationMarker = addMarker(latitude,longitude,1);
-                    currentLocationMarker.setTitle("ï¿½Òµï¿½Î»ï¿½ï¿½");
+                    currentLocationMarker.setTitle("ÎÒµÄÎ»ÖÃ");
 
-                    // ï¿½ï¿½Ó²ï¿½ï¿½ï¿½×¢ï¿½ï¿½ï¿½Ðµï¿½Î»ï¿½ï¿½
+                    // Ìí¼Ó²¢±ê×¢³¬ÊÐµÄÎ»ÖÃ
                     initMarketLocation();
 
                 }else {
-                    // ï¿½Æ¶ï¿½ï¿½ï¿½×¢ï¿½ï¿½
-                    currentLocationMarker.setPosition(mLatLng);
+                    // ÒÆ¶¯±ê×¢Îï
+                    currentLocationMarker.setPosition(latLng);
                 }
                 break;
 
             default:
-                Log.d(TAG, "onReceiveLocation: "+"ï¿½ï¿½Î»Ê§ï¿½ï¿½");
-                mMyAddress.setText("ï¿½ï¿½Î»Ê§ï¿½ï¿½");
+                Log.d(TAG, "onReceiveLocation: "+"¶¨Î»Ê§°Ü");
+                mMyAddress.setText("¶¨Î»Ê§°Ü");
                 break;
         }
     }
 
     private void setDistance(LatLng latLng) {
 
-        double distance = DistanceUtil.getDistance(mMarketLatLng, latLng)/1000;
+        double size = DistanceUtil.getDistance(mMarketLatLng, latLng);
 
-        if(distance>=0){
-        String result = String.format("%.1f",distance);
+        AppConfig.setSharedPreferences(getContext(),"distance",(float)size);
 
-        Log.d("result",result);
+        String distance = null;
+        if(size>=0){
 
-            mMyAddress.setText("ï¿½à³¬ï¿½ï¿½ "+ result +" km");
+            if (size < 1000) {
+
+                distance = (int) size + "m";
+            } else {
+                size = size / 1000;
+                DecimalFormat df = new DecimalFormat("0.00");
+                distance = df.format(size) + " km";
+            }
+            mMyAddress.setText(" ¾à³¬ÊÐ "+distance);
         }
+
     }
     private void initMarketLocation() {
-        // ï¿½è¶¨ï¿½ï¿½ï¿½Ü¾Ó³ï¿½ï¿½ÐµÄµï¿½Ö·
-        mMarketLatLng = new LatLng(21.281833,110.396756);
-        Marker marker = addMarker(21.281833, 110.39675,0);
-        marker.setTitle("ï¿½ï¿½ï¿½Ü¾Ó³ï¿½ï¿½ï¿½");
+        // Éè¶¨ÍòÄÜ¾Ó³¬ÊÐµÄµØÖ·
+        Marker marker = addMarker(21.281833, 110.39675, 0);
+        marker.setTitle("ÍòÄÜ¾Ó³¬ÊÐ");
 
-        //ï¿½ï¿½ï¿½ï¿½ï¿½Í¼×´Ì¬
+        //¶¨ÒåµØÍ¼×´Ì¬
         mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newLatLngZoom(mMarketLatLng,13));
 
-        // ï¿½ï¿½Ó¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        //Ìí¼Ó¶à±ßÐÎÇøÓò
         addRange();
     }
 
     /**
-     * ï¿½ï¿½ï¿½ ï¿½ï¿½×¢
+     * Ìí¼Ó ±ê×¢
      * @param latitude
      * @param longitude
-     * @param i   0 ï¿½ï¿½?ï¿½Ðµï¿½Î»ï¿½Ã£ï¿½ 1 ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½Î»ï¿½ï¿½
+     * @param i   0 ´ú±í³¬ÊÐµÄÎ»ÖÃ£¬ 1 ´ú±í×Ô¼ºµÄÎ»ÖÃ
      * @return
      */
     private Marker addMarker(double latitude, double longitude,int i) {
@@ -301,10 +319,10 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
 
         options.position(new LatLng(latitude,longitude));
         if(i==0){
-            // ï¿½ï¿½ï¿½Ðµï¿½Î»ï¿½ï¿½
+            // ³¬ÊÐµÄÎ»ÖÃ
             options.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_location_box));
         }else if(i==1){
-            // ï¿½Òµï¿½Î»ï¿½ï¿½
+            // ÎÒµÄÎ»ÖÃ
             options.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_location_fresh));
         }
 
@@ -321,7 +339,7 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
             final View view = LayoutInflater.from(getActivity()).inflate(R.layout.market_address, null);
             final TextView name= (TextView) view.findViewById(R.id.title);
             final TextView info= (TextView) view.findViewById(R.id.title_info);
-            // ï¿½ï¿½ï¿½ ï¿½ï¿½Î³ï¿½ÈµÃµï¿½ï¿½ï¿½Ö·ï¿½ï¿½Ï¢
+            // ¸ù¾Ý ¾­Î³¶ÈµÃµ½µØÖ·ÐÅÏ¢
             mSearch.setOnGetGeoCodeResultListener(new OnGetGeoCoderResultListener() {
                 @Override
                 public void onGetGeoCodeResult(GeoCodeResult geoCodeResult) {
@@ -332,12 +350,12 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
                 public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
                     name.setText(title);
                     if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
-                        //Ã»ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+                        //Ã»ÓÐÕÒµ½¼ìË÷½á¹û
                         info.setText("");
                     }else {
                         info.setText(result.getAddress());
                     }
-                    //ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+                    //»ñÈ¡·´ÏòµØÀí±àÂë½á¹û
                     InfoWindow infoWindow = new InfoWindow(view,marker.getPosition(),-100);
                     mBaiduMap.showInfoWindow(infoWindow);
                 }

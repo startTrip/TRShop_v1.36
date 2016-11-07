@@ -26,6 +26,16 @@ public class GoodsInfo {
     private Object store_mansong_rule_list;
     private String freight;
     private String store_name;
+
+    public String getArrive_time() {
+        return arrive_time;
+    }
+
+    public void setArrive_time(String arrive_time) {
+        this.arrive_time = arrive_time;
+    }
+
+    private String arrive_time;
     /**
      * cart_id : 11579
      * buyer_id : 14654

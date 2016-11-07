@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -106,13 +105,10 @@ public class ListViewCheack_outAdapter extends
                 freightNum = freightNum
                         + Bean.getGoods_lists().get(i).getGoods_freight();
             }*/
-            if(!TextUtils.isEmpty(Bean.getStore_shipping())){
-                freightNum=Float.parseFloat(Bean.getStore_shipping());
-            }else {
-                freightNum=Float.parseFloat(Bean.getStore_freight());
-            }
 
-            Log.d("freightNum",freightNum+"");
+            freightNum=Float.parseFloat(Bean.getStore_freight());
+
+            Log.d("freight2",freightNum+"");
             balance_fees.setText("гд:" + freightNum);
             sum = sum + freightNum;
        // }

@@ -198,10 +198,8 @@ public class address_listActivity extends BaseActivity {
         String key = UserManager.getUserInfo().getKey();
         requestParams.add("key", key);
         requestParams.add("freight_hash", freight_hash);
-        if(!TextUtils.isEmpty(mIfcart)&&!TextUtils.isEmpty(mCart_id)){
-            requestParams.add("ifcart",mIfcart);
-            requestParams.add("cart_id",mCart_id);
-        }
+        requestParams.add("ifcart",mIfcart);
+        requestParams.add("cart_id",mCart_id);
         requestParams.add("city_id", addressList.get(position).getCity_id());
         requestParams.add("area_id", addressList.get(position).getArea_id());
         String uri = HttpUtil.URL_UPDATE_ADDRESS;
@@ -209,7 +207,6 @@ public class address_listActivity extends BaseActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers,
                                   byte[] responseBody) {
-
                 try {
                     String jsonString = new String(responseBody);
 
@@ -221,12 +218,14 @@ public class address_listActivity extends BaseActivity {
                     }{
 //                        ToastUtils.showMessage(mContext, "ÐÞ¸Ä³É¹¦");
                         JSONObject jsonObject1 = jsonObject.optJSONObject("content");
+                        String content = jsonObject.optString("content");
                         String ship = jsonObject1.optString("126");
                         String offpay_hash = jsonObject.optString("offpay_hash");
                         String offpay_hash_batch = jsonObject.optString("offpay_hash_batch");
                         Intent it = new Intent();
                         Bundle bundle = new Bundle();
                         bundle.putString("ship",ship);
+                        bundle.putString("content",content);
                         bundle.putString("offpay_hash",offpay_hash);
                         bundle.putString("offpay_hash_batch",offpay_hash_batch);
                         bundle.putString("address_id", addressList.get(position).getAddress_id());

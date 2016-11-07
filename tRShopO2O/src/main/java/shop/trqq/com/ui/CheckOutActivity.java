@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,6 +30,7 @@ import com.loopj.android.http.RequestParams;
 import com.vlonjatg.progressactivity.ProgressActivity;
 
 import org.apache.http.Header;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -115,6 +117,7 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
     // 加载进度Activity
     private ProgressActivity progressActivity;
     private RelativeLayout mNoAddressLayout;
+    private JSONObject mJsonObjects;
 
     @Override
     protected void onResume() {
@@ -291,6 +294,8 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
                 Intent intent = new Intent(mContext, address_listActivity.class);
                 // 运费
                 intent.putExtra("freight_hash", freight_hash);
+                intent.putExtra("cart_id",cart_id);
+                intent.putExtra("ifcart",ifcart);
                 // 回调
                 startActivityForResult(intent, 0);
                 // context.startActivity(intent);
@@ -395,15 +400,15 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
                         try {
                             String jsonString = new String(responseBody);
                             YkLog.longe("buy1jsonString", jsonString);
-                            JSONObject jsonObjects = new JSONObject(jsonString)
+                            mJsonObjects = new JSONObject(jsonString)
                                     .getJSONObject("datas");
                             //发票信息Hash
-                            vat_hash = jsonObjects.optString("vat_hash");
+                            vat_hash = mJsonObjects.optString("vat_hash");
                             // 运费 Hash, 选择地区时作为提交
-                            freight_hash = jsonObjects
+                            freight_hash = mJsonObjects
                                     .optString("freight_hash");
                             try {
-                                JSONObject add_js = jsonObjects
+                                JSONObject add_js = mJsonObjects
                                         .getJSONObject("address_info");
                                 address_id = add_js.optString("address_id");
                                 city_id = add_js.optString("city_id");
@@ -418,7 +423,7 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
                                 e.printStackTrace();
                             }
                             // 发票信息
-                            JSONObject inv_info = jsonObjects
+                            JSONObject inv_info = mJsonObjects
                                     .optJSONObject("inv_info");
                             // 发票Id
                             invoice_id = inv_info.optString("invoice_id");
@@ -440,7 +445,7 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
                                         + store_Cart_List.get(i)
                                         .getStore_goods_total();
                             }*/
-                            String predeposit = jsonObjects
+                            String predeposit = mJsonObjects
                                     .optString("available_predeposit");
                             if (!predeposit.equals("null")) {
                                 available_predeposit.setText("使用预付款支付（可用余额为￥："
@@ -448,7 +453,7 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
                                 available_predeposit.setVisibility(View.VISIBLE);
                                 availableLayout.setVisibility(View.VISIBLE);
                             }
-                            String rc_balance = jsonObjects
+                            String rc_balance = mJsonObjects
                                     .optString("available_rc_balance");
                             //YkLog.t(rc_balance);
                             if (!"null".equals(rc_balance)) {
@@ -459,7 +464,7 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
                             }
                             // 改变地址信息
 
-                            ChangeAddressListData(jsonObjects);
+                            ChangeAddressListData(mJsonObjects);
 /*                            ifshow_offpay = jsonObjects
                                     .optBoolean("ifshow_offpay");
                             if (ifshow_offpay) {// 是否支持货到付款
@@ -591,6 +596,8 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
         String key = UserManager.getUserInfo().getKey();
         requestParams.add("key", key);
         requestParams.add("freight_hash", freight_hash);
+        requestParams.add("ifcart",ifcart);
+        requestParams.add("cart_id",cart_id);
         requestParams.add("city_id", city_id);
         requestParams.add("area_id", area_id);
         String uri = HttpUtil.URL_UPDATE_ADDRESS;
@@ -764,6 +771,19 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
                     phoneNum.setText("  " + bundle.getString("mob_phone"));
                     offpay_hash = bundle.getString("offpay_hash");
                     offpay_hash_batch = bundle.getString("offpay_hash_batch");
+                    String content = bundle.getString("content");
+                    if (!TextUtils.isEmpty(content)) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(content);
+                            ArrayList<Store_Cart_ListBean> store_Cart_List = new ArrayList<>();
+                            setSpeacBean(mJsonObjects.getJSONObject("store_cart_list"),
+                                    store_Cart_List,jsonObject,1);
+                            mListViewCheack_outAdapter.setData(store_Cart_List);
+                            mListViewCheack_outAdapter.notifyDataSetChanged();
+                        } catch (JSONException e){
+                            e.printStackTrace();
+                        }
+                    }
                     submit.setEnabled(true);
                     break;
                 case 3:// 更新发票信息
@@ -799,7 +819,7 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
         Iterator keyIter = jsonObject.keys();
         while (keyIter.hasNext()) {
             try {
-                Store_Cart_ListBean bean = new Store_Cart_ListBean();
+                Store_Cart_ListBean bean = null;
                 String id = (String) keyIter.next();
 
                 // bean.setSpecID(id);
@@ -807,7 +827,9 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
                         new TypeToken<Store_Cart_ListBean>() {
                         }.getType());
                 if(j==1){
+                    YkLog.i("freight3","freight"+content.getString(id));
                     bean.setStore_freight(content.getString(id));
+
                 }else if(j==0){
                     bean.setStore_freight("0");
                 }
