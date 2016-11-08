@@ -1,6 +1,7 @@
 package shop.trqq.com.supermarket.fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -10,11 +11,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.baidu.location.Address;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
+import com.baidu.location.Poi;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.InfoWindow;
@@ -23,6 +24,7 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
+import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.PolygonOptions;
 import com.baidu.mapapi.map.Stroke;
@@ -41,7 +43,6 @@ import java.util.List;
 
 import shop.trqq.com.AppConfig;
 import shop.trqq.com.R;
-import shop.trqq.com.util.YkLog;
 
 /**
  * 定位超市和自己的位置，描述超市配送区域和自己与超市的距离
@@ -54,12 +55,11 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
     private LocationClient mLocationClient;
     private TextView mMyAddress;
     private ImageView mReLocaation;
-    private boolean isClickLoc;
     private GeoCoder mSearch;
     private ImageView mMarketReLocation;
     private LatLng mMarketLatLng;
     private LatLng mLatLng;
-
+    private Boolean isFirst = true;
     public MarketLbsFragment() {
         // Required empty public constructor
     }
@@ -79,6 +79,31 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
         // 设置监听器
         setListener();
         return view;
+    }
+
+    private void initView(View view) {
+
+        mMapView = (MapView) view.findViewById(R.id.baidu_mapview);
+        mMyAddress = (TextView) view.findViewById(R.id.market_myaddress);
+
+        mReLocaation = (ImageView)view.findViewById(R.id.market_relocation);
+
+        mMarketReLocation = (ImageView)view.findViewById(R.id.market_location);
+    }
+
+    // 初始化数据
+    private void initData() {
+        if (mMapView != null) {
+            mBaiduMap = mMapView.getMap();
+
+        }
+        mBaiduMap.setMyLocationEnabled(true);
+
+        mMarketLatLng = new LatLng(21.281895,110.396436);
+
+        mSearch = GeoCoder.newInstance();
+        // 添加并标注超市的位置
+        setMarketLocation();
     }
 
     // 设置数据
@@ -112,6 +137,145 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
 
         mLocationClient.setLocOption(option);
         mLocationClient.start();
+    }
+
+
+    // 设置监听器
+    private void setListener() {
+
+        // 点击定位ImageView 定位到自己的位置
+        mReLocaation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                  setReLocation();
+            }
+        });
+        // 点击定位到超市 ImageView 定位到超市的位置
+        mMarketReLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                MapStatusUpdate update = MapStatusUpdateFactory.newLatLngZoom(mMarketLatLng,17);
+                mBaiduMap.animateMapStatus(update);
+            }
+        });
+        mBaiduMap.setOnMarkerClickListener(this);
+    }
+
+    // 重新定位自己的位置并且 地图以自己的位置为中心
+    private void setReLocation() {
+
+        mMapView.setClickable(false);// 不让底层的mapview截获点击事件
+
+        mLocationClient.start();// 重新定位一下
+    }
+
+
+
+    private Marker currentLocationMarker;
+
+    @Override
+    public void onReceiveLocation(BDLocation bdLocation) {
+
+        mLocationClient.stop();
+        int locType = bdLocation.getLocType();
+
+        Log.d(TAG, "onReceiveLocation: "+locType);
+
+        switch (locType) {
+            case BDLocation.TypeGpsLocation:
+            case BDLocation.TypeNetWorkLocation:
+            case BDLocation.TypeOffLineLocation:
+
+                MyLocationData locData = new MyLocationData.Builder()
+                        .accuracy(bdLocation.getRadius())
+                        // 此处设置开发者获取到的方向信息，顺时针0-360
+                        .direction(360).latitude(bdLocation.getLatitude())
+                        .longitude(bdLocation.getLongitude()).build();
+                mBaiduMap.setMyLocationData(locData);
+
+                if(isFirst){
+                    String city = bdLocation.getCity();
+                    Intent intent = new Intent("city");
+                    intent.putExtra("city",city);
+                    getActivity().sendBroadcast(intent);
+                    isFirst =false;
+                }
+                String buildingName = bdLocation.getBuildingName();
+                Log.d("poiList111",buildingName+"11");
+
+                List<Poi> poiList = bdLocation.getPoiList();
+                if (poiList != null) {
+                    for (int i = 0; i < poiList.size(); i++) {
+                        Poi poi = poiList.get(i);
+                        Log.d("poiList", poi.describeContents()+"||||"+poi.getName());
+                    }
+                }
+                // 得到定位的纬度
+                double latitude = bdLocation.getLatitude();
+                // 得到位置的精度
+                double longitude = bdLocation.getLongitude();
+
+
+                LatLng latLng = new LatLng(latitude, longitude);
+
+                setDistance(latLng);
+
+                if (currentLocationMarker == null) {
+                    // 添加标注物
+                    currentLocationMarker = addMarker(latitude,longitude,1);
+                    currentLocationMarker.setTitle("我的位置");
+
+                }else {
+                    // 移动标注物
+                    currentLocationMarker.setPosition(latLng);
+                }
+                // 点击定位到自己的位置，定位成功 更新地图
+                MapStatusUpdate update = MapStatusUpdateFactory.newLatLngZoom(latLng,17);
+                mBaiduMap.animateMapStatus(update);
+
+                break;
+
+            default:
+                Log.d(TAG, "onReceiveLocation: "+"定位失败");
+                mMyAddress.setText("定位失败");
+                break;
+        }
+    }
+
+    private void setDistance(LatLng latLng) {
+
+        double size = DistanceUtil.getDistance(mMarketLatLng, latLng);
+
+        // 将距离存储下来
+        AppConfig.setSharedPreferences(getContext(),"distance",(float)size);
+
+        String distance = null;
+        if(size>=0){
+
+            if (size < 1000) {
+
+                distance = (int) size + "m";
+            } else {
+                size = size / 1000;
+                DecimalFormat df = new DecimalFormat("0.00");
+                distance = df.format(size) + " km";
+            }
+            mMyAddress.setText(" 距超市 "+distance);
+        }
+
+    }
+    private void setMarketLocation() {
+        // 设定万能居超市的地址
+
+        Marker marker = addMarker(21.281895,110.396436, 0);
+        marker.setTitle("万能居超市");
+
+        //定义地图状态
+        mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newLatLngZoom(mMarketLatLng,13));
+
+        //添加多边形区域
+        addRange();
     }
 
     // 添加矩形区域
@@ -149,161 +313,9 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
         pts.add(pt14);
         pts.add(pt15);
         OverlayOptions ooPolygon = new PolygonOptions().points(pts)
-                .stroke(new Stroke(1, 0xAAFF0000)).fillColor(0xAAffff00);
+                .stroke(new Stroke(1, 0xAAFF0000)).fillColor(0x30ffff00);
 
         mBaiduMap.addOverlay(ooPolygon);
-    }
-
-    // 设置监听器
-    private void setListener() {
-
-        // 点击定位ImageView 定位到自己的位置
-        mReLocaation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                  setReLocation();
-            }
-        });
-        // 点击定位到超市 ImageView 定位到超市的位置
-        mMarketReLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                LatLng latLng = new LatLng(21.281833,110.396756);
-                // 点击定位到自己的位置，定位成功 更新地图
-                MapStatusUpdate update = MapStatusUpdateFactory.newLatLngZoom(latLng,16);
-                mBaiduMap.animateMapStatus(update);
-            }
-        });
-        mBaiduMap.setOnMarkerClickListener(this);
-    }
-
-    // 重新定位自己的位置并且 地图以自己的位置为中心
-    private void setReLocation() {
-
-        mMapView.setClickable(false);// 不让底层的mapview截获点击事件
-        isClickLoc = true;// 让他初始定位
-        mLocationClient.start();// 重新定位一下
-    }
-    // 初始化数据
-    private void initData() {
-        if (mMapView != null) {
-            mBaiduMap = mMapView.getMap();
-
-        }
-        mMarketLatLng = new LatLng(21.281833,110.396756);
-        mSearch = GeoCoder.newInstance();
-    }
-
-    private void initView(View view) {
-
-        mMapView = (MapView) view.findViewById(R.id.baidu_mapview);
-        mMyAddress = (TextView) view.findViewById(R.id.market_myaddress);
-
-        mReLocaation = (ImageView)view.findViewById(R.id.market_relocation);
-
-        mMarketReLocation = (ImageView)view.findViewById(R.id.market_location);
-    }
-
-    private Marker currentLocationMarker;
-
-    @Override
-    public void onReceiveLocation(BDLocation bdLocation) {
-
-        mLocationClient.stop();
-        int locType = bdLocation.getLocType();
-
-        Log.d(TAG, "onReceiveLocation: "+locType);
-
-        switch (locType) {
-            case BDLocation.TypeGpsLocation:
-            case BDLocation.TypeNetWorkLocation:
-            case BDLocation.TypeOffLineLocation:
-
-                String address1 = bdLocation.getAddrStr();
-                Address address = bdLocation.getAddress();
-                String city = address.city;
-                String district = address.district;
-                String street = address.street;
-                String streetNumber = address.streetNumber;
-
-                //定位成功设置到 上方的 Title上
-                if (address1 != null && address!=null) {
-
-                    mMyAddress.setText(city+district+street);
-                }
-
-                // 得到定位的纬度
-                double latitude = bdLocation.getLatitude();
-                // 得到位置的精度
-                double longitude = bdLocation.getLongitude();
-
-                YkLog.i("jinweidu",latitude+"/"+longitude);
-
-                LatLng latLng = new LatLng(latitude, longitude);
-
-                setDistance(latLng);
-                // 被点击定位到自己的位置
-                if(isClickLoc){
-                    // 点击定位到自己的位置，定位成功 更新地图
-                    MapStatusUpdate update = MapStatusUpdateFactory.newLatLngZoom(latLng,16);
-                    mBaiduMap.animateMapStatus(update);
-
-                    isClickLoc = false;
-                }
-
-                if (currentLocationMarker == null) {
-                    // 添加标注物
-                    currentLocationMarker = addMarker(latitude,longitude,1);
-                    currentLocationMarker.setTitle("我的位置");
-
-                    // 添加并标注超市的位置
-                    initMarketLocation();
-
-                }else {
-                    // 移动标注物
-                    currentLocationMarker.setPosition(latLng);
-                }
-                break;
-
-            default:
-                Log.d(TAG, "onReceiveLocation: "+"定位失败");
-                mMyAddress.setText("定位失败");
-                break;
-        }
-    }
-
-    private void setDistance(LatLng latLng) {
-
-        double size = DistanceUtil.getDistance(mMarketLatLng, latLng);
-
-        AppConfig.setSharedPreferences(getContext(),"distance",(float)size);
-
-        String distance = null;
-        if(size>=0){
-
-            if (size < 1000) {
-
-                distance = (int) size + "m";
-            } else {
-                size = size / 1000;
-                DecimalFormat df = new DecimalFormat("0.00");
-                distance = df.format(size) + " km";
-            }
-            mMyAddress.setText(" 距超市 "+distance);
-        }
-
-    }
-    private void initMarketLocation() {
-        // 设定万能居超市的地址
-        Marker marker = addMarker(21.281833, 110.39675, 0);
-        marker.setTitle("万能居超市");
-
-        //定义地图状态
-        mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newLatLngZoom(mMarketLatLng,13));
-
-        //添加多边形区域
-        addRange();
     }
 
     /**
@@ -325,7 +337,6 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
             // 我的位置
             options.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_location_fresh));
         }
-
         return (Marker) mBaiduMap.addOverlay(options);
     }
 

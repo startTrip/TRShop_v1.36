@@ -54,7 +54,7 @@ public class ClassifyRightFragment extends Fragment implements ClassifyRightAdap
     private void initData() {
         // 根据不同的值 进行不同数据的展示
         Bundle bundle = getArguments();
-        ClassifyData.InforBean.ListItemsBean listItemsBean =bundle.getParcelable("listItemsBean");
+        ClassifyData.InforBean.ListItemsBean listItemsBean = (ClassifyData.InforBean.ListItemsBean)bundle.getSerializable("listItemsBean");
         if (listItemsBean != null) {
             mSonItemsList = listItemsBean.getSonItems();
         }

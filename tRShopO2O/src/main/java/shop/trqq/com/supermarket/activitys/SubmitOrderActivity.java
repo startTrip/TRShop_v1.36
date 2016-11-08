@@ -32,7 +32,6 @@ import shop.trqq.com.R;
 import shop.trqq.com.UserManager;
 import shop.trqq.com.supermarket.adapters.CheckOrderStoreAdapter;
 import shop.trqq.com.supermarket.bean.GoodsInfo;
-import shop.trqq.com.supermarket.bean.OrderBuy2Data;
 import shop.trqq.com.supermarket.utils.CalculateArriveTime;
 import shop.trqq.com.ui.address_listActivity;
 import shop.trqq.com.util.HttpUtil;
@@ -58,7 +57,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
     Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what==1){
+            if (msg.what == 1) {
                 JSONObject jsonObject = (JSONObject) msg.obj;
                 JSONObject store_cart_list = jsonObject.optJSONObject("store_cart_list");
                 if (store_cart_list != null) {
@@ -68,7 +67,9 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
                     GoodsInfo goodsInfo = mGson.fromJson(string, GoodsInfo.class);
 
                     // 根据距离设置送达时间
-                    setArriveTime(goodsInfo);
+                    String arriveTime = getArriveTime(getDistance());
+                    // 设置送达时间
+                    goodsInfo.setArrive_time(arriveTime);
 
                     int size = goodsInfo.getGoods_list().size();
                     mStoreData.add(goodsInfo);
@@ -78,35 +79,35 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
                     mStoreGoodsTotal = jsonObject1.optString("store_goods_total");
                     String store_shipping = jsonObject1.optString("store_shipping");
                     if (!TextUtils.isEmpty(store_shipping)) {
-                        Float i= Float.parseFloat(mStoreGoodsTotal) + Float.parseFloat(store_shipping);
-                        mCheckMoney.setText("￥"+String.format("%.2f",i));
-                    }else {
-                        Float i= Float.parseFloat(mStoreGoodsTotal)+10;
-                        mCheckMoney.setText("￥"+String.format("%.2f",i));
+                        Float i = Float.parseFloat(mStoreGoodsTotal) + Float.parseFloat(store_shipping);
+                        mCheckMoney.setText("￥" + String.format("%.2f", i));
+                    } else {
+                        Float i = Float.parseFloat(mStoreGoodsTotal) + 10;
+                        mCheckMoney.setText("￥" + String.format("%.2f", i));
                     }
-                    mGoodsSum.setText(size+"");
+                    mGoodsSum.setText(size + "");
                 }
 
-//                    // 设置地址信息
-//                    JSONObject add_js = jsonObject
-//                            .optJSONObject("address_info");
-//                    // 已经有地址信息
-//                    if (add_js!=null){
-//                        address_id = add_js.optString("address_id");
-//                        city_id = add_js.optString("city_id");
-//                        area_id = add_js.optString("area_id");
+//                // 设置地址信息
+//                JSONObject add_js = jsonObject
+//                        .optJSONObject("address_info");
+//                // 已经有地址信息
+//                if (add_js != null) {
+//                    address_id = add_js.optString("address_id");
+//                    city_id = add_js.optString("city_id");
+//                    area_id = add_js.optString("area_id");
 //
-//                        mName.setText(add_js.getString("true_name"));
-//                        mAddress_info.setText(add_js.optString("area_info")
-//                                + " " + add_js.optString("address"));
-//                        mPhoneNumber.setText("  "
-//                                + add_js.getString("mob_phone"));
-//                    }else {
-                mChangeAdressLayout.setVisibility(View.GONE);
-                mNoAddressLayout.setVisibility(View.VISIBLE);
-                mCheckSubmit.setEnabled(false);
-//                    }
-                if (mProgressActivity.isLoading()){
+//                    mName.setText(add_js.optString("true_name"));
+//                    mAddress_info.setText(add_js.optString("area_info")
+//                            + " " + add_js.optString("address"));
+//                    mPhoneNumber.setText("optString"
+//                            + add_js.optString("mob_phone"));
+//                } else {
+                    mChangeAdressLayout.setVisibility(View.GONE);
+                    mNoAddressLayout.setVisibility(View.VISIBLE);
+                    mCheckSubmit.setEnabled(false);
+//                }
+                if (mProgressActivity.isLoading()) {
                     mProgressActivity.showContent();
                 }
                 ChangeAddressListData();
@@ -114,13 +115,16 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
         }
     };
 
-    private void setArriveTime(GoodsInfo goodsInfo) {
-        SharedPreferences sharedPreferences = AppConfig.getSharedPreferences(SubmitOrderActivity.this);
-        float distance = sharedPreferences.getFloat("distance", -1.0f);
-
+    private String getArriveTime(float distance) {
         // 得到预计的送达时间
         String arriveTime = CalculateArriveTime.calculateDateByDistance(distance);
-        goodsInfo.setArrive_time(arriveTime);
+        return arriveTime;
+    }
+
+    private float getDistance(){
+        SharedPreferences sharedPreferences = AppConfig.getSharedPreferences(SubmitOrderActivity.this);
+        float distance = sharedPreferences.getFloat("distance", -1.0f);
+        return distance;
     }
 
     private ArrayList<GoodsInfo> mStoreData;
@@ -188,6 +192,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void ChangeAddressListData() {
+
         RequestParams requestParams = new RequestParams();
         String key = UserManager.getUserInfo().getKey();
         requestParams.add("key", key);
@@ -200,7 +205,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
         HttpUtil.post(uri, requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                 String string = new String(responseBody);
+                String string = new String(responseBody);
                 try {
                     JSONObject jsonObject = new JSONObject(string);
                     JSONObject jsonObject1 = jsonObject.optJSONObject("datas");
@@ -273,7 +278,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
         HttpUtil.post(HttpUtil.URL_BUY_STEP2, requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                 String string = new String(responseBody);
+                String string = new String(responseBody);
                 try {
                     JSONObject jsonObject = new JSONObject(string);
                     JSONObject jsonObject1 = jsonObject.optJSONObject("datas");
@@ -281,28 +286,16 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
                     if (!TextUtils.isEmpty(error)) {
                         ToastUtils.showMessage(SubmitOrderActivity.this,error);
                     }else {
-                        String order_sn = jsonObject1.optString("order_sn");
                         String pay_sn = jsonObject1.optString("pay_sn");
-                        if(!TextUtils.isEmpty(order_sn)){
-                            OrderBuy2Data orderBuy2Data = mGson.fromJson(jsonObject1.toString(), OrderBuy2Data.class);
-                            // 跳转到确认订单支付界面
-                            Intent intent = new Intent(SubmitOrderActivity.this,ConfirmPayOrderActivity.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("orderInfo",orderBuy2Data);
-                            bundle.putString("state","0");
-                            intent.putExtras(bundle);
-                            startActivity(intent);
-                        }else {
-                            Intent intent = new Intent(SubmitOrderActivity.this,ConfirmPayOrderActivity.class);
-                            String checkMoney = mCheckMoney.getText().toString().substring(1);
-                            Bundle bundle = new Bundle();
-                            bundle.putString("state","1");
-                            bundle.putString("checkMoney",checkMoney);
-                            bundle.putString("pay_sn",pay_sn);
-                            intent.putExtras(bundle);
-                            startActivity(intent);
-                        }
-                        // 销毁生成订单页面
+                        Intent intent = new Intent(SubmitOrderActivity.this,ConfirmPayOrderActivity.class);
+                        String checkMoney = mCheckMoney.getText().toString().substring(1);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("state","1");
+                        bundle.putString("checkMoney",checkMoney);
+                        bundle.putString("pay_sn",pay_sn);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                        // 锟斤拷锟斤拷锟缴讹拷锟斤拷页锟斤拷
                         finish();
                     }
                 } catch (JSONException e) {
@@ -391,15 +384,40 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
              // 锟斤拷锟斤拷锟结交锟斤拷锟斤拷
              mCheckSubmit.setEnabled(true);
              String ship = bundle.getString("ship");
-             if (!TextUtils.isEmpty(ship)) {
-                 Float i = Float.parseFloat(mStoreGoodsTotal) + Float.parseFloat(ship);
-                 mCheckMoney.setText(String.format("%.2f",i));
+             // 判断地区是否是湛江 如果是湛江的话就用       地图定位的经纬度去判断
+             if(TextUtils.equals(city_id,"296")){
+                 float distance = getDistance();
+                 String s ;
+                 if(distance>10000){
+                     s= ship;
+                 }else {
+                     s ="0";
+                 }
                  for(int j = 0; j < mStoreData.size(); j++){
                      GoodsInfo goodsInfo = mStoreData.get(j);
-                     goodsInfo.setStore_shipping(ship);
+                     String arriveTime = getArriveTime(getDistance());
+                     goodsInfo.setArrive_time(arriveTime);
+                     goodsInfo.setStore_shipping(s);
                  }
                  mCheckOrderStoreAdapter.addDatas(mStoreData);
                  mCheckOrderStoreAdapter.notifyDataSetChanged();
+
+                 Float i = Float.parseFloat(mStoreGoodsTotal) + Float.parseFloat(s);
+                 mCheckMoney.setText(String.format("%.2f",i));
+             }else {   // 如果不是湛江就按运费来计算
+                 if (!TextUtils.isEmpty(ship)) {
+                     Float i = Float.parseFloat(mStoreGoodsTotal) + Float.parseFloat(ship);
+                     mCheckMoney.setText(String.format("%.2f",i));
+                     // 设置送达时间为超过十公里
+                     String arriveTime = getArriveTime(200000.0f);
+                     for(int j = 0; j < mStoreData.size(); j++){
+                         GoodsInfo goodsInfo = mStoreData.get(j);
+                         goodsInfo.setArrive_time(arriveTime);
+                         goodsInfo.setStore_shipping(ship);
+                     }
+                     mCheckOrderStoreAdapter.addDatas(mStoreData);
+                     mCheckOrderStoreAdapter.notifyDataSetChanged();
+                 }
              }
          }else {
              mNoAddressLayout.setVisibility(View.VISIBLE);

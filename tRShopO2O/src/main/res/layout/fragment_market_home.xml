@@ -21,7 +21,6 @@
             android:layout_height="match_parent"
             android:drawableLeft="@mipmap/location"
             android:gravity="center"
-            android:text=" 湛江市"
             />
 
         <TextView

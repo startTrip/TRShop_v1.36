@@ -1,8 +1,6 @@
 package shop.trqq.com.supermarket.bean;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -11,7 +9,7 @@ import java.util.List;
  * Data:   2016/9/19
  */
 
-public class ClassifyData {
+public class ClassifyData implements Serializable{
 
     /**
      * success : true
@@ -52,7 +50,7 @@ public class ClassifyData {
         this.infor = infor;
     }
 
-    public static class InforBean {
+    public static class InforBean implements Serializable{
         private String totalCount;
         /**
          * id : 614
@@ -87,7 +85,7 @@ public class ClassifyData {
             this.listItems = listItems;
         }
 
-        public static class ListItemsBean implements Parcelable {
+        public static class ListItemsBean implements Serializable {
             private String id;
             private String type;
             private String parentid;
@@ -212,17 +210,8 @@ public class ClassifyData {
                 this.sonItems = sonItems;
             }
 
-            @Override
-            public int describeContents() {
-                return 0;
-            }
 
-            @Override
-            public void writeToParcel(Parcel dest, int flags) {
-
-            }
-
-            public static class SonItemsBean {
+            public static class SonItemsBean implements Serializable{
                 private String id;
                 private String type;
                 private String parentid;
@@ -345,7 +334,7 @@ public class ClassifyData {
                     this.sonItems = sonItems;
                 }
 
-                public static class SonItemsBean1 {
+                public static class SonItemsBean1 implements Serializable{
                     private String id;
                     private String type;
                     private String parentid;

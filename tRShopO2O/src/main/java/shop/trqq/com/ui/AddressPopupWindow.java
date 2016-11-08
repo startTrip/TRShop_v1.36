@@ -2,6 +2,7 @@ package shop.trqq.com.ui;
 
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,6 +37,7 @@ import shop.trqq.com.util.YkLog;
  */
 public class AddressPopupWindow extends PopupWindow implements OnClickListener,
         OnWheelChangedListener, OnWheelScrollListener {
+    private static final String TAG = "AddressPopupWindow";
     private WheelView mViewProvince;// 省
     private WheelView mViewCity;// 市
     private WheelView mViewDistrict;// 区县
@@ -61,7 +63,8 @@ public class AddressPopupWindow extends PopupWindow implements OnClickListener,
     private Boolean first = true;
     private String[] mProvinceDatas, cities, areas;
     private String city_id, mArea_id;
-    private int oldfinish_id, newfinish_id;
+
+    private int mPosition;
 
 
     protected void initProvinceDatas() {
@@ -90,18 +93,19 @@ public class AddressPopupWindow extends PopupWindow implements OnClickListener,
         this.setOutsideTouchable(true);
         LayoutInflater mLayoutInflater = LayoutInflater.from(context);
         rootView = mLayoutInflater.inflate(R.layout.activity_address, null);
-        oldfinish_id = 0;
-        newfinish_id = 0;
+        setContentView(rootView);
+
         gson = new Gson();
         mContext = context;
         setUpViews();
 
         setUpData();
-        setContentView(rootView);
+        setUpListener();
+
     }
 
     public interface OnOptionsSelectListener {
-        public void onOptionsSelect(String options1, String option2,
+        void onOptionsSelect(String options1, String option2,
                                     String options3);
     }
 
@@ -124,6 +128,10 @@ public class AddressPopupWindow extends PopupWindow implements OnClickListener,
         mViewCity.addChangingListener(this);
         // 添加change事件
         mViewDistrict.addChangingListener(this);
+
+        mViewProvince.addScrollingListener(this);
+        mViewCity.addScrollingListener(this);
+        mViewDistrict.addScrollingListener(this);
         // 添加onclick事件
         mBtnConfirm.setOnClickListener(this);
     }
@@ -156,28 +164,24 @@ public class AddressPopupWindow extends PopupWindow implements OnClickListener,
     public void onChanged(WheelView wheel, int oldValue, int newValue) {
         // TODO Auto-generated method stub
         if (wheel == mViewProvince) {
-            loadingGetCityData(provinceList.get(newValue).getArea_id(), 2);
-        } else if (wheel == mViewCity) {
-//			HttpUtil.cancelAllRequests(true);//感觉没效果
-            oldfinish_id++;
-            loadingGetCityData(cityList.get(newValue).getArea_id(), 3);
-        } else if (wheel == mViewDistrict) {
-            if (districtList.size() != 0) {
-                mCurrentDistrictName = districtList.get(newValue)
-                        .getArea_name();
-                mArea_id = districtList.get(newValue).getArea_id();
-            } else {
-                mArea_id = "";
-            }
-
+            mPosition = newValue;
+        }else if(wheel == mViewCity){
+            mPosition = newValue;
+        }else if (wheel == mViewDistrict){
+            mPosition = newValue;
         }
+        Log.d(TAG, "onChanged: ");
+
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_confirm:
-                if (optionsSelectListener != null && oldfinish_id == newfinish_id) {
+                if (optionsSelectListener != null) {
+                    Log.d(TAG, "onClick: "+mCurrentProviceName + " "
+                                    + mCurrentCityName + " " + mCurrentDistrictName +"城市"+
+                            city_id +"地区"+mArea_id);
                     optionsSelectListener.onOptionsSelect(mCurrentProviceName + " "
                                     + mCurrentCityName + " " + mCurrentDistrictName,
                             city_id, mArea_id);
@@ -203,6 +207,7 @@ public class AddressPopupWindow extends PopupWindow implements OnClickListener,
     }
 
     private void loadingGetCityData(String area_id, final int type) {
+
         RequestParams requestParams = new RequestParams();
         String key = UserManager.getUserInfo().getKey();
         requestParams.add("key", key);
@@ -316,8 +321,7 @@ public class AddressPopupWindow extends PopupWindow implements OnClickListener,
                                         .setViewAdapter(new ArrayWheelAdapter<String>(
                                                 mContext, cities));
                                 mViewCity.setCurrentItem(0);
-                                // mViewCity.invalidate();
-                                oldfinish_id++;
+
                                 loadingGetCityData(
                                         cityList.get(mViewCity.getCurrentItem())
                                                 .getArea_id(), 3);
@@ -326,38 +330,37 @@ public class AddressPopupWindow extends PopupWindow implements OnClickListener,
                                 if (first) {
                                     mCurrentDistrictName = districtList.get(0)
                                             .getArea_name();
-                                    setUpListener();
+
                                     first = false;
                                 }
                                 int cCurrent = mViewCity.getCurrentItem();
                                 mCurrentCityName = cityList.get(cCurrent)
                                         .getArea_name();
                                 city_id = cityList.get(cCurrent).getArea_id();
-                                System.err.println(districtList.size());
-                                areas = new String[districtList.size()];
-                                for (int i = 0; i < districtList.size(); i++) {
-                                    areas[i] = districtList.get(i).getArea_name();
-                                }
+
                                 if (districtList.size() == 0) {
                                     areas = new String[]{""};
+                                }else {
+                                    areas = new String[districtList.size()];
+                                    for (int i = 0; i < districtList.size(); i++) {
+                                        areas[i] = districtList.get(i).getArea_name();
+                                    }
                                 }
+
                                 // System.err.println(areas[0]);
                                 mCurrentDistrictName = areas[0];
                                 mViewDistrict
                                         .setViewAdapter(new ArrayWheelAdapter<String>(
                                                 mContext, areas));
                                 mViewDistrict.setCurrentItem(0);
-                                newfinish_id++;
-                                YkLog.e("finish_id", oldfinish_id + "|" + newfinish_id);
+
                                 if (districtList.size() != 0)
                                     mArea_id = districtList.get(0).getArea_id();
                                 // mViewDistrict.invalidate();
                                 break;
                         }
-
                     }
                 });
-
         // return true;
     }
 
@@ -370,7 +373,18 @@ public class AddressPopupWindow extends PopupWindow implements OnClickListener,
     @Override
     public void onScrollingFinished(WheelView wheel) {
         // TODO Auto-generated method stub
+        Log.d(TAG, "onScrollingFinished: ");
         if (wheel == mViewProvince) {
+            loadingGetCityData(provinceList.get(mPosition).getArea_id(), 2);
+        } else if (wheel == mViewCity) {
+            loadingGetCityData(cityList.get(mPosition).getArea_id(), 3);
+        } else if (wheel == mViewDistrict) {
+            if (districtList.size() != 0){
+                mArea_id = districtList.get(mPosition).getArea_id();
+                mCurrentDistrictName = districtList.get(mPosition).getArea_name();
+            }else {
+                mArea_id = "";
+            }
         }
     }
 

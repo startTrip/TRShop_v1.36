@@ -4,6 +4,7 @@
     <!-- 自定义Loding_Dialog_End -->
     <!-- 浅灰色 -->
     <color name="mainColor">#ff552d</color>
+    <color name="colorAlpha">#200000ff</color>
     <color name="mainTabFont">#757575</color>
     <color name="gray_1">#CCCCCC</color>
     <color name="background">#f1eeee</color>

@@ -2,6 +2,7 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
+
              tools:context="shop.trqq.com.supermarket.fragments.MarketLbsFragment"
     >
 
@@ -14,11 +15,15 @@
 
     </com.baidu.mapapi.map.MapView>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        >
     <!-- 顶部的标题栏 -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:orientation="horizontal"
+        android:background="@color/white"
         >
 
         <TextView
@@ -50,6 +55,52 @@
             />
     </RelativeLayout>
 
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:orientation="horizontal"
+        android:background="@color/colorAlpha"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        >
+        <TextView
+            android:id="@+id/market_small_location"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:drawableLeft="@mipmap/ic_location_box_small"
+            android:text=" 万能居超市"
+            android:textSize="12sp"
+            />
+        <TextView
+            android:id="@+id/my_small_location"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:gravity="center_vertical"
+            android:drawableLeft="@mipmap/ic_location_fresh_small"
+            android:text=" 为我的位置"
+            android:textSize="12sp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="黄色"
+            android:layout_marginLeft="16dp"
+            android:gravity="center_vertical"
+            android:textColor="@color/yellow"
+            android:textSize="12sp"
+            />
+        <TextView
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="为配送区域"
+            android:textSize="12sp"
+            />
+    </LinearLayout>
+    </RelativeLayout>
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="100dp"

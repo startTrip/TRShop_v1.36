@@ -126,7 +126,7 @@ public class MarketClassifyFragment extends Fragment implements View.OnClickList
                 fragmentTransaction.add(R.id.classify_fragment_container, fragment,i+"");
                 ClassifyData.InforBean.ListItemsBean listItemsBean = mListItems.get(i);
                 Bundle bundle = new Bundle();
-                bundle.putParcelable("listItemsBean",listItemsBean);
+                bundle.putSerializable("listItemsBean",listItemsBean);
                 fragment.setArguments(bundle);
                 fragmentTransaction.hide(fragment);
             }

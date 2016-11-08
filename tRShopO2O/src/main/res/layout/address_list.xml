@@ -56,9 +56,9 @@
                 android:layout_gravity="center"
                 android:background="@color/red_text_color"
                 android:gravity="center"
-                android:text="添加地址"
+                android:text="新增收货地址"
                 android:textColor="@color/white_text_color"
-                android:textSize="24dp" />
+                android:textSize="20dp" />
         </LinearLayout>
     </RelativeLayout>
 

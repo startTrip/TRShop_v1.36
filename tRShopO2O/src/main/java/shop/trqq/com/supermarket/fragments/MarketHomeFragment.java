@@ -2,8 +2,11 @@ package shop.trqq.com.supermarket.fragments;
 
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -18,6 +21,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -94,6 +98,19 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
     private ProgressActivity mProgressActivity;
     private NetworkStateService mNetworkStateService;
     private ImageView mIvSearch;
+    private TextView mHome_location;
+
+    // 广播接收者去接收 定位的消息
+    private BroadcastReceiver mBroadcastReceive = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String city = intent.getStringExtra("city");
+            Log.d(TAG, "onReceive: "+city);
+            if (city != null) {
+                mHome_location.setText(city);
+            }
+        }
+    };
 
     public MarketHomeFragment() {
         // Required empty public constructor
@@ -120,10 +137,14 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
         return view;
     }
 
+
+
     private void initView(View view) {
 
         mSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.home_refresh_layout);
         mViewPager = (ViewPager)view.findViewById(R.id.home_pager);
+
+        mHome_location = (TextView) view.findViewById(R.id.home_location);
 
         mIvSearch = (ImageView)view.findViewById(R.id.market_home_search);
         mClassifyRecyclerView = (RecyclerView)view.findViewById(R.id.home_classify);
@@ -174,6 +195,7 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
 
         mHomeNewList = new ArrayList<>();
         mHomeNewAdapter = new HomeNewAdapter(getActivity(),mHomeNewList);
+
     }
 
     private void setData() {
@@ -205,6 +227,8 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
     public void onResume() {
         super.onResume();
         mIsSwitch = true ;   // 锟?锟斤拷杞挱
+        IntentFilter intentFilter = new IntentFilter("city");
+        getActivity().registerReceiver(mBroadcastReceive,intentFilter);
     }
 
     // 5绉掍互鍚庡惎鍔紝锟?3 绉掑垏鎹竴锟?
@@ -540,6 +564,9 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (mBroadcastReceive != null) {
+            getActivity().unregisterReceiver(mBroadcastReceive);
+        }
     }
 
     @Override

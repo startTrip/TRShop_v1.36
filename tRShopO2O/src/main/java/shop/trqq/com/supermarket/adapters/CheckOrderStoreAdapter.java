@@ -58,16 +58,20 @@ public class CheckOrderStoreAdapter extends ListViewBaseAdapter<GoodsInfo> {
             // 设置运费
             String freight = goodsInfo.getStore_shipping();
             if(!TextUtils.isEmpty(freight)){
-                holder.mFreight.setText("￥ "+freight);
+                if(TextUtils.equals(freight,"0")){
+                    holder.mFreight.setText("免配送费");
+                }else {
+                    holder.mFreight.setText("￥ "+freight+"（超出十公里）");
+                }
                 Float i = Float.parseFloat(freight) + Float.parseFloat(store_goods_total);;
                 holder.mSum_money.setText("￥ "+i);
             }else {
                 Float i= Float.parseFloat(store_goods_total)+10;
                 holder.mSum_money.setText("￥ "+i);
             }
-            // 设置到达时间
-//            String arrive_time = goodsInfo.getArrive_time();
-//            holder.mArrive_time.setText(arrive_time);
+          //   设置到达时间
+            String arrive_time = goodsInfo.getArrive_time();
+            holder.mArrive_time.setText(arrive_time);
             List<GoodsInfo.GoodsListBean> goods_list = goodsInfo.getGoods_list();
             mCheckOrderGoodsAdapter = new CheckOrderGoodsAdapter(mContext,goods_list);
             holder.mListView.setAdapter(mCheckOrderGoodsAdapter);

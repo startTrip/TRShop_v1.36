@@ -205,6 +205,7 @@ public class address_listActivity extends BaseActivity {
         String uri = HttpUtil.URL_UPDATE_ADDRESS;
         HttpUtil.post(uri, requestParams, new AsyncHttpResponseHandler() {
             @Override
+
             public void onSuccess(int statusCode, Header[] headers,
                                   byte[] responseBody) {
                 try {
@@ -216,7 +217,7 @@ public class address_listActivity extends BaseActivity {
                     if (!TextUtils.isEmpty(errStr)) {
                         ToastUtils.showMessage(mContext, errStr);
                     }{
-//                        ToastUtils.showMessage(mContext, "修改成功");
+//                        ToastUtils.showMessage(mContext, "锟睫改成癸拷");
                         JSONObject jsonObject1 = jsonObject.optJSONObject("content");
                         String content = jsonObject.optString("content");
                         String ship = jsonObject1.optString("126");
@@ -224,6 +225,7 @@ public class address_listActivity extends BaseActivity {
                         String offpay_hash_batch = jsonObject.optString("offpay_hash_batch");
                         Intent it = new Intent();
                         Bundle bundle = new Bundle();
+
                         bundle.putString("ship",ship);
                         bundle.putString("content",content);
                         bundle.putString("offpay_hash",offpay_hash);
