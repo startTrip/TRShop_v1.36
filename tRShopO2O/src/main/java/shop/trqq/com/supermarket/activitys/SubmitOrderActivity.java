@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -16,6 +17,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -26,18 +28,20 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 
 import shop.trqq.com.AppConfig;
 import shop.trqq.com.R;
 import shop.trqq.com.UserManager;
 import shop.trqq.com.supermarket.adapters.CheckOrderStoreAdapter;
 import shop.trqq.com.supermarket.bean.GoodsInfo;
-import shop.trqq.com.supermarket.utils.CalculateArriveTime;
+import shop.trqq.com.supermarket.utils.Calculate;
 import shop.trqq.com.ui.address_listActivity;
 import shop.trqq.com.util.HttpUtil;
 import shop.trqq.com.util.ToastUtils;
 
-public class SubmitOrderActivity extends AppCompatActivity implements View.OnClickListener {
+public class SubmitOrderActivity extends AppCompatActivity implements View.OnClickListener, Calculate.OnResultMapListener {
 
 
     private static final int SDK_PAY_FLAG = 1;
@@ -53,6 +57,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
     private String area_id;
     private String vat_hash;
     private String freight_hash;
+    private Calculate mCalculate;
 
     Handler mHandler = new Handler(){
         @Override
@@ -66,25 +71,20 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
 
                     GoodsInfo goodsInfo = mGson.fromJson(string, GoodsInfo.class);
 
-                    // 根据距离设置送达时间
-                    String arriveTime = getArriveTime(getDistance());
                     // 设置送达时间
-                    goodsInfo.setArrive_time(arriveTime);
-
+                    goodsInfo.setStore_shipping("0.0");
+                    goodsInfo.setArrive_time("请选择地址");
                     int size = goodsInfo.getGoods_list().size();
                     mStoreData.add(goodsInfo);
+
                     mCheckOrderStoreAdapter.addDatas(mStoreData);
 
                     JSONObject jsonObject1 = store_cart_list.optJSONObject("126");
                     mStoreGoodsTotal = jsonObject1.optString("store_goods_total");
-                    String store_shipping = jsonObject1.optString("store_shipping");
-                    if (!TextUtils.isEmpty(store_shipping)) {
-                        Float i = Float.parseFloat(mStoreGoodsTotal) + Float.parseFloat(store_shipping);
-                        mCheckMoney.setText("￥" + String.format("%.2f", i));
-                    } else {
-                        Float i = Float.parseFloat(mStoreGoodsTotal) + 10;
-                        mCheckMoney.setText("￥" + String.format("%.2f", i));
-                    }
+
+                    Float i = Float.parseFloat(mStoreGoodsTotal);
+                    mCheckMoney.setText("￥" + String.format("%.2f", i));
+
                     mGoodsSum.setText(size + "");
                 }
 
@@ -117,7 +117,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
 
     private String getArriveTime(float distance) {
         // 得到预计的送达时间
-        String arriveTime = CalculateArriveTime.calculateDateByDistance(distance);
+        String arriveTime = Calculate.calculateDateByDistance(distance);
         return arriveTime;
     }
 
@@ -189,6 +189,9 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
         mProgressActivity.showLoading();
         loadOnlineBuyStep1Data();
 
+        mCalculate = new Calculate();
+        // 传递实现接口的对象过去
+        mCalculate.registerOnResult(this);
     }
 
     private void ChangeAddressListData() {
@@ -196,6 +199,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
         RequestParams requestParams = new RequestParams();
         String key = UserManager.getUserInfo().getKey();
         requestParams.add("key", key);
+        Log.d("key", "ChangeAddressListData: "+key);
         requestParams.add("freight_hash", freight_hash);
         requestParams.add("ifcart", mIfcart);
         requestParams.add("cart_id", mCart_id);
@@ -384,6 +388,9 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
              // 锟斤拷锟斤拷锟结交锟斤拷锟斤拷
              mCheckSubmit.setEnabled(true);
              String ship = bundle.getString("ship");
+
+             mCalculate.getLocation(bundle.getString("area_info"),bundle.getString("address"));
+
              // 判断地区是否是湛江 如果是湛江的话就用       地图定位的经纬度去判断
              if(TextUtils.equals(city_id,"296")){
                  float distance = getDistance();
@@ -403,11 +410,12 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
                  mCheckOrderStoreAdapter.notifyDataSetChanged();
 
                  Float i = Float.parseFloat(mStoreGoodsTotal) + Float.parseFloat(s);
-                 mCheckMoney.setText(String.format("%.2f",i));
+                 mCheckMoney.setText("￥"+String.format("%.2f",i));
+
              }else {   // 如果不是湛江就按运费来计算
                  if (!TextUtils.isEmpty(ship)) {
                      Float i = Float.parseFloat(mStoreGoodsTotal) + Float.parseFloat(ship);
-                     mCheckMoney.setText(String.format("%.2f",i));
+                     mCheckMoney.setText("￥"+String.format("%.2f",i));
                      // 设置送达时间为超过十公里
                      String arriveTime = getArriveTime(200000.0f);
                      for(int j = 0; j < mStoreData.size(); j++){
@@ -447,5 +455,22 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
     protected void onDestroy() {
         mHandler.removeCallbacksAndMessages(null);
         super.onDestroy();
+    }
+
+
+    @Override
+    public void onReverseGeoCodeResult(Map<String, Object> map) {
+
+    }
+
+    @Override
+    public void onGeoCodeResult(Map<String, Object> map) {
+
+        if(map.get("noResult")==null){
+            Log.d("NNNNNNN","没有结果");
+        }else {
+            Object latLng = map.get("latLng");
+            LatLng latLng1 = (LatLng) latLng;
+        }
     }
 }

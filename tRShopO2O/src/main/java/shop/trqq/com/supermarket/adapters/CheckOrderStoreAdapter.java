@@ -60,6 +60,8 @@ public class CheckOrderStoreAdapter extends ListViewBaseAdapter<GoodsInfo> {
             if(!TextUtils.isEmpty(freight)){
                 if(TextUtils.equals(freight,"0")){
                     holder.mFreight.setText("免配送费");
+                }else if (freight.equals("0.0")){
+                    holder.mFreight.setText("请填写地址");
                 }else {
                     holder.mFreight.setText("￥ "+freight+"（超出十公里）");
                 }
@@ -71,13 +73,16 @@ public class CheckOrderStoreAdapter extends ListViewBaseAdapter<GoodsInfo> {
             }
           //   设置到达时间
             String arrive_time = goodsInfo.getArrive_time();
-            holder.mArrive_time.setText(arrive_time);
+            if(arrive_time.equals("请填写地址")){
+                holder.mArrive_time.setText("请填写地址");
+            }else {
+                holder.mArrive_time.setText(arrive_time);
+            }
             List<GoodsInfo.GoodsListBean> goods_list = goodsInfo.getGoods_list();
             mCheckOrderGoodsAdapter = new CheckOrderGoodsAdapter(mContext,goods_list);
             holder.mListView.setAdapter(mCheckOrderGoodsAdapter);
             holder.mListView.setEnabled(false);
         }
-
         return convertView;
     }
 

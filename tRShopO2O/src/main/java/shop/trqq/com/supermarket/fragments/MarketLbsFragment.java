@@ -360,6 +360,7 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
                 @Override
                 public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
                     name.setText(title);
+
                     if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
                         //没有找到检索结果
                         info.setText("");
@@ -371,6 +372,7 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
                     mBaiduMap.showInfoWindow(infoWindow);
                 }
             });
+
             mSearch.reverseGeoCode(new ReverseGeoCodeOption().location(marker.getPosition()));
         }
 
