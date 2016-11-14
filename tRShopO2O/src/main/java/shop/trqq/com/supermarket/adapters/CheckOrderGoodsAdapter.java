@@ -52,7 +52,6 @@ public class CheckOrderGoodsAdapter extends ListViewBaseAdapter<GoodsInfo.GoodsL
             if(!TextUtils.isEmpty(goods_weight)){
                 holder.mGoods_weight.setText(goods_weight +"kg");
             }
-
         }
         return convertView;
     }

@@ -26,6 +26,8 @@ import java.util.Map;
 public class Calculate implements OnGetGeoCoderResultListener {
 
 
+
+
     // 获取反地理编码对象
     private GeoCoder mGeoCoder = GeoCoder.newInstance();
 
@@ -107,9 +109,9 @@ public class Calculate implements OnGetGeoCoderResultListener {
 
             map.put("latLng", geoCodeResult.getLocation());
             map.put("address", geoCodeResult.getAddress());
-            if (mOnResultMapListener != null) {
-                mOnResultMapListener.onGeoCodeResult(map);
-            }
+        }
+        if (mOnResultMapListener != null) {
+            mOnResultMapListener.onGeoCodeResult(map);
         }
     }
 
@@ -127,7 +129,7 @@ public class Calculate implements OnGetGeoCoderResultListener {
      */
     public static String calculateDateByDistance(float distance) {
 
-        Log.d("distance", "calculateDateByDistance: "+distance);
+        Log.d("NNNNNNN", "calculateDateByDistance: "+distance);
         String arriveTime;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -141,6 +143,7 @@ public class Calculate implements OnGetGeoCoderResultListener {
             simpleDateFormat.applyPattern("立即送出（大约HH:mm送达）");
             arriveTime = simpleDateFormat.format(new Date(time));
         } else if (5000 <distance && distance <= 10000) {  //五公里到十公里之间
+
             calendar.set(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH),15,0,0);
             long specifiedTime = calendar.getTimeInMillis();
 
@@ -157,6 +160,8 @@ public class Calculate implements OnGetGeoCoderResultListener {
                 simpleDateFormat.applyPattern("明天"+"（"+dayOfWeek+"）"+"HH:mm之前送达");
                 arriveTime = simpleDateFormat.format(calendar.getTime());
             }
+            Log.d("NNNNNNN", "calculateDateByDistance: "+arriveTime);
+
         }else {   //  超过十公里 直接快递   设置三天时间
             calendar.add(Calendar.DAY_OF_YEAR,3);
             String dayOfWeek = getDayOfWeek(calendar);

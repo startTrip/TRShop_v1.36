@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
 
+import shop.trqq.com.util.HttpUtil;
+
 /**
  * Project: TRShop_v1.36
  * Author: wm
@@ -49,7 +51,7 @@ public class AlipayHelper {
 
         // 服务器异步通知页面路径
         // 当支付宝支付成功，支付宝服务器会自动调用这个网址告诉我们的商城支付是否成功
-        orderInfo += "&notify_url=" + "\"" +  "http://shop.wushi3.com/mobile/index.php?act=wnj_payment&op=notify_url" + "\"";
+        orderInfo += "&notify_url=" + "\"" + HttpUtil.HOST+"?act=wnj_payment&op=notify_url" + "\"";
 
         // 服务接口名称， 固定值
         orderInfo += "&service=\"mobile.securitypay.pay\"";

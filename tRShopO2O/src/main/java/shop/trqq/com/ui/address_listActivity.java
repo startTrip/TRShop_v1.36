@@ -7,12 +7,15 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.utils.DistanceUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -26,11 +29,14 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import shop.trqq.com.AppContext;
 import shop.trqq.com.R;
 import shop.trqq.com.UserManager;
 import shop.trqq.com.adapter.ListViewAddressAdapter;
 import shop.trqq.com.bean.AddressBean;
+import shop.trqq.com.supermarket.utils.Calculate;
 import shop.trqq.com.ui.Base.BaseActivity;
 import shop.trqq.com.ui.Base.UIHelper;
 import shop.trqq.com.util.HttpUtil;
@@ -39,7 +45,7 @@ import shop.trqq.com.util.ToastUtils;
 /**
  * ï¿½ï¿½Ö·ï¿½Ð±ï¿½
  */
-public class address_listActivity extends BaseActivity {
+public class address_listActivity extends BaseActivity implements Calculate.OnResultMapListener {
 
     private Context mContext;
     // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
@@ -55,6 +61,9 @@ public class address_listActivity extends BaseActivity {
     private String freight_hash;
     private String mIfcart;
     private String mCart_id;
+    private Calculate mCalculate;
+    private int mPos;
+    private double mDistance1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,6 +81,10 @@ public class address_listActivity extends BaseActivity {
         freight_hash =intent.getStringExtra("freight_hash");
         mIfcart = intent.getStringExtra("ifcart");
         mCart_id = intent.getStringExtra("cart_id");
+
+        mCalculate = new Calculate();
+        mCalculate.registerOnResult(this);
+
         listView.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
@@ -81,8 +94,13 @@ public class address_listActivity extends BaseActivity {
                 //System.err.println(freight_hash);
                 if (freight_hash.equals("")) {
                     // ToastUtils.showMessage(mContext, "ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½");
+                    Log.d("onItemClick1111", "onItemClick: "+position);
                 } else {
-                    ChangeAddressListData(position);
+                    Log.d("onItemClick", "onItemClick: "+position);
+                    mPos = position;          // ¼ÇÂ¼µã»÷µÄListView ÌõÄ¿µÄÎ»ÖÃ
+                    String area_info = addressList.get(position).getArea_info();
+                    String address = addressList.get(position).getAddress();
+                    mCalculate.getLocation(area_info,address);
                 }
             }
         });
@@ -193,16 +211,18 @@ public class address_listActivity extends BaseActivity {
         });
     }
 
-    private void ChangeAddressListData(final int position) {
+    private void ChangeAddressListData(final int position, final String distance) {
 
         RequestParams requestParams = new RequestParams();
         String key = UserManager.getUserInfo().getKey();
         requestParams.add("key", key);
         requestParams.add("freight_hash", freight_hash);
+        requestParams.add("distance",distance);
         requestParams.add("ifcart",mIfcart);
         requestParams.add("cart_id",mCart_id);
         requestParams.add("city_id", addressList.get(position).getCity_id());
         requestParams.add("area_id", addressList.get(position).getArea_id());
+
         String uri = HttpUtil.URL_UPDATE_ADDRESS;
         HttpUtil.post(uri, requestParams, new AsyncHttpResponseHandler() {
             @Override
@@ -212,7 +232,7 @@ public class address_listActivity extends BaseActivity {
                 try {
                     String jsonString = new String(responseBody);
 
-                    JSONObject jsonObject = new JSONObject(jsonString)
+                    JSONObject jsonObject = new JSONObject (jsonString)
                             .getJSONObject("datas");
                     String errStr = jsonObject.optString("error");
                     if (!TextUtils.isEmpty(errStr)) {
@@ -228,6 +248,8 @@ public class address_listActivity extends BaseActivity {
                         Bundle bundle = new Bundle();
 
                         bundle.putString("ship",ship);
+
+                        bundle.putString("distance",distance);
                         bundle.putString("content",content);
                         bundle.putString("offpay_hash",offpay_hash);
                         bundle.putString("offpay_hash_batch",offpay_hash_batch);
@@ -268,4 +290,31 @@ public class address_listActivity extends BaseActivity {
         });
     }
 
+    @Override
+    public void onReverseGeoCodeResult(Map<String, Object> map) {
+
+    }
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?ï¿½Øµï¿½ï¿½Ó¿ï¿½
+    @Override
+    public void onGeoCodeResult(Map<String, Object> map) {
+
+        String distance;
+        Log.d("NNNNNNN",map.toString());
+        if(map.get("noResult")!=null){
+            distance = "-1";            // Ã»ï¿½Ð¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?
+        }else {
+            LatLng latLng = (LatLng)map.get("latLng");
+            LatLng marketLatLng = new LatLng(AppContext.marketLatitude, AppContext.marketLongitude);
+            mDistance1 = DistanceUtil.getDistance(marketLatLng, latLng);
+            Log.d("NNNNNNN","¾àÀë"+mDistance1);
+            if(mDistance1 >=0&& mDistance1 <=5000){
+                distance = "0";              //  ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Â¼×´Ì¬ ï¿½å¹«ï¿½ï¿½Ö®ï¿½Úºï¿½Ì¨ï¿½ï¿½ï¿½ï¿½ï¿½Ë·ï¿½
+            }else if(mDistance1 >5000&& mDistance1 <=10000){
+                distance = "1";         //  Ê®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿?
+            }else {
+                distance = "2";         // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë·ï¿½
+            }
+        }
+        ChangeAddressListData(mPos,distance);
+    }
 }

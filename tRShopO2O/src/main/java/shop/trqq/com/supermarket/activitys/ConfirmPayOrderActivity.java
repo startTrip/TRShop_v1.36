@@ -331,6 +331,5 @@ public class ConfirmPayOrderActivity extends AppCompatActivity implements View.O
     private void weixinpay() {
         ToastUtils.showMessage(ConfirmPayOrderActivity.this,"微信支付待完成");
     }
-
 }
 

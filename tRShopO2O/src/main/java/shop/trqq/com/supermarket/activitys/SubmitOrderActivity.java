@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -17,7 +16,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -28,8 +26,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.Set;
 
 import shop.trqq.com.AppConfig;
 import shop.trqq.com.R;
@@ -41,7 +37,7 @@ import shop.trqq.com.ui.address_listActivity;
 import shop.trqq.com.util.HttpUtil;
 import shop.trqq.com.util.ToastUtils;
 
-public class SubmitOrderActivity extends AppCompatActivity implements View.OnClickListener, Calculate.OnResultMapListener {
+public class SubmitOrderActivity extends AppCompatActivity implements View.OnClickListener {
 
 
     private static final int SDK_PAY_FLAG = 1;
@@ -189,9 +185,6 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
         mProgressActivity.showLoading();
         loadOnlineBuyStep1Data();
 
-        mCalculate = new Calculate();
-        // 传递实现接口的对象过去
-        mCalculate.registerOnResult(this);
     }
 
     private void ChangeAddressListData() {
@@ -199,7 +192,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
         RequestParams requestParams = new RequestParams();
         String key = UserManager.getUserInfo().getKey();
         requestParams.add("key", key);
-        Log.d("key", "ChangeAddressListData: "+key);
+        requestParams.add("distance","100");
         requestParams.add("freight_hash", freight_hash);
         requestParams.add("ifcart", mIfcart);
         requestParams.add("cart_id", mCart_id);
@@ -256,7 +249,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
             }
         });
 
-        // 点击更换地址
+        // 锟斤拷锟斤拷锟斤拷址
         mChangeAdressLayout.setOnClickListener(this);
         mNoAddressLayout.setOnClickListener(this);
     }
@@ -388,50 +381,64 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
              // 锟斤拷锟斤拷锟结交锟斤拷锟斤拷
              mCheckSubmit.setEnabled(true);
              String ship = bundle.getString("ship");
+             String distance = bundle.getString("distance");
 
-             mCalculate.getLocation(bundle.getString("area_info"),bundle.getString("address"));
-
-             // 判断地区是否是湛江 如果是湛江的话就用       地图定位的经纬度去判断
-             if(TextUtils.equals(city_id,"296")){
-                 float distance = getDistance();
-                 String s ;
-                 if(distance>10000){
-                     s= ship;
-                 }else {
-                     s ="0";
-                 }
-                 for(int j = 0; j < mStoreData.size(); j++){
-                     GoodsInfo goodsInfo = mStoreData.get(j);
-                     String arriveTime = getArriveTime(getDistance());
-                     goodsInfo.setArrive_time(arriveTime);
-                     goodsInfo.setStore_shipping(s);
-                 }
-                 mCheckOrderStoreAdapter.addDatas(mStoreData);
-                 mCheckOrderStoreAdapter.notifyDataSetChanged();
-
-                 Float i = Float.parseFloat(mStoreGoodsTotal) + Float.parseFloat(s);
-                 mCheckMoney.setText("￥"+String.format("%.2f",i));
-
-             }else {   // 如果不是湛江就按运费来计算
-                 if (!TextUtils.isEmpty(ship)) {
-                     Float i = Float.parseFloat(mStoreGoodsTotal) + Float.parseFloat(ship);
-                     mCheckMoney.setText("￥"+String.format("%.2f",i));
-                     // 设置送达时间为超过十公里
-                     String arriveTime = getArriveTime(200000.0f);
-                     for(int j = 0; j < mStoreData.size(); j++){
-                         GoodsInfo goodsInfo = mStoreData.get(j);
-                         goodsInfo.setArrive_time(arriveTime);
-                         goodsInfo.setStore_shipping(ship);
+             /**
+              *  -1     没有定位到具体的经纬度
+              *  0      五公里范围之内
+              *  1      五公里到十公里之内
+              *  2      超过十公里范围内
+              */
+             switch (distance) {
+                 case "-1":
+                     if(TextUtils.equals(ship,"0")){  // 没有得到地址的经纬度 ，在赤坎区和霞山区之内
+                         float distance1 = getDistance();   // 用当前距离超市去算配送时间
+                         UpdateAdapter(ship,distance1);
+                     }else {                            // 3天之后送达
+                         UpdateAdapter(ship, 20000f);
                      }
-                     mCheckOrderStoreAdapter.addDatas(mStoreData);
-                     mCheckOrderStoreAdapter.notifyDataSetChanged();
-                 }
+                     break;
+                 case "0":    // 5公里范围之内
+                     UpdateAdapter(ship,3000f);
+                     break;
+                 case "1":
+                     UpdateAdapter(ship,8000f);
+                     break;
+                 case "2":
+                     UpdateAdapter(ship,20000f);
+                     break;
              }
          }else {
+             Float i = Float.parseFloat(mStoreGoodsTotal);
+             mCheckMoney.setText("￥"+String.format("%.2f",i));
+             for(int j = 0; j < mStoreData.size(); j++){
+                 GoodsInfo goodsInfo = mStoreData.get(j);
+                 goodsInfo.setStore_shipping("0.0");
+                 goodsInfo.setArrive_time("请选择地址");
+             }
+             mCheckOrderStoreAdapter.addDatas(mStoreData);
+             mCheckOrderStoreAdapter.notifyDataSetChanged();
              mNoAddressLayout.setVisibility(View.VISIBLE);
              mChangeAdressLayout.setVisibility(View.GONE);
              mCheckSubmit.setEnabled(false);
          }
+    }
+
+    // 更新数据
+    private void UpdateAdapter(String ship,Float f) {
+
+
+        for(int j = 0; j < mStoreData.size(); j++){
+            GoodsInfo goodsInfo = mStoreData.get(j);
+            String arriveTime = getArriveTime(f);
+            goodsInfo.setArrive_time(arriveTime);
+            goodsInfo.setStore_shipping(ship);
+        }
+        mCheckOrderStoreAdapter.addDatas(mStoreData);
+        mCheckOrderStoreAdapter.notifyDataSetChanged();
+
+        Float i = Float.parseFloat(mStoreGoodsTotal) + Float.parseFloat(ship);
+        mCheckMoney.setText("￥"+String.format("%.2f",i));
     }
 
     @Override
@@ -447,6 +454,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
                 intent1.putExtra("ifcart",mIfcart);
                     // 回传结果
                 startActivityForResult(intent1, 0);
+
                 break;
         }
     }
@@ -457,20 +465,23 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
         super.onDestroy();
     }
 
-
-    @Override
-    public void onReverseGeoCodeResult(Map<String, Object> map) {
-
-    }
-
-    @Override
-    public void onGeoCodeResult(Map<String, Object> map) {
-
-        if(map.get("noResult")==null){
-            Log.d("NNNNNNN","没有结果");
-        }else {
-            Object latLng = map.get("latLng");
-            LatLng latLng1 = (LatLng) latLng;
-        }
-    }
+//
+//    // 反地理编码回调接口
+//    @Override
+//    public void onReverseGeoCodeResult(Map<String, Object> map) {
+//
+//    }
+//
+//    // 地理编码 回调接口
+//    @Override
+//    public void onGeoCodeResult(Map<String, Object> map) {
+//
+//        Log.d("NNNNNNN",map.toString());
+//        if(map.get("noResult")!=null){
+//            Log.d("NNNNNNN","没有结果");
+//        }else {
+//            LatLng latLng = (LatLng)map.get("latLng");
+//            Log.d("NNNNNNN",latLng.latitude+"|||"+latLng.longitude);
+//        }
+//    }
 }

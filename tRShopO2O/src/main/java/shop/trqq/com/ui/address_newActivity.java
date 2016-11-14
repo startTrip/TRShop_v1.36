@@ -37,6 +37,7 @@ public class address_newActivity extends BaseActivity {
     private String city_id = "-1";
     private TextView mHeadTitleTextView;
     private AddressPopupWindow mAddressPopupWindow;
+    private String mAddResult;
 
     private void SendCityData() {
         String ph = phone.getText().toString();
@@ -117,6 +118,7 @@ public class address_newActivity extends BaseActivity {
     }
 
     public void initView() {
+
         mHeadTitleTextView = (TextView) findViewById(R.id.head_title_textView);
         mHeadTitleTextView.setText("添加地址");
         name = (EditText) findViewById(R.id.add_address_name);
@@ -136,12 +138,12 @@ public class address_newActivity extends BaseActivity {
                                                 String option2, String options3) {
                         // TODO Auto-generated method stub
                         add_flag = true;
-                        String addResult = options1;
+                        mAddResult = options1;
                         // 锟矫碉拷锟斤拷锟叫和碉拷锟斤拷锟絠d
                         city_id = option2;
                         area_id = options3;
-                        ToastUtils.showMessage(mContext, addResult);
-                        add_address.setText(addResult);
+                        ToastUtils.showMessage(mContext, mAddResult);
+                        add_address.setText(mAddResult);
                     }
                 });
 
@@ -151,8 +153,10 @@ public class address_newActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                if (!mAddressPopupWindow.isShowing())
+                if (!mAddressPopupWindow.isShowing()){
+                    // 地理编码 去得到该地址的 经纬度
                     SendCityData();
+                }
             }
         });
         // address=(TextView)findViewById(R.id.add_address_address);
@@ -174,4 +178,5 @@ public class address_newActivity extends BaseActivity {
             }
         });
     }
+
 }

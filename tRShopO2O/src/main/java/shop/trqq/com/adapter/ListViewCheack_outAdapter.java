@@ -73,6 +73,7 @@ public class ListViewCheack_outAdapter extends
     public void setData(List<Store_Cart_ListBean> data) {
         // TODO Auto-generated method stub
         super.setData(data);
+        store_sumPrice=0;
         store_sumflag = new boolean[mData.size()];
         VoucherStr = new String[mData.size()];
         Voucherflag = new boolean[mData.size()];
@@ -82,6 +83,7 @@ public class ListViewCheack_outAdapter extends
     // getview里面的一个方法
     @Override
     public void convert(ViewHolder holder, Store_Cart_ListBean Bean) {
+
         TextView Title = (TextView) holder.getView(R.id.storegroup_title);
         final TextView store_sum = (TextView) holder.getView(R.id.store_sum);
         TextView balance_fees = (TextView) holder.getView(R.id.balance_fees);
@@ -221,7 +223,10 @@ public class ListViewCheack_outAdapter extends
 
         // 将数据传到 CheckoutActivity
         if (!store_sumflag[mPosition]) {//拉到最底才显示，所以item的getview全执行了。
+            Log.d("store_sumPrice前",store_sumPrice+"");
+            Log.d("store_sumPrice",sum+"");
             store_sumPrice = store_sumPrice + sum;
+            Log.d("store_sumPrice后",store_sumPrice+"");
             Message msg = new Message();
             Bundle bundle = new Bundle();
             bundle.putFloat("store_sumPrice", store_sumPrice);

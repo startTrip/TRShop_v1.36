@@ -140,6 +140,7 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
         // ifcart£ºÊÇ·ñ¹ºÎï³µ£¬0=Á¢¼´¹ºÂò,1=¹ºÎï³µ
         ifcart = getIntent().getStringExtra("ifcart");
         buystep_flag = getIntent().getStringExtra("buystep_flag");
+
         user = (LinearLayout) findViewById(R.id.balance_user);
         mNoAddressLayout = (RelativeLayout) findViewById(R.id.no_address_layout);
         name = (TextView) findViewById(R.id.balance_name);
@@ -192,6 +193,10 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
 		 * arrow_balance_score
 		 * =(ImageView)findViewById(R.id.arrow_balance_score);
 		 */
+
+        mNoAddressLayout.setVisibility(View.VISIBLE);
+        user.setVisibility(View.GONE);
+        submit.setEnabled(false);
 
         user.setOnClickListener(this);
         mNoAddressLayout.setOnClickListener(this);
@@ -296,7 +301,7 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
                 intent.putExtra("freight_hash", freight_hash);
                 intent.putExtra("cart_id",cart_id);
                 intent.putExtra("ifcart",ifcart);
-                // »Øµ÷
+                // ï¿½Øµï¿½
                 startActivityForResult(intent, 0);
                 // context.startActivity(intent);
                 break;
@@ -834,7 +839,7 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
                     bean.setStore_freight("0");
                 }
                 list.add(bean);
-                // System.err.println("ÉÌµêÃû³Æ" + list.get(i).getStore_name());
+                // System.err.println("ï¿½Ìµï¿½ï¿½ï¿½ï¿? + list.get(i).getStore_name());
                 i++;
             } catch (Exception e) {
                 // TODO Auto-generated catch block

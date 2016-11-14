@@ -151,6 +151,7 @@
                             android:textSize="14dp" />
                     </LinearLayout>
                 </LinearLayout>
+
                 <RelativeLayout
                     android:id="@+id/no_address_layout"
                     android:background="@drawable/body_cont"

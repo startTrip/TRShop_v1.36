@@ -59,7 +59,6 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
     private ImageView mMarketReLocation;
     private LatLng mMarketLatLng;
     private LatLng mLatLng;
-    private Boolean isFirst = true;
     public MarketLbsFragment() {
         // Required empty public constructor
     }
@@ -194,15 +193,12 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
                         .longitude(bdLocation.getLongitude()).build();
                 mBaiduMap.setMyLocationData(locData);
 
-                if(isFirst){
-                    String city = bdLocation.getCity();
-                    Intent intent = new Intent("city");
-                    intent.putExtra("city",city);
-                    getActivity().sendBroadcast(intent);
-                    isFirst =false;
-                }
-                String buildingName = bdLocation.getBuildingName();
-                Log.d("poiList111",buildingName+"11");
+
+                String city = bdLocation.getCity();
+                Intent intent = new Intent("city");
+                intent.putExtra("city",city);
+                getActivity().sendBroadcast(intent);
+
 
                 List<Poi> poiList = bdLocation.getPoiList();
                 if (poiList != null) {
@@ -213,7 +209,7 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
                 }
                 // 得到定位的纬度
                 double latitude = bdLocation.getLatitude();
-                // 得到位置的精度
+                // 得到位置的经度
                 double longitude = bdLocation.getLongitude();
 
 

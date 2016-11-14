@@ -45,6 +45,10 @@ public class AppContext extends LitePalApplication {
 
     private static final String TAG = "AppContext";
 
+    public static Double marketLongitude =110.396436;
+
+    public static Double marketLatitude =21.281895;
+
     // WIFI利大
     public static final int NETTYPE_WIFI = 0x01;
     // WAP利大

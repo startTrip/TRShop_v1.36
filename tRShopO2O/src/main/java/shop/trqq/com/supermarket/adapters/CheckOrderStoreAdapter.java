@@ -59,7 +59,7 @@ public class CheckOrderStoreAdapter extends ListViewBaseAdapter<GoodsInfo> {
             String freight = goodsInfo.getStore_shipping();
             if(!TextUtils.isEmpty(freight)){
                 if(TextUtils.equals(freight,"0")){
-                    holder.mFreight.setText("免配送费");
+                    holder.mFreight.setText("免配送费(十公里内)");
                 }else if (freight.equals("0.0")){
                     holder.mFreight.setText("请填写地址");
                 }else {
