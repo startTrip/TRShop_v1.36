@@ -200,7 +200,7 @@ public class MarketGoCartFragment extends Fragment implements View.OnClickListen
     }
 
     // 设置选中的状态
-    private void setCheckState() {
+    private void setStoreCheckState() {
         int m = 0 ;
         for (int i = 0; i < mMarketData.size(); i++) {
             if(mMarketData.get(i).getIsCheck()){
@@ -217,12 +217,13 @@ public class MarketGoCartFragment extends Fragment implements View.OnClickListen
                 mCb_Goods_All.setChecked(true);
                 mCheckTitle.setChecked(true);
             }else {
-                if (mIsAllSelected){
+                if (mIsAllSelected){    // 如果店铺全部被选中则 设置店铺的CheckBox设置false对店铺的商品无效
                     mIsAll = false;
                 }else {
                     mIsAll = true;
                 }
                 mIsAllSelected=false;
+                Log.d("mmmm", "setStoreCheckState: "+mIsAll);
                 mCb_Goods_All.setChecked(false);
                 mCheckTitle.setChecked(false);
             }
@@ -444,6 +445,7 @@ public class MarketGoCartFragment extends Fragment implements View.OnClickListen
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
             case R.id.gocart_market_all:
+                Log.d("mmmm", "change: "+mIsAll);
                 if(mIsAll){  // 设置全选按钮有效
                     mCb_Goods_All.setChecked(isChecked);
                     for (int i = 0; i < mMarketData.size(); i++) {
@@ -467,8 +469,8 @@ public class MarketGoCartFragment extends Fragment implements View.OnClickListen
                 GoCartGoods.DatasBean.CartListBean cartListBean = mMarketData.get(position);
                 cartListBean.setIsCheck(isChecked);
 
-                // 设置选中状态
-                setCheckState();
+                // 设置店铺的CheckBox的选中状态
+                setStoreCheckState();
                 mGoCartListViewAdapter.notifyDataSetChanged();
                 break;
         }

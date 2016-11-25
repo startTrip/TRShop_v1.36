@@ -68,7 +68,8 @@ public class HomeNewAdapter extends BaseAdapter{
             String url = newGoodsListBean.getUrl();
 
             if (!TextUtils.isEmpty(url)) {
-                Picasso.with(mContext).load(url).placeholder(R.mipmap.load_default)
+
+                Picasso.with(mContext).load(url).placeholder(R.mipmap.empty_picture)
                         .config(Bitmap.Config.RGB_565)
                         .into(viewHolder.mImageView);
             }

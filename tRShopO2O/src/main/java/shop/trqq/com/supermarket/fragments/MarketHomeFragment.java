@@ -440,7 +440,6 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
                 super.onFinish();
             }
         });
-
     }
 
 

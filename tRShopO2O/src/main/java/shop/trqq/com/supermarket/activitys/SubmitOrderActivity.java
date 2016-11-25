@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -110,6 +111,8 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
             }
         }
     };
+    private boolean hasSubmit = true;
+    private String mDistance;
 
     private String getArriveTime(float distance) {
         // 得到预计的送达时间
@@ -233,21 +236,8 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
                 finish();
             }
         });
-        // 点击提交订单监听
-        mCheckSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 判断地址是否为空
-                if (address_id == "" || address_id == null) {
-                    ToastUtils.showMessage(SubmitOrderActivity.this, "核对一下您的地址信息");
-                }else {
-                    // 提交订单
-                    SubmitOrder();
-
-                }
-
-            }
-        });
+        // 锟斤拷锟斤拷峤伙拷锟斤拷锟斤拷锟斤拷锟?
+        mCheckSubmit.setOnClickListener(this);
 
         // 锟斤拷锟斤拷锟斤拷址
         mChangeAdressLayout.setOnClickListener(this);
@@ -263,6 +253,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
         requestParams.add("cart_id", mCart_id);  // 购物车中商品的 id和对应的数量
         requestParams.add("ifcart", mIfcart);   // 是否是从购物车中来的
         requestParams.add("address_id", address_id); // 地址
+        requestParams.add("distance",mDistance);
         requestParams.add("vat_hash", vat_hash);
         requestParams.add("offpay_hash", mOffpay_hash);
         requestParams.add("offpay_hash_batch", mOffpay_hash_batch);
@@ -381,7 +372,8 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
              // 锟斤拷锟斤拷锟结交锟斤拷锟斤拷
              mCheckSubmit.setEnabled(true);
              String ship = bundle.getString("ship");
-             String distance = bundle.getString("distance");
+             mDistance = bundle.getString("distance");
+
 
              /**
               *  -1     没有定位到具体的经纬度
@@ -389,7 +381,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
               *  1      五公里到十公里之内
               *  2      超过十公里范围内
               */
-             switch (distance) {
+             switch (mDistance) {
                  case "-1":
                      if(TextUtils.equals(ship,"0")){  // 没有得到地址的经纬度 ，在赤坎区和霞山区之内
                          float distance1 = getDistance();   // 用当前距离超市去算配送时间
@@ -446,7 +438,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
         switch (view.getId()) {
             case R.id.no_address_layout:
                 case R.id.check_address_layout:
-
+                hasSubmit = true;
                 Intent intent1 = new Intent(SubmitOrderActivity.this, address_listActivity.class);
                     // 运费
                 intent1.putExtra("freight_hash",freight_hash);
@@ -455,6 +447,22 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
                     // 回传结果
                 startActivityForResult(intent1, 0);
 
+                break;
+            case R.id.bt_check_submit:
+                // 锟叫断碉拷址锟角凤拷为锟斤拷
+                if (address_id == "" || address_id == null) {
+                    ToastUtils.showMessage(SubmitOrderActivity.this, "核对一下您的地址信息");
+                }else {
+                    Log.d("click", "onClick: "+hasSubmit);
+                    if(hasSubmit){
+
+                        hasSubmit = false; // 锟斤拷止锟截革拷锟结交
+                        // 锟结交锟斤拷锟斤拷
+                        SubmitOrder();
+                        Log.d("click", "onClick: "+hasSubmit);
+                    }
+
+                }
                 break;
         }
     }

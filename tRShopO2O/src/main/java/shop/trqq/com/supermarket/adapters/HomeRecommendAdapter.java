@@ -69,9 +69,9 @@ public class HomeRecommendAdapter extends BaseAdapter{
             String url = recommendedGoodsListBean.getUrl();
 
             if (!TextUtils.isEmpty(url)) {
-                Picasso.with(mContext).load(url).
+                Picasso.with(mContext).load(url).placeholder(R.mipmap.empty_picture).
                         resize(mWidthPixels/2,mWidthPixels/2)
-                        .centerCrop().placeholder(R.mipmap.load_default)
+                        .centerCrop()
                         .config(Bitmap.Config.RGB_565)
                         .into(viewHolder.mImageView);
             }

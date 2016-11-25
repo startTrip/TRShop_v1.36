@@ -118,6 +118,7 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
     private ProgressActivity progressActivity;
     private RelativeLayout mNoAddressLayout;
     private JSONObject mJsonObjects;
+    private String mDistance;
 
     @Override
     protected void onResume() {
@@ -528,6 +529,7 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
         requestParams.add("cart_id", cart_id);  // 购物车中商品的 id和对应的数量
         requestParams.add("ifcart", ifcart);   // 是否是从购物车中来的
         requestParams.add("address_id", address_id); // 地址
+        requestParams.add("distance",mDistance);
         requestParams.add("vat_hash", vat_hash);
         requestParams.add("offpay_hash", offpay_hash);
         requestParams.add("offpay_hash_batch", offpay_hash_batch);
@@ -777,6 +779,7 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
                     offpay_hash = bundle.getString("offpay_hash");
                     offpay_hash_batch = bundle.getString("offpay_hash_batch");
                     String content = bundle.getString("content");
+                    mDistance = bundle.getString("distance");
                     if (!TextUtils.isEmpty(content)) {
                         try {
                             JSONObject jsonObject = new JSONObject(content);

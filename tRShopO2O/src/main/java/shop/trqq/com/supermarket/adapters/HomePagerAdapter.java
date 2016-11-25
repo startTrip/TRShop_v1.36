@@ -95,10 +95,10 @@ public class HomePagerAdapter extends PagerAdapter implements ViewPager.OnPageCh
 
             if (!TextUtils.isEmpty(img_url)) {
                 Picasso.with(mContext).load(img_url)
-                        .config(Bitmap.Config.RGB_565).placeholder(R.mipmap.load_default).resize(mWidthPixels, (int) (180*mDensity)).centerCrop()
+                        .config(Bitmap.Config.RGB_565).resize(mWidthPixels, (int) (180*mDensity)).placeholder(R.mipmap.empty_picture)
                         .into(imageView);
             }
-            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+
             imageView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {

@@ -46,7 +46,7 @@ public class HomeClassifyAdapter extends RecyclerView.Adapter<HomeClassifyAdapte
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(mContext).inflate(R.layout.market_layout_home_classify_item, null,false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.market_layout_home_classify_item,null);
 
         return new ViewHolder(view);
     }
@@ -64,7 +64,7 @@ public class HomeClassifyAdapter extends RecyclerView.Adapter<HomeClassifyAdapte
 //                .displayImage(homeClassifyTitle.getImgurl(),holder.imageView,
 //                        ImageLoadUtils.getoptions(),ImageLoadUtils.getAnimateFirstDisplayListener());
         Picasso.with(mContext)
-                .load(homeClassifyTitle.getImgurl()).resize(mWidthPixels/10,mWidthPixels/10).centerCrop()
+                .load(homeClassifyTitle.getImgurl()).resize(mWidthPixels/10,mWidthPixels/10)
                 .config(Bitmap.Config.RGB_565).into(holder.imageView);
 
         holder.mName.setText(homeClassifyTitle.getName());

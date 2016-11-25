@@ -15,7 +15,6 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
-import com.baidu.location.Poi;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.InfoWindow;
@@ -154,7 +153,7 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
             @Override
             public void onClick(View view) {
 
-                MapStatusUpdate update = MapStatusUpdateFactory.newLatLngZoom(mMarketLatLng,17);
+                MapStatusUpdate update = MapStatusUpdateFactory.newLatLngZoom(mMarketLatLng,13);
                 mBaiduMap.animateMapStatus(update);
             }
         });
@@ -200,13 +199,9 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
                 getActivity().sendBroadcast(intent);
 
 
-                List<Poi> poiList = bdLocation.getPoiList();
-                if (poiList != null) {
-                    for (int i = 0; i < poiList.size(); i++) {
-                        Poi poi = poiList.get(i);
-                        Log.d("poiList", poi.describeContents()+"||||"+poi.getName());
-                    }
-                }
+                String addrStr = bdLocation.getAddrStr();
+                Log.d(TAG, "onReceiveLocation: "+addrStr);
+
                 // 得到定位的纬度
                 double latitude = bdLocation.getLatitude();
                 // 得到位置的经度

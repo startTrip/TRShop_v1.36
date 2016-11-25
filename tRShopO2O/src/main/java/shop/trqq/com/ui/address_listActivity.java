@@ -94,9 +94,7 @@ public class address_listActivity extends BaseActivity implements Calculate.OnRe
                 //System.err.println(freight_hash);
                 if (freight_hash.equals("")) {
                     // ToastUtils.showMessage(mContext, "锟斤拷时锟斤拷锟斤拷锟睫革拷");
-                    Log.d("onItemClick1111", "onItemClick: "+position);
                 } else {
-                    Log.d("onItemClick", "onItemClick: "+position);
                     mPos = position;          // 记录点击的ListView 条目的位置
                     String area_info = addressList.get(position).getArea_info();
                     String address = addressList.get(position).getAddress();

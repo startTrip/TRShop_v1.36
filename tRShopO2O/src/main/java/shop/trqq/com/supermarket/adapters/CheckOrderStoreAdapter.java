@@ -63,7 +63,7 @@ public class CheckOrderStoreAdapter extends ListViewBaseAdapter<GoodsInfo> {
                 }else if (freight.equals("0.0")){
                     holder.mFreight.setText("请填写地址");
                 }else {
-                    holder.mFreight.setText("￥ "+freight+"（超出十公里）");
+                    holder.mFreight.setText("￥ "+freight);
                 }
                 Float i = Float.parseFloat(freight) + Float.parseFloat(store_goods_total);;
                 holder.mSum_money.setText("￥ "+i);
