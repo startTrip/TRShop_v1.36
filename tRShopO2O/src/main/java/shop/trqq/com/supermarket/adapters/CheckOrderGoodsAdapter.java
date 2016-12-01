@@ -2,6 +2,7 @@ package shop.trqq.com.supermarket.adapters;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -51,6 +52,8 @@ public class CheckOrderGoodsAdapter extends ListViewBaseAdapter<GoodsInfo.GoodsL
             String goods_weight = goodsListBean.getGoods_weight();
             if(!TextUtils.isEmpty(goods_weight)){
                 holder.mGoods_weight.setText(goods_weight +"kg");
+            }else {
+                holder.mGoods_weight.setText("0.00kg");
             }
         }
         return convertView;

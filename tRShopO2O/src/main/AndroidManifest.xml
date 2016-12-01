@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest package="shop.trqq.com"
           xmlns:android="http://schemas.android.com/apk/res/android"
-          android:versionCode="5"
-          android:versionName="1.39"
+          android:versionCode="6"
+          android:versionName="1.41"
     >
+
+    <!-- 测试服务器  versionCode = 6    versionName = 1.41 -->
+    <!--  正式服务器 versionCode = 1    versionName = 1.37-->
 
     <uses-sdk
         android:minSdkVersion="11"
@@ -462,25 +465,17 @@
             android:value="563967ede0f55a01e80004ab"
             />
 
-        <!--  -->
-        <activity
-            android:name="supermarket.MarketMainActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"
-            >
-        </activity>
-        <activity
-            android:name="supermarket.activitys.MarketClassifyDetailActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="landscape"
-            >
-        </activity>
+
+
+        <!-- 超市的主界面 -->
         <activity
             android:name=".supermarket.MarketMainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
             >
         </activity>
+
+        <!-- 超市分类详情界面 -->
         <activity
             android:name=".supermarket.activitys.MarketClassifyDetailActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -517,15 +512,35 @@
             >
         </activity>
 
-        <!-- 支付宝 重要 包含支付入口 -->
+        <!-- 提交订单界面 -->
+        <activity
+            android:name=".supermarket.activitys.SubmitOrderActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            >
+        </activity>
 
-        <activity android:name=".supermarket.activitys.SubmitOrderActivity">
+        <activity
+            android:name=".ui.PersonalActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            >
         </activity>
-        <activity android:name=".ui.PersonalActivity">
+
+        <!-- 确认订单界面 -->
+        <activity
+            android:name=".supermarket.activitys.ConfirmPayOrderActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            >
         </activity>
-        <activity android:name=".supermarket.activitys.ConfirmPayOrderActivity">
-        </activity>
-        <activity android:name=".supermarket.activitys.MarketGoCartActivity">
+
+        <!-- 超市购物车界面 -->
+        <activity
+            android:name=".supermarket.activitys.MarketGoCartActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            >
         </activity>
     </application>
 

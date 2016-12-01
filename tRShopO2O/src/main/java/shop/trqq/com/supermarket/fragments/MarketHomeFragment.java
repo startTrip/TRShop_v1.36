@@ -33,6 +33,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -44,12 +47,14 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import shop.trqq.com.AppContext;
 import shop.trqq.com.NetworkStateService;
 import shop.trqq.com.R;
+import shop.trqq.com.bean.Mb_SlidersBean;
 import shop.trqq.com.supermarket.MarketMainActivity;
 import shop.trqq.com.supermarket.adapters.HomeClassifyAdapter;
 import shop.trqq.com.supermarket.adapters.HomeNewAdapter;
@@ -73,7 +78,7 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
     private ViewPager mViewPager;
     private HomePagerAdapter mTopAdapter;
     private int position;
-    private ArrayList<HomeTopImage.DataBean> mTopData;
+    private ArrayList<Mb_SlidersBean> mTopData;
     private LinearLayout mIndicatorContainer;
     private ArrayList<ImageView> mTopIndicators;
     private int mDensityDpi;
@@ -286,10 +291,11 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
                     case MotionEvent.ACTION_UP:
                         // 进行页面切换
                         mIsSwitch = true;
+                        mSwipeRefreshLayout.setEnabled(true);
                         break;
 
                     case MotionEvent.ACTION_CANCEL:
-                        mSwipeRefreshLayout.setEnabled(true);
+
                         break;
                 }
                 return false;
@@ -319,7 +325,7 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
 
         YkLog.i("onfailure1", AppContext.getInstance().getNetworkType()+"");
         // 得到头部轮播图的数据
-        getTopData();
+//        getTopData();
         // 得到中间分类的数�?
         getClassifyTitle();
         // 得到下方推荐的数�?
@@ -356,6 +362,48 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
                         mHomeNewList.addAll(new_goods_list);
                     }
                         mHomeNewAdapter.notifyDataSetChanged();
+
+                        // gson��������
+                        JsonObject jsonObject = new JsonParser().parse(response)
+                                .getAsJsonObject();
+                        JsonObject data = jsonObject.getAsJsonObject("datas");
+                        JsonObject goodslist_info = data
+                                .getAsJsonObject("goods_list_info");
+                        JsonObject goodsstore = goodslist_info
+                                .getAsJsonObject("goods_store");
+                        if (goodsstore.get("mb_sliders").isJsonObject()) {
+                            mTopData.clear();
+                            JsonObject mb_sliders = goodsstore
+                                    .getAsJsonObject("mb_sliders");
+                            for (Map.Entry<String, JsonElement> entry : mb_sliders
+                                    .entrySet()) {
+                                Mb_SlidersBean bean = new Mb_SlidersBean();
+                                bean = mGson.fromJson(entry.getValue(),
+                                        Mb_SlidersBean.class);
+                                mTopData.add(bean);
+                            }
+
+                            mTopAdapter = new HomePagerAdapter(getActivity(), mTopData, mViewPager);
+                            mViewPager.setAdapter(mTopAdapter);
+
+                            if (mTopAdapter != null) {
+
+                                mTopAdapter.setOnBannerImageClickListener(new HomePagerAdapter.onBannerImageClickListener() {
+                                    @Override
+                                    public void onBannerImageClick(int i) {
+                                        // 按下   停止轮播
+                                        if(i==0){
+                                            mIsSwitch = false;
+                                        }else if (i==1){   // 抬起  继续轮播
+                                            mIsSwitch = true;;
+                                        }
+                                    }
+                                });
+                            }
+                            initIndicatorsDot();
+
+                            mViewPager.setCurrentItem(1,false);
+                    }
 
                     mRecommendComplete = true;
                     // չʾ����
@@ -459,7 +507,7 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
                 // 判断是不是为null
                 if (data != null) {
                     mTopData.clear();
-                    mTopData.addAll(data);
+//                    mTopData.addAll(data);
                 }
                 mTopAdapter = new HomePagerAdapter(getActivity(), mTopData, mViewPager);
                 mViewPager.setAdapter(mTopAdapter);
@@ -510,7 +558,7 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
     }
 
     private void showContent(){
-        if (mTopComplete&&mClassifyComplete&&mRecommendComplete){
+        if (mClassifyComplete&&mRecommendComplete){
 
             if(mSwipeRefreshLayout.isRefreshing()){
                 mSwipeRefreshLayout.setRefreshing(false);
@@ -531,7 +579,6 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
                     public void onClick(View v) {
                         // TODO Auto-generated method stub
                         mProgressActivity.showLoading();
-                        mTopComplete = false;
                         mClassifyComplete = false;
                         mRecommendComplete = false;
                         getData();
@@ -541,27 +588,33 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
 
     // 初始化小圆点
     private void initIndicatorsDot() {
-        if (mTopIndicators.size()==0) {
 
-            int dp = mDensityDpi/160;
-            for (int i = 0; i < mTopData.size(); i++) {
-                ImageView iv = new ImageView(getActivity());
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(8*dp, 8*dp);
-                params.setMargins(0,0,8*dp,8*dp);
-                iv.setLayoutParams(params);
-                mTopIndicators.add(iv);
-                mIndicatorContainer.addView(iv);
-                if (i==0){
-                    iv.setImageResource(R.mipmap.dot_read);
-                }else {
-                    iv.setImageResource(R.mipmap.dot_gary);
+        if(mTopData.size()>1) {
+            if(mTopIndicators.size()==0){
+                int dp = mDensityDpi/160;
+                for (int i = 0; i < mTopData.size(); i++) {
+                    ImageView iv = new ImageView(getActivity());
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(8*dp, 8*dp);
+                    params.setMargins(0,0,8*dp,8*dp);
+                    iv.setLayoutParams(params);
+                    mTopIndicators.add(iv);
+                    mIndicatorContainer.addView(iv);
+                    if (i==0){
+                        iv.setImageResource(R.mipmap.dot_read);
+                    }else {
+                        iv.setImageResource(R.mipmap.dot_gary);
+                    }
                 }
             }
+        }else {
+            mTopIndicators.clear();
+            mIndicatorContainer.removeAllViews();
         }
     }
 
     @Override
     public void onDestroy() {
+
         super.onDestroy();
         if (mBroadcastReceive != null) {
             getActivity().unregisterReceiver(mBroadcastReceive);

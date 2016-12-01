@@ -15,6 +15,10 @@ public class HttpUtil {
     public static final String HOST = "http://shop.wushi3.com/mobile/index.php";
     //public static final String HOST ="http://192.168.191.1/late_shop/mobile/index.php";
 
+
+    public static final String HOMEBANNER = HOST +"/mobile/index.php?act=wnj_show_store";
+
+
     //public static final String HOST  "http://192.168.23.1/haoshop/mobile/index.php";
     public static final String URL_SHOP = HOST + "?act=shop&op=index";
     public static final String URL_SHOP_CLASS = HOST + "?act=shop_class&op=index";

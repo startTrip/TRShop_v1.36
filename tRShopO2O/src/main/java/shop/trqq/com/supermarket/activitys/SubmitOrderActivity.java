@@ -34,6 +34,7 @@ import shop.trqq.com.UserManager;
 import shop.trqq.com.supermarket.adapters.CheckOrderStoreAdapter;
 import shop.trqq.com.supermarket.bean.GoodsInfo;
 import shop.trqq.com.supermarket.utils.Calculate;
+import shop.trqq.com.ui.Base.UIHelper;
 import shop.trqq.com.ui.address_listActivity;
 import shop.trqq.com.util.HttpUtil;
 import shop.trqq.com.util.ToastUtils;
@@ -275,14 +276,16 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
                         ToastUtils.showMessage(SubmitOrderActivity.this,error);
                     }else {
                         String pay_sn = jsonObject1.optString("pay_sn");
-                        Intent intent = new Intent(SubmitOrderActivity.this,ConfirmPayOrderActivity.class);
-                        String checkMoney = mCheckMoney.getText().toString().substring(1);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("state","1");
-                        bundle.putString("checkMoney",checkMoney);
-                        bundle.putString("pay_sn",pay_sn);
-                        intent.putExtras(bundle);
-                        startActivity(intent);
+//                        Intent intent = new Intent(SubmitOrderActivity.this,ConfirmPayOrderActivity.class);
+//                        String checkMoney = mCheckMoney.getText().toString().substring(1);
+//                        Bundle bundle = new Bundle();
+//                        bundle.putString("state","1");
+//                        bundle.putString("checkMoney",checkMoney);
+//                        bundle.putString("pay_sn",pay_sn);
+//                        intent.putExtras(bundle);
+                        //  è·³è½¬åˆ°è®¢å•ä»˜æ¬¾çš„ç•Œé¢
+                        UIHelper.showOrder(SubmitOrderActivity.this, "");
+//                        startActivity(intent);
                         // ï¿½ï¿½ï¿½ï¿½ï¿½É¶ï¿½ï¿½ï¿½Ò³ï¿½ï¿½
                         finish();
                     }
@@ -313,6 +316,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String string = new String(responseBody);
+
                 try {
                     JSONObject jsonObject1 = new JSONObject(string);
                     JSONObject jsonObjects = jsonObject1.optJSONObject(("datas"));
@@ -474,19 +478,19 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
     }
 
 //
-//    // ·´µØÀí±àÂë»Øµ÷½Ó¿Ú
+//    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½ï¿½Ó¿ï¿½
 //    @Override
 //    public void onReverseGeoCodeResult(Map<String, Object> map) {
 //
 //    }
 //
-//    // µØÀí±àÂë »Øµ÷½Ó¿Ú
+//    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?ï¿½Øµï¿½ï¿½Ó¿ï¿½
 //    @Override
 //    public void onGeoCodeResult(Map<String, Object> map) {
 //
 //        Log.d("NNNNNNN",map.toString());
 //        if(map.get("noResult")!=null){
-//            Log.d("NNNNNNN","Ã»ÓĞ½á¹û");
+//            Log.d("NNNNNNN","Ã»ï¿½Ğ½ï¿½ï¿?);
 //        }else {
 //            LatLng latLng = (LatLng)map.get("latLng");
 //            Log.d("NNNNNNN",latLng.latitude+"|||"+latLng.longitude);

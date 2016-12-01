@@ -12,6 +12,7 @@ public interface NetConfig {
     // 超市首页 banner 页面 get 请求
     String DISCOVERBANNER ="http://api.markapp.cn/v131/singles/banner";
 
+
     // 超市首页分类 post 请求 baseUrl 请求参数 agent_id = 101
     String BASEHOMECLASSIFY ="http://123.57.81.236/sixmarket/sixmarket/index.php/Webservice/v410/index_show";
 

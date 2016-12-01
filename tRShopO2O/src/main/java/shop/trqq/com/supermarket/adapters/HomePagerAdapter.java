@@ -17,7 +17,10 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import shop.trqq.com.R;
+import shop.trqq.com.bean.Mb_SlidersBean;
 import shop.trqq.com.supermarket.bean.HomeTopImage;
+import shop.trqq.com.ui.Base.UIHelper;
+import shop.trqq.com.util.ToastUtils;
 import shop.trqq.com.util.YkLog;
 
 /**
@@ -30,7 +33,7 @@ public class HomePagerAdapter extends PagerAdapter implements ViewPager.OnPageCh
     private final float mDensity;
     private Context mContext;
     private ArrayList<ImageView> mList;
-    private ArrayList<HomeTopImage.DataBean> mDataBeen;
+    private ArrayList<Mb_SlidersBean> mDataBeen;
     private ViewPager mViewPager;
 
     private onBannerImageClickListener mOnBannerImageClickListener;
@@ -44,7 +47,7 @@ public class HomePagerAdapter extends PagerAdapter implements ViewPager.OnPageCh
         mOnBannerImageClickListener = onBannerImageClickListener;
     }
 
-    public HomePagerAdapter(Context context, ArrayList<HomeTopImage.DataBean> topData, ViewPager topPager) {
+    public HomePagerAdapter(Context context, ArrayList<Mb_SlidersBean> topData, ViewPager topPager) {
         mContext = context;
         if (topData != null) {
             mDataBeen = topData;
@@ -56,10 +59,15 @@ public class HomePagerAdapter extends PagerAdapter implements ViewPager.OnPageCh
         mDensity = displayMetrics.density;
 
         mList = new ArrayList<>();
-
-        for (int i = 0; i < mDataBeen.size() + 2; i++) {
+        if(mDataBeen.size()==1){
             ImageView imageView = new ImageView(mContext);
             mList.add(imageView);
+        }else if(mDataBeen.size()>1){
+
+            for (int i = 0; i < mDataBeen.size() + 2; i++) {
+                ImageView imageView = new ImageView(mContext);
+                mList.add(imageView);
+            }
         }
         mViewPager = topPager;
         mViewPager.addOnPageChangeListener(this);
@@ -83,7 +91,7 @@ public class HomePagerAdapter extends PagerAdapter implements ViewPager.OnPageCh
 
         if (mDataBeen.size() > 0) {
 
-            HomeTopImage.DataBean dataBean;
+            Mb_SlidersBean dataBean;
             if (position == 0) {
                 dataBean = mDataBeen.get(mDataBeen.size() - 1);
             } else if (position == mList.size() - 1) {
@@ -91,9 +99,10 @@ public class HomePagerAdapter extends PagerAdapter implements ViewPager.OnPageCh
             } else {
                 dataBean = mDataBeen.get(position - 1);
             }
-            String img_url = dataBean.getImg_url();
+            String img_url = dataBean.getImgUrl();
 
             if (!TextUtils.isEmpty(img_url)) {
+
                 Picasso.with(mContext).load(img_url)
                         .config(Bitmap.Config.RGB_565).resize(mWidthPixels, (int) (180*mDensity)).placeholder(R.mipmap.empty_picture)
                         .into(imageView);
@@ -105,7 +114,7 @@ public class HomePagerAdapter extends PagerAdapter implements ViewPager.OnPageCh
 
                     switch (motionEvent.getAction()) {
                         case MotionEvent.ACTION_DOWN:
-                            YkLog.i("lunbo","iDown");
+
                             // 按下s
                             if (mOnBannerImageClickListener != null) {
                                 mOnBannerImageClickListener.onBannerImageClick(0);
@@ -114,7 +123,6 @@ public class HomePagerAdapter extends PagerAdapter implements ViewPager.OnPageCh
                         case MotionEvent.ACTION_MOVE:
                             break;
                         case MotionEvent.ACTION_UP:
-                            YkLog.i("lunbo","iUp");
                             if (mOnBannerImageClickListener != null) {
                                 mOnBannerImageClickListener.onBannerImageClick(1);
                             }
@@ -128,18 +136,33 @@ public class HomePagerAdapter extends PagerAdapter implements ViewPager.OnPageCh
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int i = mList.indexOf(v);
-
-                    Log.d("AAA", "onClick:" + i);
-//                    Intent intent = new Intent(mContext, BannerDetailActivity.class);
-//                    intent.putExtra("id",mDataBeen.get().getId());
-//                    mContext.startActivity(intent);
+                    int i = 0;
+                    if(mList.size()==1){
+                        i = 0;
+                    }else {
+                        i = mList.indexOf(v)-1;
+                    }
+                    YkLog.e("click","点击了"+i);
+                    Mb_SlidersBean mb_slidersBean = mDataBeen.get(i);
+                    String type = mb_slidersBean.getType();
+                    String link = mb_slidersBean.getLink();
+                    clickimg(type,link);
                 }
             });
 
             container.addView(imageView);
         }
         return imageView;
+    }
+
+    private void clickimg(String type, String data) {
+        if (type.equals("1")) {
+//
+//                String a[] = data.split("goods_id=");
+//                UIHelper.showGoods_Detaill(mContext, a[1]);
+        } else if (type.equals("2")) {
+            UIHelper.showGoods_Detaill(mContext, data);
+        }
     }
 
     @Override

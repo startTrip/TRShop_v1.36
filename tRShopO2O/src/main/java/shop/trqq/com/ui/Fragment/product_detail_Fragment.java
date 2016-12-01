@@ -285,8 +285,8 @@ public class product_detail_Fragment extends Fragment implements OnClickListener
                     YkLog.longe(TAG, jsonString);
                     try {
                         String errStr = jsonObject.getString("error");
+                        ToastUtils.showMessage(mContext, errStr);
                         if (!TextUtils.isEmpty(errStr)) {
-                            ToastUtils.showMessage(mContext, errStr);
                                 UIHelper.showPersonalActivity(getActivity());
                                 getActivity().finish();
                         }

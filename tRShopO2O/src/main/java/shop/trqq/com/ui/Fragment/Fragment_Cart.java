@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -299,9 +300,11 @@ public class Fragment_Cart extends Fragment implements OnItemClickListener {
             switch (msg.what) {
                 case 1:
                     float num = msg.getData().getFloat("SumNum");
+                    Log.d("delete",num+"总金额"+SumNumber);
                     SumNumber = SumNumber + num;
-                    String sum = String.format("%.1f", num);
-                    Sum.setText("总计：" + sum + "元");
+//                    String sum = String.format("%.1f", num);
+//                    Sum.setText("总计：" + sum + "元");
+                    Sum.setText("总计：" + SumNumber + "元");
                     break;
                 case 2:
                     // setUserVisibleHint(true);

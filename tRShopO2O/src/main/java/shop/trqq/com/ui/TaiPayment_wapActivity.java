@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -43,6 +44,7 @@ public class TaiPayment_wapActivity extends BaseActivity {
     private TextView TaiPay_amount;
     private TextView TaiPayorder_amount;
     private EditText TaiPay_Password;
+    private boolean btIsUse = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,7 +93,10 @@ public class TaiPayment_wapActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                loadOnlineTaiPay();
+                if(btIsUse){      // 防止多次点击
+                    btIsUse = false;
+                    loadOnlineTaiPay();
+                }
             }
         });
         /*
@@ -216,6 +221,7 @@ public class TaiPayment_wapActivity extends BaseActivity {
                                 break;
                             case 4:
                                 message = "支付成功";
+                                TaiPay_Submit.setEnabled(false);
                                 TaiPay_Submit.setText("支付成功");
                                 TaiPay_Submit.setOnClickListener(null);
                                 TaiPay_Submit.setBackgroundColor(Color.GRAY);
@@ -246,6 +252,7 @@ public class TaiPayment_wapActivity extends BaseActivity {
                                 new ContextThemeWrapper(
                                         mContext,
                                         android.support.v7.appcompat.R.style.Theme_AppCompat_Light_DialogWhenLarge));
+                        final String finalMessage = message;
                         builder.setTitle("温馨提示")
                                 .setMessage(message)
                                 .setPositiveButton(android.R.string.ok,
@@ -253,10 +260,12 @@ public class TaiPayment_wapActivity extends BaseActivity {
                                             public void onClick(
                                                     DialogInterface dialog,
                                                     int which) {
-
+                                                    if (TextUtils.equals(finalMessage,"支付成功")){
+                                                    finish();
+                                                }
                                             }
                                         }).setCancelable(false).create().show();
-
+                        btIsUse = true;  // 当弹窗出来以后才可以重新点击
                     }
 
                     @Override

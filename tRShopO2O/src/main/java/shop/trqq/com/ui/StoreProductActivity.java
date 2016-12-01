@@ -328,6 +328,7 @@ public class StoreProductActivity extends BaseActivity {
                                   byte[] responseBody) {
                 try {
                     String jsonString = new String(responseBody);
+                    YkLog.i("storeProduct",jsonString);
                     try {
                         YkLog.t("StoreProductActivity", jsonString);
                         JSONObject jsonObjects = new JSONObject(jsonString)

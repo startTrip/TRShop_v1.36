@@ -47,6 +47,7 @@ public class StoreActivity extends BaseFragmentActivity {
     }
 
     private void initView() {
+
         setContentView(R.layout.activity_voucher_list);
         // dm = getResources().getDisplayMetrics();
         pager = (ViewPager) findViewById(R.id.pager);

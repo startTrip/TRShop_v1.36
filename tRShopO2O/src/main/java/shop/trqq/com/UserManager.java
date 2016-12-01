@@ -2,6 +2,7 @@ package shop.trqq.com;
 
 import android.content.Context;
 import android.provider.Settings;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -168,6 +169,7 @@ public class UserManager {
     public static boolean jsonToBean(Context context, String json) {
         // json×Ö·û´®ToBean
         userInfo = gson.fromJson(json, UserInfoBean.class);
+        YkLog.e("userInfo","µÇÂ¼Ç°"+userInfo.toString());
         if (userInfo == null) {
             userInfo = new UserInfoBean();
             userInfo.setLogin(false);
@@ -176,6 +178,7 @@ public class UserManager {
         if (!userInfo.getNickname().equals("")) {
             userInfo.setLogin(true);
             String key;
+            YkLog.e("userInfo",userInfo.toString());
             try {
                 // AES¼ÓÃÜkey
                 key = AESCipher.encrypt(getAesKey(context), userInfo.getKey());

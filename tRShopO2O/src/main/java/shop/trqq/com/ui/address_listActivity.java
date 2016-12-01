@@ -297,20 +297,20 @@ public class address_listActivity extends BaseActivity implements Calculate.OnRe
     public void onGeoCodeResult(Map<String, Object> map) {
 
         String distance;
-        Log.d("NNNNNNN",map.toString());
+
         if(map.get("noResult")!=null){
-            distance = "-1";            // Ã»ï¿½Ð¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?
+            distance = "-1";            // Ã»ÓÐ»ñµÃ¾­Î³¶È
         }else {
             LatLng latLng = (LatLng)map.get("latLng");
             LatLng marketLatLng = new LatLng(AppContext.marketLatitude, AppContext.marketLongitude);
             mDistance1 = DistanceUtil.getDistance(marketLatLng, latLng);
-            Log.d("NNNNNNN","¾àÀë"+mDistance1);
+
             if(mDistance1 >=0&& mDistance1 <=5000){
-                distance = "0";              //  ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Â¼×´Ì¬ ï¿½å¹«ï¿½ï¿½Ö®ï¿½Úºï¿½Ì¨ï¿½ï¿½ï¿½ï¿½ï¿½Ë·ï¿½
+                distance = "0";              //  Îå¹«ÀïÖ®ÄÚ
             }else if(mDistance1 >5000&& mDistance1 <=10000){
-                distance = "1";         //  Ê®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿?
+                distance = "1";         //  Ê®¹«ÀïÒÔÄÚ
             }else {
-                distance = "2";         // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë·ï¿½
+                distance = "2";         // Ê®¹«ÀïÒÔÍâ
             }
         }
         ChangeAddressListData(mPos,distance);

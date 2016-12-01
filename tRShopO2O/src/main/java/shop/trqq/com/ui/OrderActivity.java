@@ -58,7 +58,7 @@ import shop.trqq.com.util.ToastUtils;
 import shop.trqq.com.util.YkLog;
 
 /**
- * ¶©µ¥½çÃæ
+ * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  */
 public class OrderActivity extends BaseActivity implements OrderAdapter.onClickAliPay {
 

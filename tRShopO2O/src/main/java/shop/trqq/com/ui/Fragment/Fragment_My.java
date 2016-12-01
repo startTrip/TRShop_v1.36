@@ -367,7 +367,7 @@ public class Fragment_My extends Fragment implements OnClickListener,SwipeRefres
         RequestParams requestParams = new RequestParams();
         String key = UserManager.getUserInfo().getKey();
         requestParams.add("key", key);
-        String uri = "http://shop.trqq.com/mobile/index.php?act=member_index&op=bao";
+        String uri = HttpUtil.HOST+"?act=member_index&op=bao";
         HttpUtil.post(uri, requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers,

@@ -58,6 +58,8 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
     private ImageView mMarketReLocation;
     private LatLng mMarketLatLng;
     private LatLng mLatLng;
+    private LocationClientOption mOption;
+
     public MarketLbsFragment() {
         // Required empty public constructor
     }
@@ -113,27 +115,27 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
 
         mLocationClient.registerLocationListener(this);
 
-        LocationClientOption option = new LocationClientOption();
+        mOption = new LocationClientOption();
 
         // 设置打开GPS
-        option.setOpenGps(true);
+        mOption.setOpenGps(true);
 
-        option.setCoorType("bd09ll");
+        mOption.setCoorType("bd09ll");
 
         // 在定位的时候，返回地址信息
-        option.setIsNeedAddress(true);
-        option.setIsNeedLocationDescribe(true);
+        mOption.setIsNeedAddress(true);
+        mOption.setIsNeedLocationDescribe(true);
 
-        option.setIsNeedLocationDescribe(true);//可选，默认false，设置是否需要位置语义化结果，可以在BDLocation.getLocationDescribe里得到，结果类似于“在北京天安门附近”
-        option.setIsNeedLocationPoiList(true);//可选，默认false，设置是否需要POI结果，可以在BDLocation.getPoiList里得到
-        option.setIgnoreKillProcess(false);//可选，默认true，定位SDK内部是一个SERVICE，并放到了独立进程，设置是否在stop的时候杀死这个进程，默认不杀死
-        option.SetIgnoreCacheException(false);//可选，默认false，设置是否收集CRASH信息，默认收集
-        option.setEnableSimulateGps(false);//可选，默认false，设置是否需要过滤GPS仿真结果，默认需要
+        mOption.setIsNeedLocationDescribe(true);//可选，默认false，设置是否需要位置语义化结果，可以在BDLocation.getLocationDescribe里得到，结果类似于“在北京天安门附近”
+        mOption.setIsNeedLocationPoiList(true);//可选，默认false，设置是否需要POI结果，可以在BDLocation.getPoiList里得到
+        mOption.setIgnoreKillProcess(false);//可选，默认true，定位SDK内部是一个SERVICE，并放到了独立进程，设置是否在stop的时候杀死这个进程，默认不杀死
+        mOption.SetIgnoreCacheException(false);//可选，默认false，设置是否收集CRASH信息，默认收集
+        mOption.setEnableSimulateGps(false);//可选，默认false，设置是否需要过滤GPS仿真结果，默认需要
 
         // 设置定位模式
-        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
+        mOption.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
 
-        mLocationClient.setLocOption(option);
+        mLocationClient.setLocOption(mOption);
         mLocationClient.start();
     }
 
@@ -153,7 +155,7 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
             @Override
             public void onClick(View view) {
 
-                MapStatusUpdate update = MapStatusUpdateFactory.newLatLngZoom(mMarketLatLng,13);
+                MapStatusUpdate update = MapStatusUpdateFactory.newLatLngZoom(mMarketLatLng,14);
                 mBaiduMap.animateMapStatus(update);
             }
         });
@@ -165,6 +167,11 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
 
         mMapView.setClickable(false);// 不让底层的mapview截获点击事件
 
+        if (mOption.isOpenGps()) {
+            Log.d(TAG, "setReLocation: ");
+            mOption.setOpenGps(false);
+        }
+        mLocationClient.setLocOption(mOption);
         mLocationClient.start();// 重新定位一下
     }
 
