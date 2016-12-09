@@ -2,6 +2,7 @@ package shop.trqq.com.adapter;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.view.ContextThemeWrapper;
@@ -21,9 +22,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import butterknife.Bind;
 import shop.trqq.com.R;
 import shop.trqq.com.UserManager;
 import shop.trqq.com.bean.OrderGroupHomeListBean;
+import shop.trqq.com.supermarket.activitys.BinderCardActivity;
 import shop.trqq.com.ui.Base.UIHelper;
 import shop.trqq.com.util.HttpUtil;
 import shop.trqq.com.util.ToastUtils;
@@ -135,7 +138,7 @@ public class OrderAdapter extends CommonAdapter<OrderGroupHomeListBean> {
         HttpUtil.post(HttpUtil.URL_ORDER_PAYMENT_LIST, requestParams,
                 new AsyncHttpResponseHandler() {
                     @Override
-                    public void onSuccess(int statusCode, Header[] headers,
+                    public void onSuccess(final int statusCode, Header[] headers,
                                           byte[] responseBody) {
                         try {
                             String jsonString = new String(responseBody);
@@ -157,7 +160,7 @@ public class OrderAdapter extends CommonAdapter<OrderGroupHomeListBean> {
                                             "没有可用的支付方式");
                                 } else if (payment_list.contains("taifubao")) {
                                     final String[] mItems = {"泰付宝",
-                                            "消费积分兑换", "产品积分兑换", "通用积分兑换"};
+                                            "消费积分兑换", "产品积分兑换", "通用积分兑换","购物卡"};
 
 //                                            "泰锟斤拷锟斤拷",
 //                                            "锟斤拷鸦锟街兑伙拷", "锟斤拷品锟斤拷侄一锟?, "通锟矫伙拷侄一锟?};
@@ -218,6 +221,9 @@ public class OrderAdapter extends CommonAdapter<OrderGroupHomeListBean> {
                                                                     pay_amount,
                                                                     "tyongpay");
                                                             break;
+                                                        case 4:
+                                                            Intent intent = new Intent(mContext,BinderCardActivity.class);
+                                                            mContext.startActivity(intent);
                                                         default:
                                                             break;
                                                     }

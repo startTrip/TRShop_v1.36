@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +38,7 @@ import shop.trqq.com.R;
 import shop.trqq.com.UserManager;
 import shop.trqq.com.adapter.ListViewCartAdapter;
 import shop.trqq.com.bean.CartInfoBean;
+import shop.trqq.com.supermarket.activitys.MarketGoCartActivity;
 import shop.trqq.com.ui.CheckOutActivity;
 import shop.trqq.com.util.HttpUtil;
 import shop.trqq.com.util.ToastUtils;
@@ -61,6 +63,7 @@ public class Fragment_Cart extends Fragment implements OnItemClickListener {
     private TextView Sum;
     private float SumNumber;
     private ArrayList<String> cartIDList = new ArrayList<String>();
+    private ArrayList<CartInfoBean> mCartData;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,6 +73,7 @@ public class Fragment_Cart extends Fragment implements OnItemClickListener {
 
         gson = new Gson();
         cartInfoList = new ArrayList<CartInfoBean>();
+        mCartData = new ArrayList<CartInfoBean>();
         initTitleBarView();
         initViews();
 
@@ -158,6 +162,15 @@ public class Fragment_Cart extends Fragment implements OnItemClickListener {
             }
         });
 
+        LinearLayout skipToMarketCart= (LinearLayout)rootView.findViewById(R.id.skip_market_cart);
+        // 点击跳转到超市购物车界面
+        skipToMarketCart.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), MarketGoCartActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     // 下载网络购物车的数据
@@ -177,9 +190,20 @@ public class Fragment_Cart extends Fragment implements OnItemClickListener {
                     JSONObject jsonObjects = new JSONObject(jsonString)
                             .getJSONObject("datas");
                     String cart_list = jsonObjects.getString("cart_list");
-                    cartInfoList = gson.fromJson(cart_list,
+                    mCartData = gson.fromJson(cart_list,
                             new TypeToken<List<CartInfoBean>>() {
                             }.getType());
+                   ;
+                    if (mCartData != null) {
+                        YkLog.e(TAG, cartInfoList.size()+"之前");
+                        for (int i = 0; i < mCartData.size(); i++) {
+                            // 如果是万能居超市 去掉，必须到万能居超市购物车结算
+                            if(!TextUtils.equals(mCartData.get(i).getStore_id(),"126")){
+                                cartInfoList.add(mCartData.get(i));
+                            }
+                        }
+                    }
+                    YkLog.e(TAG, cartInfoList.size()+"");
                     cartIDList.clear();
                     System.err.println(cart_list);
                     // ??????????{"code":200,"datas":{"cart_list":[],"sum":"0.00"}}

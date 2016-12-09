@@ -373,6 +373,7 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
                                 .getAsJsonObject("goods_store");
                         if (goodsstore.get("mb_sliders").isJsonObject()) {
                             mTopData.clear();
+                            mViewPager.setVisibility(View.VISIBLE);
                             JsonObject mb_sliders = goodsstore
                                     .getAsJsonObject("mb_sliders");
                             for (Map.Entry<String, JsonElement> entry : mb_sliders
@@ -403,7 +404,9 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
                             initIndicatorsDot();
 
                             mViewPager.setCurrentItem(1,false);
-                    }
+                        }else {
+                            mViewPager.setVisibility(View.GONE);
+                        }
 
                     mRecommendComplete = true;
                     // 展示数据

@@ -124,7 +124,6 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
 
         // 在定位的时候，返回地址信息
         mOption.setIsNeedAddress(true);
-        mOption.setIsNeedLocationDescribe(true);
 
         mOption.setIsNeedLocationDescribe(true);//可选，默认false，设置是否需要位置语义化结果，可以在BDLocation.getLocationDescribe里得到，结果类似于“在北京天安门附近”
         mOption.setIsNeedLocationPoiList(true);//可选，默认false，设置是否需要POI结果，可以在BDLocation.getPoiList里得到
@@ -198,7 +197,6 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
                         .direction(360).latitude(bdLocation.getLatitude())
                         .longitude(bdLocation.getLongitude()).build();
                 mBaiduMap.setMyLocationData(locData);
-
 
                 String city = bdLocation.getCity();
                 Intent intent = new Intent("city");
@@ -331,6 +329,7 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
         if(i==0){
             // 超市的位置
             options.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_location_box));
+
         }else if(i==1){
             // 我的位置
             options.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_location_fresh));
@@ -397,6 +396,8 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
         mLocationClient.stop();
         mMapView.onDestroy();
 
+        mSearch.destroy();
+        mMapView = null;
         super.onDestroy();
     }
 }

@@ -121,6 +121,8 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 >
+
+                <!-- 地址信息 -->
                 <RelativeLayout
                     android:id="@+id/check_address_layout"
                     android:background="@drawable/selector_layout_press"
@@ -214,7 +216,7 @@
                     android:src="@mipmap/addressline"
                     />
 
-                <!-- 支付方式暂时在订单界面中去选择  -->
+                 <!--支付方式暂时在订单界面中去选择  -->
                 <!--<LinearLayout-->
                 <!--android:orientation="vertical"-->
                 <!--android:layout_marginTop="10dp"-->
@@ -251,6 +253,81 @@
 
                 </shop.trqq.com.widget.MyListView>
 
+                <LinearLayout
+                    android:id="@+id/available_Layout"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:paddingLeft="30dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginRight="30dp"
+                    android:background="@drawable/line" />
+
+                    <CheckBox
+                        android:id="@+id/available_rc_balance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:text="使用充值卡支付（充值卡余额为¥：0）"
+                        android:visibility="gone"/>
+
+                    <CheckBox
+                        android:id="@+id/available_predeposit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:text="使用预付款支付（可用余额为¥：0）"
+                        android:visibility="gone"/>
+
+                    <CheckBox
+                        android:id="@+id/available_buycard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:text="使用购物卡支付（购物卡余额为¥：0）"
+                        android:visibility="gone"
+                        />
+
+                    <LinearLayout
+                        android:id="@+id/PayPassword_Layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginRight="40dp"
+                        android:background="@drawable/shape_binder"
+                        android:visibility="invisible">
+
+                        <EditText
+                            android:id="@+id/PayPassword"
+                            android:layout_width="0dp"
+                            android:layout_height="36dp"
+                            android:layout_weight="1"
+                            android:paddingLeft="10dp"
+                            android:layout_gravity="center_vertical"
+                            android:hint="输入支付密码"
+                            android:textSize="16sp"
+                            android:background="@null"
+                            android:inputType="textPassword">
+
+                        </EditText>
+
+                        <Button
+                            android:id="@+id/check_password"
+                            android:layout_width="50dp"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/selector_button_binder"
+                            android:singleLine="true"
+                            android:text="使用"
+                            android:textColor="@color/white_text_color" />
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
         </ScrollView>
     </com.vlonjatg.progressactivity.ProgressActivity>

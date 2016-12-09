@@ -23,7 +23,7 @@ import java.util.Map;
  * Author: wm
  * Data:   2016/11/6
  */
-public class Calculate implements OnGetGeoCoderResultListener {
+public class DistanceUtils implements OnGetGeoCoderResultListener {
 
 
 
@@ -101,8 +101,7 @@ public class Calculate implements OnGetGeoCoderResultListener {
         // 用来存储获取的定位信息
          Map<String, Object> map = new HashMap<String, Object>();
 
-        if (geoCodeResult == null
-                || geoCodeResult.error != SearchResult.ERRORNO.NO_ERROR) {
+        if (geoCodeResult == null || geoCodeResult.error != SearchResult.ERRORNO.NO_ERROR) {
             // 没有检测到结果
             map.put("noResult",1);
         }else {
@@ -129,7 +128,6 @@ public class Calculate implements OnGetGeoCoderResultListener {
      */
     public static String calculateDateByDistance(float distance) {
 
-        Log.d("NNNNNNN", "calculateDateByDistance: "+distance);
         String arriveTime;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 

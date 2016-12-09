@@ -14,8 +14,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
-import com.baidu.mapapi.model.LatLng;
-import com.baidu.mapapi.utils.DistanceUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -29,14 +27,12 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import shop.trqq.com.AppContext;
 import shop.trqq.com.R;
 import shop.trqq.com.UserManager;
 import shop.trqq.com.adapter.ListViewAddressAdapter;
 import shop.trqq.com.bean.AddressBean;
-import shop.trqq.com.supermarket.utils.Calculate;
+import shop.trqq.com.supermarket.utils.DistanceUtils;
 import shop.trqq.com.ui.Base.BaseActivity;
 import shop.trqq.com.ui.Base.UIHelper;
 import shop.trqq.com.util.HttpUtil;
@@ -45,7 +41,7 @@ import shop.trqq.com.util.ToastUtils;
 /**
  * ï¿½ï¿½Ö·ï¿½Ð±ï¿½
  */
-public class address_listActivity extends BaseActivity implements Calculate.OnResultMapListener {
+public class address_listActivity extends BaseActivity {
 
     private Context mContext;
     // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
@@ -61,7 +57,7 @@ public class address_listActivity extends BaseActivity implements Calculate.OnRe
     private String freight_hash;
     private String mIfcart;
     private String mCart_id;
-    private Calculate mCalculate;
+    private DistanceUtils mDistanceUtils;
     private int mPos;
     private double mDistance1;
 
@@ -82,9 +78,6 @@ public class address_listActivity extends BaseActivity implements Calculate.OnRe
         mIfcart = intent.getStringExtra("ifcart");
         mCart_id = intent.getStringExtra("cart_id");
 
-        mCalculate = new Calculate();
-        mCalculate.registerOnResult(this);
-
         listView.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
@@ -96,9 +89,10 @@ public class address_listActivity extends BaseActivity implements Calculate.OnRe
                     // ToastUtils.showMessage(mContext, "ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½");
                 } else {
                     mPos = position;          // ¼ÇÂ¼µã»÷µÄListView ÌõÄ¿µÄÎ»ÖÃ
-                    String area_info = addressList.get(position).getArea_info();
-                    String address = addressList.get(position).getAddress();
-                    mCalculate.getLocation(area_info,address);
+//                    String area_info = addressList.get(position).getArea_info();
+//                    String address = addressList.get(position).getAddress();
+//                    mDistanceUtils.getLocation(area_info,address);
+                    ChangeAddressListData(mPos);
                 }
             }
         });
@@ -209,13 +203,13 @@ public class address_listActivity extends BaseActivity implements Calculate.OnRe
         });
     }
 
-    private void ChangeAddressListData(final int position, final String distance) {
+    private void ChangeAddressListData(final int position) {
 
         RequestParams requestParams = new RequestParams();
         String key = UserManager.getUserInfo().getKey();
         requestParams.add("key", key);
         requestParams.add("freight_hash", freight_hash);
-        requestParams.add("distance",distance);
+//        requestParams.add("distance",distance);
         requestParams.add("ifcart",mIfcart);
         requestParams.add("cart_id",mCart_id);
         requestParams.add("city_id", addressList.get(position).getCity_id());
@@ -230,6 +224,7 @@ public class address_listActivity extends BaseActivity implements Calculate.OnRe
                 try {
                     String jsonString = new String(responseBody);
 
+                    Log.d("address",jsonString);
                     JSONObject jsonObject = new JSONObject (jsonString)
                             .getJSONObject("datas");
                     String errStr = jsonObject.optString("error");
@@ -247,7 +242,7 @@ public class address_listActivity extends BaseActivity implements Calculate.OnRe
 
                         bundle.putString("ship",ship);
 
-                        bundle.putString("distance",distance);
+//                        bundle.putString("distance",distance);
                         bundle.putString("content",content);
                         bundle.putString("offpay_hash",offpay_hash);
                         bundle.putString("offpay_hash_batch",offpay_hash_batch);
@@ -288,31 +283,4 @@ public class address_listActivity extends BaseActivity implements Calculate.OnRe
         });
     }
 
-    @Override
-    public void onReverseGeoCodeResult(Map<String, Object> map) {
-
-    }
-    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?ï¿½Øµï¿½ï¿½Ó¿ï¿½
-    @Override
-    public void onGeoCodeResult(Map<String, Object> map) {
-
-        String distance;
-
-        if(map.get("noResult")!=null){
-            distance = "-1";            // Ã»ÓÐ»ñµÃ¾­Î³¶È
-        }else {
-            LatLng latLng = (LatLng)map.get("latLng");
-            LatLng marketLatLng = new LatLng(AppContext.marketLatitude, AppContext.marketLongitude);
-            mDistance1 = DistanceUtil.getDistance(marketLatLng, latLng);
-
-            if(mDistance1 >=0&& mDistance1 <=5000){
-                distance = "0";              //  Îå¹«ÀïÖ®ÄÚ
-            }else if(mDistance1 >5000&& mDistance1 <=10000){
-                distance = "1";         //  Ê®¹«ÀïÒÔÄÚ
-            }else {
-                distance = "2";         // Ê®¹«ÀïÒÔÍâ
-            }
-        }
-        ChangeAddressListData(mPos,distance);
-    }
 }

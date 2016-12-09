@@ -124,13 +124,13 @@ public class RegisterActivity extends BaseActivity {
                             String string = new String(responseBody);
                             try {
                                 JSONObject jsonObject = new JSONObject(string);
-                                String response = jsonObject.optString("msg");
+                                    String response = jsonObject.optString("msg");
 
-                                ToastUtils.showMessage(mContext,response);
-                                String string1 = jsonObject.optString("state");
-                                if(string1.trim().equals("true")){
-                                    handler.removeCallbacksAndMessages(null);
-                                    handler.postDelayed(runnable,1000);
+                                    ToastUtils.showMessage(mContext,response);
+                                    String string1 = jsonObject.optString("state");
+                                    if(string1.trim().equals("true")){
+                                        handler.removeCallbacksAndMessages(null);
+                                        handler.postDelayed(runnable,1000);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();

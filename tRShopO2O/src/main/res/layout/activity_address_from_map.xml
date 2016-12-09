@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="shop.trqq.com.supermarket.activitys.AddressFromMapActivity"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        >
+
+        <ImageView
+            android:id="@+id/title_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="3dp"
+            android:onClick="imageClick"
+            android:src="@mipmap/tm_actionbar_btn_back"
+            />
+
+        <LinearLayout
+            android:id="@+id/search_title"
+            android:layout_toRightOf="@id/title_back"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:orientation="horizontal"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/shape_binder"
+        >
+
+            <EditText
+                android:id="@+id/search_tv"
+                android:layout_width="0dp"
+                android:layout_height="33dp"
+                android:layout_weight="1"
+                android:paddingLeft="10dp"
+                android:layout_gravity="center_vertical"
+                android:hint="请输入您的收货地址"
+                android:textSize="14sp"
+                android:imeOptions="actionSearch"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:background="@null"
+                >
+
+            </EditText>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <View style="@style/dividerline"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
+        <com.baidu.mapapi.map.MapView
+            android:id="@+id/address_map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+        </com.baidu.mapapi.map.MapView>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="40dp"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/xuandian_shi"
+            />
+
+        <ImageView
+            android:id="@+id/relocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:onClick="onClick"
+            android:src="@mipmap/mian_dingwei"
+            />
+    </RelativeLayout>
+
+    <View style="@style/dividerline"/>
+
+    <com.vlonjatg.progressactivity.ProgressActivity xmlns:android="http://schemas.android.com/apk/res/android"
+                                                    xmlns:progressActivity="http://schemas.android.com/apk/res-auto"
+                                                    android:id="@+id/address_progress"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="0dp"
+                                                    android:layout_weight="1"
+                                                    progressActivity:emptyBackgroundColor="#FFFFFF"
+                                                    progressActivity:emptyContentTextColor="@color/black_text_color"
+                                                    progressActivity:emptyTitleTextColor="@color/black_text_color"
+                                                    progressActivity:errorBackgroundColor="#FFFFFF"
+                                                    progressActivity:errorButtonTextColor="#FFFFFF"
+                                                    progressActivity:errorContentTextColor="@color/black_text_color"
+                                                    progressActivity:errorTitleTextColor="@color/black_text_color"
+                                                    progressActivity:loadingBackgroundColor="#FFFFFF">
+
+    <ListView
+        android:id="@+id/address_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+    </ListView>
+
+    </com.vlonjatg.progressactivity.ProgressActivity>
+</LinearLayout>

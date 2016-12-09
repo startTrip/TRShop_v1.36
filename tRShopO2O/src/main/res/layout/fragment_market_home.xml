@@ -84,7 +84,7 @@
                 <!-- 头部滑动的 ViewPager-->
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="180dp"
+                    android:layout_height="wrap_content"
                     >
                     <android.support.v4.view.ViewPager
                         android:id="@+id/home_pager"
@@ -106,12 +106,12 @@
                     </LinearLayout>
                 </RelativeLayout>
 
-                <!-- 分割线-->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="@color/gray_1"
-                    />
+                <!--&lt;!&ndash; 分割线&ndash;&gt;-->
+                <!--<View-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="0.5dp"-->
+                    <!--android:background="@color/gray_1"-->
+                    <!--/>-->
 
                 <!--  中间分类模块 -->
                 <android.support.v7.widget.RecyclerView

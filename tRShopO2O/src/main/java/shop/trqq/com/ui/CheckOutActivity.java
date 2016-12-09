@@ -500,7 +500,9 @@ public class CheckOutActivity extends BaseActivity implements OnClickListener {
                                                 // TODO Auto-generated method
                                                 // stub
                                                 progressActivity.showLoading();
-                                                store_Cart_List.clear();
+                                                if (store_Cart_List != null) {
+                                                    store_Cart_List.clear();
+                                                }
                                                 loadOnlineBuyStep1Data();
                                             }
                                         });

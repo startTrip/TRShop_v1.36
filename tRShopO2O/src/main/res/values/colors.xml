@@ -4,7 +4,9 @@
     <!-- 自定义Loding_Dialog_End -->
     <!-- 浅灰色 -->
     <color name="mainColor">#ff552d</color>
+    <color name="mainColor1">#fa8f76</color>
     <color name="colorAlpha">#200000ff</color>
+    <color name="colorAlpha1">#20ff6c6c</color>
     <color name="mainTabFont">#757575</color>
     <color name="gray_1">#CCCCCC</color>
     <color name="background">#f1eeee</color>
@@ -39,6 +41,7 @@
 
     <color name="marketName">#ff9500</color>
     <color name="bg_gray">#efeff4</color>
+    <color name="grey_ca">#C9CACA</color>
     <color name="white">#FFFFFF</color>
     <color name="text_blue">#35b7f3</color>
     <color name="marketbg">#f3f2f0</color>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="shop.trqq.com.supermarket.activitys.AddressSearchActivity"
+    >
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        >
+
+        <ImageView
+            android:id="@+id/title_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:padding="3dp"
+            android:onClick="imageClick"
+            android:src="@mipmap/tm_actionbar_btn_back"
+            />
+
+        <LinearLayout
+            android:id="@+id/search_title"
+            android:layout_toRightOf="@id/title_back"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:orientation="horizontal"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/shape_binder"
+            >
+
+            <EditText
+                android:id="@+id/search_tv"
+                android:layout_width="0dp"
+                android:layout_height="33dp"
+                android:layout_weight="1"
+                android:paddingLeft="10dp"
+                android:layout_gravity="center_vertical"
+                android:hint="请输入您的收货地址"
+                android:imeOptions="actionSearch"
+                android:textSize="14sp"
+                android:background="@null"
+                >
+
+            </EditText>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <View style="@style/dividerline"/>
+
+    <com.vlonjatg.progressactivity.ProgressActivity xmlns:android="http://schemas.android.com/apk/res/android"
+                                                    xmlns:progressActivity="http://schemas.android.com/apk/res-auto"
+                                                    android:id="@+id/search_progress"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="match_parent"
+                                                    progressActivity:emptyBackgroundColor="#FFFFFF"
+                                                    progressActivity:emptyContentTextColor="@color/black_text_color"
+                                                    progressActivity:emptyTitleTextColor="@color/black_text_color"
+                                                    progressActivity:errorBackgroundColor="#FFFFFF"
+                                                    progressActivity:errorButtonTextColor="#FFFFFF"
+                                                    progressActivity:errorContentTextColor="@color/black_text_color"
+                                                    progressActivity:errorTitleTextColor="@color/black_text_color"
+                                                    progressActivity:loadingBackgroundColor="#FFFFFF">
+
+    <ListView
+        android:id="@+id/list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+    </ListView>
+    </com.vlonjatg.progressactivity.ProgressActivity>>
+</LinearLayout>

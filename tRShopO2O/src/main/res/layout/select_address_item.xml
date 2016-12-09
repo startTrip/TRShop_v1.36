@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:paddingLeft="20dp"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        >
+
+        <TextView
+            android:id="@+id/location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="[当前位置]"
+            android:textSize="18sp"
+            android:textColor="@color/btn_bg_green_down"
+            />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/location"
+            android:paddingLeft="3dp"
+            android:text="深圳和成世纪公寓"
+            android:textColor="@color/black_text"
+            android:textSize="18sp"
+            />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingLeft="5dp"
+        android:text="深圳市"
+        android:textSize="14sp"
+        />
+
+</LinearLayout>

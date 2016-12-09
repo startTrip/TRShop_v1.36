@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="shop.trqq.com.supermarket.activitys.BinderCardActivity"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:background="@color/mainColor"
+        >
+
+        <ImageView
+            android:id="@+id/title_back"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:clickable="true"
+            android:gravity="center"
+            android:onClick="onClick"
+            android:padding="5dp"
+            android:scaleType="center"
+            android:src="@mipmap/ic_back_title" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="80dp"
+            android:paddingRight="80dp" >
+
+            <TextView
+                android:id="@+id/title_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:text="购物卡绑定"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <!--  购物卡号 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/shape_binder"
+        android:gravity="center_vertical" >
+
+        <EditText
+            android:id="@+id/binder_card_number"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:drawablePadding="5dp"
+            android:gravity="center_vertical"
+            android:hint="购物卡号"
+            android:inputType="number"
+            android:padding="5dp"
+            android:singleLine="true"
+            android:textColorHint="@color/grey_ca"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <!--  持卡人姓名 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/shape_binder"
+        android:gravity="center_vertical" >
+
+        <EditText
+            android:id="@+id/binder_name"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:drawablePadding="5dp"
+            android:gravity="center_vertical"
+            android:hint="持卡人姓名"
+            android:padding="5dp"
+            android:singleLine="true"
+            android:textColorHint="@color/grey_ca"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <!--  持卡人电话 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/shape_binder"
+        android:gravity="center_vertical" >
+
+        <EditText
+            android:id="@+id/binder_phone_number"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:drawablePadding="5dp"
+            android:gravity="center_vertical"
+            android:hint="手机号码"
+            android:inputType="number"
+            android:maxLength="11"
+            android:padding="5dp"
+            android:singleLine="true"
+            android:textColorHint="@color/grey_ca"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/shape_binder"
+        android:gravity="center_vertical" >
+
+        <EditText
+            android:id="@+id/binder_code"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:hint="验证码"
+            android:inputType="number"
+            android:padding="5dp"
+            android:singleLine="true"
+            android:textColorHint="@color/grey_ca"
+            android:textSize="16sp" />
+
+        <TextView
+            android:clickable="true"
+            android:id="@+id/binder_send_code"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:text="获取验证码"
+            android:onClick="onClick"
+            android:textColor="@color/mainColor"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/binder_button"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="20dp"
+        android:onClick="onClick"
+        android:text="绑定"
+        android:background="@drawable/selector_button_binder"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+</LinearLayout>

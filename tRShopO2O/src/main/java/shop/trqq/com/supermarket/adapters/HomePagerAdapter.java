@@ -157,7 +157,6 @@ public class HomePagerAdapter extends PagerAdapter implements ViewPager.OnPageCh
 
     private void clickimg(String type, String data) {
         if (type.equals("1")) {
-//
 //                String a[] = data.split("goods_id=");
 //                UIHelper.showGoods_Detaill(mContext, a[1]);
         } else if (type.equals("2")) {

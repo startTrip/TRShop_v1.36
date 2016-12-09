@@ -84,6 +84,24 @@
                     android:textSize="24dp" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_above="@id/layout_bottom"
+                android:id="@+id/skip_market_cart"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:background="@color/colorAlpha1"
+                >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:drawableRight="@drawable/icon_enter"
+                    android:gravity="center"
+                    android:paddingRight="10dp"
+                    android:text="去超市购物车结算超市商品"
+                    />
+
+            </LinearLayout>
             <!--
              <RelativeLayout
             android:id="@+id/cart_load_error_relativeLayout"

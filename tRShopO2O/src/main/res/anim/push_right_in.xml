@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- activity从右边进入的动画 -->
+<translate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fromXDelta="100%p" android:toXDelta="0" android:duration="300"/>

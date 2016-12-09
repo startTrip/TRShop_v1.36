@@ -113,7 +113,7 @@ public class MyPopupWindow {
 			// setBackgroundAlpha(activity, 0.6f);// 设置屏幕透明度
 			mPopupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
 			mPopupWindow.setFocusable(true);
-			mPopupWindow.setOutsideTouchable(true);
+			mPopupWindow.setOutsideTouchable(true) ;
 			// 设置popupwindow弹出时的背景色--半透明
 			ColorDrawable cd = new ColorDrawable(0xb0000000);
 			mPopupWindow.setBackgroundDrawable(cd);

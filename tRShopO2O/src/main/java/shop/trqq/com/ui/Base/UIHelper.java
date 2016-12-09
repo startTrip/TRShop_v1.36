@@ -56,7 +56,7 @@ import shop.trqq.com.ui.Voucher_ListActivity;
 import shop.trqq.com.ui.Vr_buy1Activity;
 import shop.trqq.com.ui.address_editeActivity;
 import shop.trqq.com.ui.address_listActivity;
-import shop.trqq.com.ui.address_newActivity;
+import shop.trqq.com.ui.Address_newActivity;
 import shop.trqq.com.ui.invoice_listActivity;
 import shop.trqq.com.ui.product_infoActivity;
 import shop.trqq.com.util.HttpUtil;
@@ -195,7 +195,7 @@ public class UIHelper {
      */
     public static void showAddressNew(Context context) {
         YkLog.i(TAG, "跳转到添加地址界面");
-        Intent intent = new Intent(context, address_newActivity.class);
+        Intent intent = new Intent(context, Address_newActivity.class);
         context.startActivity(intent);
     }
 

@@ -65,7 +65,7 @@ public class GoCartListViewAdapter extends ListViewBaseAdapter<GoCartGoods.Datas
         holder.mTextViewContent.setText(marketFoodBean.getGoods_name());
         holder.mTextViewCount.setText(marketFoodBean.getGoods_num());
         String price = String.format("%.1f",Double.parseDouble(marketFoodBean.getGoods_price()));
-        holder.mTextViewPrice.setText("гд "+price);
+        holder.mTextViewPrice.setText("гд"+price);
         holder.mGoods_num.setText("x "+marketFoodBean.getGoods_num());
 
         if(mIsUse)

@@ -4,10 +4,8 @@
           android:versionCode="6"
           android:versionName="1.41"
     >
-
     <!-- 测试服务器  versionCode = 6    versionName = 1.41 -->
-    <!--  正式服务器 versionCode = 1    versionName = 1.37-->
-
+    <!-- 正式服务器 versionCode = 1    versionName = 1.37 -->
     <uses-sdk
         android:minSdkVersion="11"
         android:targetSdkVersion="23"
@@ -175,9 +173,11 @@
             />
         <!-- 添加地址界面 -->
         <activity
-            android:name=".ui.address_newActivity"
+            android:name=".ui.Address_newActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
             />
         <!-- 编辑地址界面 -->
         <activity
@@ -465,8 +465,6 @@
             android:value="563967ede0f55a01e80004ab"
             />
 
-
-
         <!-- 超市的主界面 -->
         <activity
             android:name=".supermarket.MarketMainActivity"
@@ -517,9 +515,9 @@
             android:name=".supermarket.activitys.SubmitOrderActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
             >
         </activity>
-
         <activity
             android:name=".ui.PersonalActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -540,6 +538,15 @@
             android:name=".supermarket.activitys.MarketGoCartActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
+            >
+        </activity>
+        <activity android:name=".supermarket.activitys.BinderCardActivity">
+        </activity>
+        <activity android:name=".supermarket.activitys.AddressFromMapActivity"
+                    android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
+            >
+        </activity>
+        <activity android:name=".supermarket.activitys.AddressSearchActivity"
             >
         </activity>
     </application>
