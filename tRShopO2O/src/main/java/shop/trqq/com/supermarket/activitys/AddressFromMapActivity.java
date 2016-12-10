@@ -29,6 +29,7 @@ import com.baidu.mapapi.search.core.SearchResult;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
 import com.baidu.mapapi.search.poi.PoiDetailResult;
@@ -64,6 +65,11 @@ public class AddressFromMapActivity extends AppCompatActivity implements BDLocat
     private String mCity;
     private ProgressActivity mProgressActivity;
     private LatLng mCenter;
+    private PoiInfo mPoiInfo;
+    private int mHasselect;
+    private String mArea;
+    private ImageView mMarketReLocation;
+    private LatLng mMarketLatLng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +87,8 @@ public class AddressFromMapActivity extends AppCompatActivity implements BDLocat
 
         mMapView = (MapView) findViewById(R.id.address_map);
         mRelocation = (ImageView)findViewById(R.id.relocation);
+
+        mMarketReLocation = (ImageView) findViewById(R.id.market_location);
         mListView = (ListView) findViewById(R.id.address_list);
         keyWordView = (EditText)findViewById(R.id.search_tv);
         mProgressActivity = (ProgressActivity)findViewById(R.id.address_progress);
@@ -111,11 +119,18 @@ public class AddressFromMapActivity extends AppCompatActivity implements BDLocat
 
     }
 
+
     // 设置数据
     private void setData() {
 
         mBaiduMap.getUiSettings().setCompassEnabled(false);
 
+            // 开启定位
+            startLocation();
+
+    }
+        //  开始定位
+    private void startLocation() {
         mLocationClient = new LocationClient(this);
 
         mLocationClient.registerLocationListener(this);
@@ -195,14 +210,23 @@ public class AddressFromMapActivity extends AppCompatActivity implements BDLocat
 
     private void setListener() {
 
+        // 点击定位到超市 ImageView 定位到超市的位置
+        mMarketReLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                MapStatusUpdate update = MapStatusUpdateFactory.newLatLngZoom(mMarketLatLng,14);
+                mBaiduMap.animateMapStatus(update);
+            }
+        });
+
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent();
-                intent.putExtra("address",mListData.get(i));
-                setResult(RESULT_OK,intent);
-                finish();
-                overridePendingTransition(R.anim.push_left_in,R.anim.push_right_out);
+                mPoiInfo = mListData.get(i);
+                // 反编码得到详细的 地址信息回传
+                mSearch.reverseGeoCode(new ReverseGeoCodeOption()
+                        .location(mPoiInfo.location));
             }
         });
 
@@ -245,8 +269,6 @@ public class AddressFromMapActivity extends AppCompatActivity implements BDLocat
         mCenter = mapStatus.bound.getCenter();
 
         Log.d("addressfromMapActivity","地图改变完成");
-//        mSearch.reverseGeoCode(new ReverseGeoCodeOption()
-//                .location(center));
 
 //         Poi 检索搜索附近
         searchNeayBy(mCenter);
@@ -263,7 +285,7 @@ public class AddressFromMapActivity extends AppCompatActivity implements BDLocat
         poiNearbySearchOption.keyword("小区");
         poiNearbySearchOption.sortType(PoiSortType.distance_from_near_to_far);
         poiNearbySearchOption.location(center);
-        poiNearbySearchOption.radius(2000);  // 检索半径，单位是米
+        poiNearbySearchOption.radius(1000);  // 检索半径，单位是米
         poiNearbySearchOption.pageCapacity(20);  // 默认每页10条
 
         mProgressActivity.showLoading();
@@ -286,7 +308,6 @@ public class AddressFromMapActivity extends AppCompatActivity implements BDLocat
             showNetWorkError();
         }
 
-        Log.d("addressfromMapActivity","2");
         // 获取POI检索结果
         if (result == null || result.error == SearchResult.ERRORNO.RESULT_NOT_FOUND) {// 没有找到检索结果
 
@@ -300,10 +321,10 @@ public class AddressFromMapActivity extends AppCompatActivity implements BDLocat
                     for (PoiInfo poiInfo : allPoi) {
                         String name = poiInfo.name;
                         String address = poiInfo.address;
-                        LatLng location = poiInfo.location;
-                        Log.d("addressfromMapActivity","name"+name+"|address"+address);
+                        Log.d("addressfromMapActivity","name"+name+"|address"+address+"");
                     }
                     mAddressInfoAdapter.addDatas(result.getAllPoi());
+
                 }
             }
         }
@@ -358,6 +379,7 @@ public class AddressFromMapActivity extends AppCompatActivity implements BDLocat
     //正向搜索
     @Override
     public void onGetGeoCodeResult(GeoCodeResult result) {
+
         if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
 
             return;
@@ -373,12 +395,20 @@ public class AddressFromMapActivity extends AppCompatActivity implements BDLocat
 
             return;
         }else {
+            ReverseGeoCodeResult.AddressComponent addressDetail = result.getAddressDetail();
+            String address1 = result.getAddress();
+            Log.d("addressfromMapActivity","|location"+result.getLocation());
+            Log.d("addressfromMapActivity","|address"+address1);
+            Log.d("addressfromMapActivity","|address"+addressDetail.city+addressDetail.district);
 
-            List<PoiInfo> poiList = result.getPoiList();
-            Log.d("addressfromMapActivity", "onGetReverseGeoCodeResult:"+poiList.size());
-            if (poiList.size()!=0) {
-                // 添加数据并更新
-                mAddressInfoAdapter.addDatas(poiList);
+            if (mPoiInfo != null) {
+                Log.d("addressfromMapActivity","|location1"+mPoiInfo.location);
+                Intent intent = new Intent();
+                intent.putExtra("poiInfo",mPoiInfo);
+                intent.putExtra("address",addressDetail);
+                setResult(RESULT_OK,intent);
+                finish();
+                overridePendingTransition(R.anim.push_left_in,R.anim.push_right_out);
             }
         }
     }

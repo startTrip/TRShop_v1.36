@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,6 +20,7 @@ import com.loopj.android.http.RequestParams;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.apache.http.Header;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
@@ -58,7 +61,7 @@ public class Order_CellAdapter extends CommonAdapter<Order_listBean> {
     }
 
     @Override
-    public void convert(ViewHolder holder, Order_listBean bean) {
+    public void convert(ViewHolder holder, final Order_listBean bean) {
         // TODO Auto-generated method stub
         // loadOrderListDATA();
         final Resources resource = (Resources) mContext.getResources();
@@ -76,6 +79,7 @@ public class Order_CellAdapter extends CommonAdapter<Order_listBean> {
         Button receive = (Button) holder.getView(R.id.trade_item_receive);
         Button cancel = (Button) holder.getView(R.id.trade_item_cancel);
         Button deliver = (Button) holder.getView(R.id.trade_item_deliver);
+        Button free = (Button) holder.getView(R.id.trade_item_free);
         store_name.setText(":  " + bean.getStore_name());
         trade_number.setText(":  " + bean.getOrder_sn());
         fee.setText("运费: ￥" + bean.getShipping_fee());
@@ -129,7 +133,31 @@ public class Order_CellAdapter extends CommonAdapter<Order_listBean> {
         cancel.setVisibility(View.GONE);
         receive.setVisibility(View.GONE);
         deliver.setVisibility(View.GONE);
-        // 根据商品发货状态来显示  订单取消，订单确认，查看物流
+        free.setVisibility(View.GONE);
+        // 根据商品发货状态来显示  订单取消，订单确认，查看物流, 申请免单
+        if(TextUtils.equals(state_desc,"交易完成")){
+            free.setVisibility(View.VISIBLE);
+            free.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    DialogTool.createNormalDialog2(mContext,
+                            "付款后超过30分钟送达才可以申请成功哦",
+                            "申请",
+                            "取消",
+                            new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialog,
+                                                    int which) {
+                                    // 申请免单
+                                    applyForFree(order_id);
+                                }},
+                            null).show();
+
+                }
+            });
+        }
         if (bean.isIf_cancel()) {
 
             cancel.setOnClickListener(new OnClickListener() {
@@ -195,6 +223,50 @@ public class Order_CellAdapter extends CommonAdapter<Order_listBean> {
         }
 
         // listLayout.setVisibility(View.VISIBLE);
+    }
+
+    // 申请免单方法
+    private void applyForFree(String order_id) {
+        RequestParams requestParams = new RequestParams();
+        String key = UserManager.getUserInfo().getKey();
+        requestParams.add("key",key);
+        requestParams.add("apply_status","apply_fee");
+        requestParams.add("order_id",order_id);
+        HttpUtil.post(HttpUtil.URL_APPLY_FREE, requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                String jsonString = new String(responseBody);
+                Log.d("free",jsonString);
+                try {
+                    JSONObject jsonObject = new JSONObject(jsonString);
+                    String data = jsonObject.optString("data");
+                    if (!TextUtils.isEmpty(data)) {
+                        switch (data){
+                            case "0":       // 不符合免单申请要求
+                                break;
+                            case "1":    // 免单申请提交成功，等待审核
+                                break;
+                            case "2":       // 免单申请提交失败，请检查网络
+                                break;
+                            case "-1":      // 非万能居超市不支持免单
+                                break;
+                            case "-2":      // 请确认订单信息以后提交申请
+
+                                break;
+                            case "-3":      // 参数提交失败
+                                break;
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+            }
+        });
     }
 
     // 订单取消

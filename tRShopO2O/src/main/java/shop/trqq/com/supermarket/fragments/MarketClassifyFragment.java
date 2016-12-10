@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +23,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import shop.trqq.com.R;
+import shop.trqq.com.UserManager;
 import shop.trqq.com.supermarket.bean.ClassifyData;
-import shop.trqq.com.supermarket.config.NetConfig;
 import shop.trqq.com.util.HttpUtil;
 
 /**
@@ -58,7 +57,7 @@ public class MarketClassifyFragment extends Fragment implements View.OnClickList
     private LinkedList<String> mLeftData;
     private LinearLayout mLinearLayout;
     private LinkedList<ClassifyRightFragment> mFragments;
-    private List<ClassifyData.InforBean.ListItemsBean> mListItems;
+    private List<ClassifyData.DatasBean> mListItems;
 
     private void initView(View view) {
 
@@ -79,26 +78,29 @@ public class MarketClassifyFragment extends Fragment implements View.OnClickList
     private void getData() {
 
         RequestParams requestParams = new RequestParams();
+        String key = UserManager.getUserInfo().getKey();
+        requestParams.add("key",key);
 
-        requestParams.add("agent_id","101");
-
-        HttpUtil.post(NetConfig.CLASSIFYDATA, requestParams, new AsyncHttpResponseHandler() {
+        HttpUtil.post(HttpUtil.URL_MARKET_CLASSIFY, requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String response = new String(responseBody);
                 ClassifyData classifyData = mGson.fromJson(response, ClassifyData.class);
-                mListItems = classifyData.getInfor().getListItems();
+                mListItems = classifyData.getDatas();
+                if ( mListItems!= null) {
 
-                for (int i = 0; i < mListItems.size(); i++) {
-                    // 得到分类
-                    mLeftData.add(mListItems.get(i).getType());
+                    int size = mListItems.size();
+                    for (int i = 0; i < size; i++) {
+                        // 得到分类
+                        mLeftData.add(mListItems.get(i).getStc_name());
+                    }
+                    addViewToLayout();
+                    setFragment();
+
+                    // 初始化数据 默认选中第一个Fragment
+                    setTextColor(0);
+                    switchFragment(0);
                 }
-                addViewToLayout();
-                setFragment();
-
-                // 初始化数据 默认选中第一个Fragment
-                setTextColor(0);
-                switchFragment(0);
             }
 
             @Override
@@ -124,9 +126,9 @@ public class MarketClassifyFragment extends Fragment implements View.OnClickList
 
                 ClassifyRightFragment fragment = mFragments.get(i);
                 fragmentTransaction.add(R.id.classify_fragment_container, fragment,i+"");
-                ClassifyData.InforBean.ListItemsBean listItemsBean = mListItems.get(i);
+                ClassifyData.DatasBean datasBean = mListItems.get(i);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("listItemsBean",listItemsBean);
+                bundle.putSerializable("listItemsBean",datasBean);
                 fragment.setArguments(bundle);
                 fragmentTransaction.hide(fragment);
             }
@@ -138,7 +140,8 @@ public class MarketClassifyFragment extends Fragment implements View.OnClickList
     // 将TextView 添加到布局中去
     private void addViewToLayout() {
         // 添加到 左边的 Layout中去
-        for (int i = 0; i < mLeftData.size(); i++) {
+        int size = mLeftData.size();
+        for (int i = 0; i < size; i++) {
             View view = LayoutInflater.from(getActivity()).inflate(R.layout.market_classify_left_item,null);
             TextView textView = (TextView) view.findViewById(R.id.tv_item_classify);
             // 设置点击监听事件
@@ -146,7 +149,6 @@ public class MarketClassifyFragment extends Fragment implements View.OnClickList
             textView.setText(mLeftData.get(i));
             mLinearLayout.addView(view);
         }
-        Log.d("size",mLinearLayout.getChildCount()+"");
     }
 
     private void setData() {

@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import shop.trqq.com.AppConfig;
+import shop.trqq.com.AppContext;
 import shop.trqq.com.R;
 
 /**
@@ -59,6 +60,8 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
     private LatLng mMarketLatLng;
     private LatLng mLatLng;
     private LocationClientOption mOption;
+    private Double mMarketLatitude;
+    private Double mMarketLongitude;
 
     public MarketLbsFragment() {
         // Required empty public constructor
@@ -99,7 +102,9 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
         }
         mBaiduMap.setMyLocationEnabled(true);
 
-        mMarketLatLng = new LatLng(21.281895,110.396436);
+        mMarketLatitude = AppContext.marketLatitude;
+        mMarketLongitude = AppContext.marketLongitude;
+        mMarketLatLng = new LatLng(mMarketLatitude,mMarketLongitude);
 
         mSearch = GeoCoder.newInstance();
         // 添加并标注超市的位置
@@ -264,7 +269,7 @@ public class MarketLbsFragment extends Fragment implements BDLocationListener, B
     private void setMarketLocation() {
         // 设定万能居超市的地址
 
-        Marker marker = addMarker(21.281895,110.396436, 0);
+        Marker marker = addMarker(mMarketLatitude,mMarketLongitude, 0);
         marker.setTitle("万能居超市");
 
         //定义地图状态

@@ -22,6 +22,8 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.utils.DistanceUtil;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -34,6 +36,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import shop.trqq.com.AppConfig;
+import shop.trqq.com.AppContext;
 import shop.trqq.com.R;
 import shop.trqq.com.UserManager;
 import shop.trqq.com.supermarket.adapters.CheckOrderStoreAdapter;
@@ -43,6 +46,7 @@ import shop.trqq.com.ui.Base.UIHelper;
 import shop.trqq.com.ui.address_listActivity;
 import shop.trqq.com.util.HttpUtil;
 import shop.trqq.com.util.ToastUtils;
+import shop.trqq.com.widget.DialogTool;
 
 public class SubmitOrderActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -61,7 +65,8 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
     private String vat_hash;
     private String password;
     private String freight_hash;
-    private String available[] = {"0", "0"};
+    private String available[] = {"0", "0"};    // 数组中 0,1表示状态，0不使用，1使用
+                                                    // 数组中的第一个 充值卡，第二个 预付款
     private DistanceUtils mDistanceUtils;
 
     Handler mHandler = new Handler(){
@@ -140,7 +145,6 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
         }
     };
     private boolean hasSubmit = true;
-    private String mDistance;
     private LinearLayout availableLayout;
     private CheckBox available_predeposit;
     private CheckBox available_rc_balance;
@@ -149,6 +153,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
     private LinearLayout PayPasswordLayout;
     private Context mContext;
     private boolean is_pay;
+    private boolean mIfSubmit;
 
     private String getArriveTime(float distance) {
         // 得到预计的送达时间
@@ -244,7 +249,6 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
         RequestParams requestParams = new RequestParams();
         String key = UserManager.getUserInfo().getKey();
         requestParams.add("key", key);
-        requestParams.add("distance","100");
         requestParams.add("freight_hash", freight_hash);
         requestParams.add("ifcart", mIfcart);
         requestParams.add("cart_id", mCart_id);
@@ -350,20 +354,20 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
         requestParams.add("cart_id", mCart_id);  // 购物车中商品的 id和对应的数量
         requestParams.add("ifcart", mIfcart);   // 是否是从购物车中来的
         requestParams.add("address_id", address_id); // 地址
-        requestParams.add("distance",mDistance);
         requestParams.add("vat_hash", vat_hash);
         requestParams.add("offpay_hash", mOffpay_hash);
         requestParams.add("offpay_hash_batch", mOffpay_hash_batch);
         requestParams.add("pay_name", "online");
         requestParams.add("invoice_id", "");
         requestParams.add("voucher","");// 代金券，voucher_t_id|store_id|voucher_price，多个店铺用逗号分割
-        requestParams.add("pd_pay", "0");// 是否使用预存款支付 1-使用 0-不使用
-        requestParams.add("rcb_pay", "0");// 是否使用充值卡支付 1-使用 0-不使用
+        requestParams.add("pd_pay", available[1]);// 是否使用预存款支付 1-使用 0-不使用
+        requestParams.add("rcb_pay", available[0]);// 是否使用充值卡支付 1-使用 0-不使用
         requestParams.add("fcode","");
         HttpUtil.post(HttpUtil.URL_BUY_STEP2, requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String string = new String(responseBody);
+                Log.d("string", "onSuccess: "+string);
                 try {
                     JSONObject jsonObject = new JSONObject(string);
                     JSONObject jsonObject1 = jsonObject.optJSONObject("datas");
@@ -458,6 +462,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // 地址回传的信息
         if(requestCode==0&&resultCode== Activity.RESULT_OK){
+
             mNoAddressLayout.setVisibility(View.GONE);
             mChangeAdressLayout.setVisibility(View.VISIBLE);
             Bundle bundle = data.getExtras();
@@ -473,34 +478,15 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
             // 锟斤拷锟斤拷锟结交锟斤拷锟斤拷
             mCheckSubmit.setEnabled(true);
             String ship = bundle.getString("ship");
-            mDistance = bundle.getString("distance");
+            String longitude = bundle.getString("longitude");
+            String latitude = bundle.getString("latitude");
 
+            // 判断是否可以提交
+            mIfSubmit = checkDistanceToMarket(latitude, longitude);
+            Log.d("ifsubmit",mIfSubmit+"");
+            // 更新适配器
+            updateAdapter(ship,1000f);
 
-            /**
-             *  -1     没有定位到具体的经纬度
-             *  0      五公里范围之内
-             *  1      五公里到十公里之内
-             *  2      超过十公里范围内
-             */
-            switch (mDistance) {
-                case "-1":
-                    if(TextUtils.equals(ship,"0")){  // 没有得到地址的经纬度 ，在赤坎区和霞山区之内
-                        float distance1 = getDistance();   // 用当前距离超市去算配送时间
-                        UpdateAdapter(ship,distance1);
-                    }else {                            // 3天之后送达
-                        UpdateAdapter(ship, 20000f);
-                    }
-                    break;
-                case "0":    // 5公里范围之内
-                    UpdateAdapter(ship,3000f);
-                    break;
-                case "1":
-                    UpdateAdapter(ship,8000f);
-                    break;
-                case "2":
-                    UpdateAdapter(ship,20000f);
-                    break;
-            }
         }else {
             Float i = Float.parseFloat(mStoreGoodsTotal);
             mCheckMoney.setText("￥"+String.format("%.2f",i));
@@ -517,9 +503,24 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    // 更新数据
-    private void UpdateAdapter(String ship,Float f) {
+    /**
+     *   计算距离超市的距离
+     * @param latitude
+     * @param longitude
+     * @return
+     */
+    private boolean checkDistanceToMarket(String latitude, String longitude) {
+        LatLng marketLatLng = new LatLng(AppContext.marketLatitude,AppContext.marketLongitude);
+        LatLng latLng = new LatLng(Double.parseDouble(latitude),Double.parseDouble(longitude));
+        double distance = DistanceUtil.getDistance(marketLatLng, latLng);
+        if(distance<5000){
+            return true;
+        }
+        return false;
+    }
 
+    // 更新数据
+    private void updateAdapter(String ship,Float f) {
 
         for(int j = 0; j < mStoreData.size(); j++){
             GoodsInfo goodsInfo = mStoreData.get(j);
@@ -545,28 +546,38 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
                 intent1.putExtra("freight_hash",freight_hash);
                 intent1.putExtra("cart_id",mCart_id);
                 intent1.putExtra("ifcart",mIfcart);
+                intent1.putExtra("ifmarket",1); // 表示从超市结算界面跳转过去的
                 // 回传结果
                 startActivityForResult(intent1, 0);
-
                 break;
             case R.id.bt_check_submit:
                 // 检查地址是否为空
                 if (address_id == "" || address_id == null) {
                     ToastUtils.showMessage(SubmitOrderActivity.this, "核对一下您的地址信息");
                 }else {
-                    if(hasSubmit){
-
-                        hasSubmit = false; // 锟斤拷止锟截革拷锟结交
-                        // 锟结交锟斤拷锟斤拷
-                        SubmitOrder();
+                    if(mIfSubmit){
+                        if(hasSubmit){
+                            hasSubmit = false; // 防止二次提交
+                            // 提交订单
+                            SubmitOrder();
+                        }
+                    }else {
+                        // 提示超出5公里范围不能购买
+                        showAlertDialog();
                     }
-
                 }
                 break;
             case R.id.check_password:
                 check_password();
                 break;
         }
+    }
+
+    private void showAlertDialog() {
+
+        DialogTool.createNormalDialog2(mContext,
+                "超市只配送五公里范围,请更换地址",
+                "","我知道了", null,null).show();
     }
 
     // 检查支付密码
@@ -578,7 +589,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
         requestParams.add("password", password);
         HttpUtil.post(HttpUtil.URL_CHECK_PASSWORD, requestParams,
                 new AsyncHttpResponseHandler() {
-                    @Override
+                        @Override
                     public void onSuccess(int statusCode, Header[] headers,
                                           byte[] responseBody) {
                         try {
@@ -622,5 +633,4 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
         mHandler.removeCallbacksAndMessages(null);
         super.onDestroy();
     }
-
 }

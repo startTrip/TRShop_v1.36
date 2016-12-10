@@ -61,6 +61,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         >
+
         <com.baidu.mapapi.map.MapView
             android:id="@+id/address_map"
             android:layout_width="match_parent"
@@ -88,6 +89,36 @@
             android:onClick="onClick"
             android:src="@mipmap/mian_dingwei"
             />
+        <ImageView
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:id="@+id/market_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/relocation"
+            android:src="@mipmap/chaoshi"
+            />
+        <LinearLayout
+            android:layout_alignParentTop="true"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:orientation="horizontal"
+            android:background="@color/colorAlpha"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            >
+            <TextView
+                android:id="@+id/market_small_location"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:drawableLeft="@mipmap/ic_location_box_small"
+                android:text=" 万能居超市"
+                android:textSize="12sp"
+                />
+
+        </LinearLayout>
     </RelativeLayout>
 
     <View style="@style/dividerline"/>

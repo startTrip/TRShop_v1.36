@@ -1,14 +1,17 @@
 package shop.trqq.com.supermarket.adapters;
 
 import android.content.Context;
-import android.support.v7.widget.GridLayoutManager;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +26,9 @@ import shop.trqq.com.supermarket.bean.ClassifyData;
  */
 public class ClassifyRightAdapter extends RecyclerView.Adapter<ClassifyRightAdapter.ViewHolder> {
 
+    private int mWidthPixels;
     private Context mContext;
-    private ArrayList<ClassifyData.InforBean.ListItemsBean.SonItemsBean> mList;
+    private ArrayList<ClassifyData.DatasBean.ChildrenBean> mList;
     private OnClassifyRightClick mOnClassifyRightClick;
     public ClassifyRightChildAdapter mClassifyChildAdapter;
 
@@ -34,22 +38,23 @@ public class ClassifyRightAdapter extends RecyclerView.Adapter<ClassifyRightAdap
 
     public interface OnClassifyRightClick{
         void onClassifyRightClick(int position);
-        void onClassifyRightChildClick1(int index,int position);
     }
 
     public void setOnClassifyRightClick(OnClassifyRightClick onClassifyRightClick) {
         mOnClassifyRightClick = onClassifyRightClick;
     }
 
-    public ClassifyRightAdapter(Context context, List<ClassifyData.InforBean.ListItemsBean.SonItemsBean> sonItemsList) {
+    public ClassifyRightAdapter(Context context, List<ClassifyData.DatasBean.ChildrenBean> sonItemsList) {
         mContext = context;
-        mList = (ArrayList<ClassifyData.InforBean.ListItemsBean.SonItemsBean>) sonItemsList;
+        mList = (ArrayList<ClassifyData.DatasBean.ChildrenBean>) sonItemsList;
+        DisplayMetrics displayMetrics = mContext.getResources().getDisplayMetrics();
+        mWidthPixels = displayMetrics.widthPixels;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(mContext).inflate(R.layout.market_classify_right_item, null);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.market_classify_right_child_item,null);
 
         return new ViewHolder(view);
     }
@@ -57,31 +62,34 @@ public class ClassifyRightAdapter extends RecyclerView.Adapter<ClassifyRightAdap
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
-        ClassifyData.InforBean.ListItemsBean.SonItemsBean sonItemsBean = mList.get(position);
+        ClassifyData.DatasBean.ChildrenBean sonItemsBean = mList.get(position);
         if (sonItemsBean != null) {
-            holder.mTextView.setText(sonItemsBean.getType());
+            holder.mTextView.setText(sonItemsBean.getStc_name());
+            String stc_img_path = sonItemsBean.getStc_img_path();
+            if(!TextUtils.isEmpty(stc_img_path)){
 
-            holder.mRelativeLayout.setOnClickListener(new View.OnClickListener() {
+                Picasso.with(mContext)
+                        .load(stc_img_path)
+                        .placeholder(R.drawable.icon_downloading)
+                        .resize(mWidthPixels*1/5,mWidthPixels)
+                        .centerInside().
+                        error(R.mipmap.empty_picture)
+                        .config(Bitmap.Config.RGB_565).into(holder.mImageView);
+            }else {
+//                holder.mImageView.setMaxWidth(mWidthPixels*1/5);
+//                holder.mImageView.setMaxHeight(mWidthPixels*1/5);
+//                holder.mImageView.setImageResource(R.mipmap.empty_picture);
+            }
+
+            holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(View view) {
+                    if (mOnClassifyRightClick != null) {
 
-                    mOnClassifyRightClick.onClassifyRightClick(position);
+                        mOnClassifyRightClick.onClassifyRightClick(position);
+                    }
                 }
             });
-            List<ClassifyData.InforBean.ListItemsBean.SonItemsBean.SonItemsBean1> sonItems = sonItemsBean.getSonItems();
-            mClassifyChildAdapter = new ClassifyRightChildAdapter(mContext,position,sonItems);
-            mClassifyChildAdapter.setOnClassifyRightClick(new ClassifyRightChildAdapter.onClassifyRightChildClick() {
-
-                @Override
-                public void onClassifyRightChildClick(int index, int position) {
-                    mOnClassifyRightClick.onClassifyRightChildClick1(index,position);
-                    Log.d("index",index+"mIndex");
-                    Log.d("index",position+"position");
-                }
-            });
-            holder.mRecyclerView.setLayoutManager(new GridLayoutManager(mContext,3));
-
-            holder.mRecyclerView.setAdapter(mClassifyChildAdapter);
         }
     }
 
@@ -92,15 +100,14 @@ public class ClassifyRightAdapter extends RecyclerView.Adapter<ClassifyRightAdap
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
 
+        public ImageView mImageView;
         public TextView mTextView;
-        public RelativeLayout mRelativeLayout;
-        public RecyclerView mRecyclerView;
-        public ViewHolder(final View itemView) {
+        public View mView;
+        public ViewHolder(View itemView) {
             super(itemView);
-            mRelativeLayout = (RelativeLayout)itemView.findViewById(R.id.rl_classify_right);
-            mTextView = (TextView) itemView.findViewById(R.id.tv_classify_right);
-            mRecyclerView = (RecyclerView)itemView.findViewById(R.id.rv_classify_item);
-
+            mView = itemView;
+            mImageView = (ImageView) itemView.findViewById(R.id.classify_right_child_iv);
+            mTextView = (TextView)itemView.findViewById(R.id.classify_right_child_tv);
         }
     }
 }

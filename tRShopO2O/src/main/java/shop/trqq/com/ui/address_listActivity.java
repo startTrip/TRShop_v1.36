@@ -2,6 +2,7 @@ package shop.trqq.com.ui;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -14,6 +15,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.utils.DistanceUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -28,6 +31,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import shop.trqq.com.AppContext;
 import shop.trqq.com.R;
 import shop.trqq.com.UserManager;
 import shop.trqq.com.adapter.ListViewAddressAdapter;
@@ -37,6 +41,7 @@ import shop.trqq.com.ui.Base.BaseActivity;
 import shop.trqq.com.ui.Base.UIHelper;
 import shop.trqq.com.util.HttpUtil;
 import shop.trqq.com.util.ToastUtils;
+import shop.trqq.com.widget.DialogTool;
 
 /**
  * 锟斤拷址锟叫憋拷
@@ -60,6 +65,7 @@ public class address_listActivity extends BaseActivity {
     private DistanceUtils mDistanceUtils;
     private int mPos;
     private double mDistance1;
+    private int mIfmarket;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,7 +83,8 @@ public class address_listActivity extends BaseActivity {
         freight_hash =intent.getStringExtra("freight_hash");
         mIfcart = intent.getStringExtra("ifcart");
         mCart_id = intent.getStringExtra("cart_id");
-
+        mIfmarket = intent.getIntExtra("ifmarket",0);
+        Log.d("mIfmarket",mIfmarket+"");
         listView.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
@@ -146,6 +153,7 @@ public class address_listActivity extends BaseActivity {
                                   byte[] responseBody) {
                 try {
                     String jsonString = new String(responseBody);
+                    Log.d("addresslist",jsonString);
                     // System.out.println("addlistjsonString" + jsonString);
                     JSONObject jsonObjects = new JSONObject(jsonString)
                             .getJSONObject("datas");
@@ -209,7 +217,6 @@ public class address_listActivity extends BaseActivity {
         String key = UserManager.getUserInfo().getKey();
         requestParams.add("key", key);
         requestParams.add("freight_hash", freight_hash);
-//        requestParams.add("distance",distance);
         requestParams.add("ifcart",mIfcart);
         requestParams.add("cart_id",mCart_id);
         requestParams.add("city_id", addressList.get(position).getCity_id());
@@ -231,7 +238,6 @@ public class address_listActivity extends BaseActivity {
                     if (!TextUtils.isEmpty(errStr)) {
                         ToastUtils.showMessage(mContext, errStr);
                     }{
-//                        ToastUtils.showMessage(mContext, "锟睫改成癸拷");
                         JSONObject jsonObject1 = jsonObject.optJSONObject("content");
                         String content = jsonObject.optString("content");
                         String ship = jsonObject1.optString("126");
@@ -239,23 +245,54 @@ public class address_listActivity extends BaseActivity {
                         String offpay_hash_batch = jsonObject.optString("offpay_hash_batch");
                         Intent it = new Intent();
                         Bundle bundle = new Bundle();
-
                         bundle.putString("ship",ship);
-
+                        // 如果是超市跳转过来就判断经纬度
+                        if(mIfmarket==1){
+                                String longitude = addressList.get(position).getLongitude();
+                                String latitude = addressList.get(position).getLatitude();
+                                if(TextUtils.isEmpty(longitude)||TextUtils.isEmpty(latitude)){  // 经纬度为空
+                                    // 显示提示信息
+                                    showAlertDialog(position);
+                                }else {
+                                    double distance = getDistanceToMarket(latitude, longitude);
+                                    // 如果小于 5 公里
+                                    if(distance>5000){
+                                        // 显示提醒信息
+                                        showAlertDialog(position);
+                                    }else {     // 大于 5 公里
+                                        bundle.putString("longitude",longitude);
+                                        bundle.putString("latitude",latitude);
+                                        bundle.putString("content",content);
+                                        bundle.putString("offpay_hash",offpay_hash);
+                                        bundle.putString("offpay_hash_batch",offpay_hash_batch);
+                                        bundle.putString("address_id", addressList.get(position).getAddress_id());
+                                        bundle.putString("city_id", addressList.get(position).getCity_id());
+                                        bundle.putString("area_id", addressList.get(position).getArea_id());
+                                        bundle.putString("true_name", addressList.get(position).getTrue_name());
+                                        bundle.putString("area_info", addressList.get(position).getArea_info());
+                                        bundle.putString("address", addressList.get(position).getAddress());
+                                        bundle.putString("mob_phone", addressList.get(position).getMob_phone());
+                                        it.putExtras(bundle);
+                                        setResult(Activity.RESULT_OK, it);
+                                        finish();
+                                    }
+                                }
+                        }else {  // 不是超市就回传这些数据
 //                        bundle.putString("distance",distance);
-                        bundle.putString("content",content);
-                        bundle.putString("offpay_hash",offpay_hash);
-                        bundle.putString("offpay_hash_batch",offpay_hash_batch);
-                        bundle.putString("address_id", addressList.get(position).getAddress_id());
-                        bundle.putString("city_id", addressList.get(position).getCity_id());
-                        bundle.putString("area_id", addressList.get(position).getArea_id());
-                        bundle.putString("true_name", addressList.get(position).getTrue_name());
-                        bundle.putString("area_info", addressList.get(position).getArea_info());
-                        bundle.putString("address", addressList.get(position).getAddress());
-                        bundle.putString("mob_phone", addressList.get(position).getMob_phone());
-                        it.putExtras(bundle);
-                        setResult(Activity.RESULT_OK, it);
-                        finish();
+                            bundle.putString("content",content);
+                            bundle.putString("offpay_hash",offpay_hash);
+                            bundle.putString("offpay_hash_batch",offpay_hash_batch);
+                            bundle.putString("address_id", addressList.get(position).getAddress_id());
+                            bundle.putString("city_id", addressList.get(position).getCity_id());
+                            bundle.putString("area_id", addressList.get(position).getArea_id());
+                            bundle.putString("true_name", addressList.get(position).getTrue_name());
+                            bundle.putString("area_info", addressList.get(position).getArea_info());
+                            bundle.putString("address", addressList.get(position).getAddress());
+                            bundle.putString("mob_phone", addressList.get(position).getMob_phone());
+                            it.putExtras(bundle);
+                            setResult(Activity.RESULT_OK, it);
+                            finish();
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -281,6 +318,32 @@ public class address_listActivity extends BaseActivity {
 
             }
         });
+    }
+
+    private void showAlertDialog(final int position) {
+        DialogTool.createNormalDialog2(mContext,
+                "超市只配送五公里范围,以前的地址不能购买",
+                "选择其它地址","去新增地址", null,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //没有经纬度 跳转到 地址编辑界面去从地图上面选择经纬度的地址
+                        UIHelper.showAddressNew(mContext);
+                    }
+                }).show();
+    }
+
+    /**
+     *   计算距离超市的距离
+     * @param latitude
+     * @param longitude
+     * @return
+     */
+    private double getDistanceToMarket(String latitude, String longitude) {
+        LatLng marketLatLng = new LatLng(AppContext.marketLatitude,AppContext.marketLongitude);
+        LatLng latLng = new LatLng(Double.parseDouble(latitude),Double.parseDouble(longitude));
+        double distance = DistanceUtil.getDistance(marketLatLng, latLng);
+        return distance;
     }
 
 }

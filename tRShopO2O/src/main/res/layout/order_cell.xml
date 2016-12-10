@@ -188,7 +188,16 @@
                     android:textColor="#333333"
                     android:textSize="13dp" />
                 -->
-
+                <Button
+                    android:id="@+id/trade_item_free"
+                    android:layout_width="70dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/red"
+                    android:text="申请免单"
+                    android:textColor="#ffffff"
+                    android:textSize="13sp" />
                 <Button
                     android:id="@+id/trade_item_receive"
                     android:layout_width="70dp"

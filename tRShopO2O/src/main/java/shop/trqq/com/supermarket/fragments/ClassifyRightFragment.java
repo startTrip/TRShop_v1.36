@@ -3,11 +3,13 @@ package shop.trqq.com.supermarket.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.vlonjatg.progressactivity.ProgressActivity;
 
 import java.util.List;
 
@@ -23,8 +25,9 @@ public class ClassifyRightFragment extends Fragment implements ClassifyRightAdap
 
 
     private RecyclerView mRecyclerView;
-    private List<ClassifyData.InforBean.ListItemsBean.SonItemsBean> mSonItemsList;
+    private List<ClassifyData.DatasBean.ChildrenBean> mSonItemsList;
     private ClassifyRightAdapter mClassifyRightAdapter;
+    private ProgressActivity mProgressActivity;
 
     public ClassifyRightFragment() {
         // Required empty public constructor
@@ -48,23 +51,26 @@ public class ClassifyRightFragment extends Fragment implements ClassifyRightAdap
     private void initView(View view) {
 
         mRecyclerView = (RecyclerView)view.findViewById(R.id.classify_right_rv);
-
+        mProgressActivity = (ProgressActivity)view.findViewById(R.id.market_classify_progress);
     }
 
     private void initData() {
+        mProgressActivity.showLoading();
         // 根据不同的值 进行不同数据的展示
         Bundle bundle = getArguments();
-        ClassifyData.InforBean.ListItemsBean listItemsBean = (ClassifyData.InforBean.ListItemsBean)bundle.getSerializable("listItemsBean");
+        ClassifyData.DatasBean listItemsBean = (ClassifyData.DatasBean)bundle.getSerializable("listItemsBean");
         if (listItemsBean != null) {
-            mSonItemsList = listItemsBean.getSonItems();
+            mSonItemsList = listItemsBean.getChildren();
         }
         mClassifyRightAdapter = new ClassifyRightAdapter(getActivity(),mSonItemsList);
     }
 
     private void setData() {
-
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(),3));
         mRecyclerView.setAdapter(mClassifyRightAdapter);
+        if(mProgressActivity.isLoading()){
+            mProgressActivity.showContent();
+        }
     }
 
 
@@ -88,17 +94,4 @@ public class ClassifyRightFragment extends Fragment implements ClassifyRightAdap
         UIHelper.showShop(getActivity(), "", "", "126", "");
     }
 
-    // 点击 recyclerView 里面的内容跳转到详情页面并将 ID 传过去
-    @Override
-    public void onClassifyRightChildClick1(int index, int position) {
-//        Intent intent = new Intent(getActivity(),MarketClassifyDetailActivity.class);
-//        Bundle bundle = new Bundle();
-//        bundle.putString("source","classify");
-//        bundle.putString("id",mSonItemsList.get(index).getSonItems(). get(position).getId());
-//        intent.putExtras(bundle);
-//
-//        Log.d("id",mSonItemsList.get(index).getSonItems().get(position).getId());
-//        getActivity().startActivity(intent);
-        UIHelper.showShop(getActivity(), "", "", "126", "");
-    }
 }

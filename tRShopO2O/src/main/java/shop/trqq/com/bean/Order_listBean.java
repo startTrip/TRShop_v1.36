@@ -81,6 +81,16 @@ public class Order_listBean extends Entity {
 
     private boolean if_deliver;
 
+    public boolean isIf_free() {
+        return if_free;
+    }
+
+    public void setIf_free(boolean if_free) {
+        this.if_free = if_free;
+    }
+
+    private boolean if_free;
+
     public String getOrder_id() {
         return order_id;
     }

@@ -20,7 +20,13 @@ public class HttpUtil {
 
     public static final String URL_BINDER_CARD= HOST + "?act=shopcard_interface&op=card_info";
 
-    public static final String URL_MARKET_CLASSIFY=HOST + "/mobile/index.php?act=wnj_store_goods_class&op=index";
+    // 超市中的分类接口
+    public static final String URL_MARKET_CLASSIFY=HOST + "/mobile/index.php?act=wnj_store_goods_class&op=index&store_id=126";
+
+    // 申请 免单的接口
+    public static final String URL_APPLY_FREE = HOST + "?act=wnj_order_fee&op=apply_order_fee";
+    // 请求地图上面 id 的接口
+    public static final String URL_ADDRESS_ID= HOST + "?act=wnj_area&op=get_area_id";
 
     //public static final String HOST  "http://192.168.23.1/haoshop/mobile/index.php";
     public static final String URL_SHOP = HOST + "?act=shop&op=index";

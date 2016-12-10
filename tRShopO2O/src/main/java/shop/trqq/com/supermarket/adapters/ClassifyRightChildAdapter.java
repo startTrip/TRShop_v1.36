@@ -28,7 +28,7 @@ public class ClassifyRightChildAdapter extends RecyclerView.Adapter<ClassifyRigh
 
     private final int mIndex;
     private Context mContext;
-    private ArrayList<ClassifyData.InforBean.ListItemsBean.SonItemsBean.SonItemsBean1> mList;
+    private ArrayList<ClassifyData.DatasBean.ChildrenBean> mList;
     private final int mWidthPixels;
 
     private onClassifyRightChildClick mOnClassifyRightClick;
@@ -41,12 +41,13 @@ public class ClassifyRightChildAdapter extends RecyclerView.Adapter<ClassifyRigh
         mOnClassifyRightClick= onClassifyRightClick;
     }
 
-    public ClassifyRightChildAdapter(Context context,int index,List<ClassifyData.InforBean.ListItemsBean.SonItemsBean.SonItemsBean1> sonItems) {
+    public ClassifyRightChildAdapter(Context context,int index,List<ClassifyData.DatasBean.ChildrenBean> sonItems) {
         mContext = context;
         mIndex = index;
         DisplayMetrics displayMetrics = mContext.getResources().getDisplayMetrics();
         mWidthPixels = displayMetrics.widthPixels;
-        mList = (ArrayList<ClassifyData.InforBean.ListItemsBean.SonItemsBean.SonItemsBean1>) sonItems;
+        mList = (ArrayList<ClassifyData.DatasBean.ChildrenBean>) sonItems;
+
     }
 
 
@@ -61,12 +62,12 @@ public class ClassifyRightChildAdapter extends RecyclerView.Adapter<ClassifyRigh
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
-        ClassifyData.InforBean.ListItemsBean.SonItemsBean.SonItemsBean1 sonItemsBean1 = mList.get(position);
+        ClassifyData.DatasBean.ChildrenBean sonItemsBean1 = mList.get(position);
         if (sonItemsBean1 != null) {
-            holder.mTextView.setText(sonItemsBean1.getType());
+            holder.mTextView.setText(sonItemsBean1.getStc_name());
             holder.mImageView.setMinimumWidth(mWidthPixels*5/21);
             Picasso.with(mContext)
-                    .load(sonItemsBean1.getPhoto()).resize(mWidthPixels*5/21,mWidthPixels*5/21).centerCrop().placeholder(R.drawable.icon_downloading)
+                    .load(sonItemsBean1.getStc_img_path()).resize(mWidthPixels*5/21,mWidthPixels*5/21).centerCrop().placeholder(R.drawable.icon_downloading)
                     .config(Bitmap.Config.RGB_565).into(holder.mImageView);
 
             holder.mView.setOnClickListener(new View.OnClickListener() {

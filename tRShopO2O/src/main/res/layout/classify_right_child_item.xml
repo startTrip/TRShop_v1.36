@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/classify_right_child_iv"
+        android:padding="6dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:scaleType="centerCrop"
+        android:layout_centerInParent="true"
+        android:src="@mipmap/ic_launcher"
+        android:scaleType="centerInside"
         />
 
     <TextView
+        android:layout_below="@id/classify_right_child_iv"
         android:id="@+id/classify_right_child_tv"
-        android:padding="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="热带水果"
+        android:textColor="@color/gray_text_color"
+        android:textSize="14sp"
         android:gravity="center"
         />
 
-</LinearLayout>
+</RelativeLayout>

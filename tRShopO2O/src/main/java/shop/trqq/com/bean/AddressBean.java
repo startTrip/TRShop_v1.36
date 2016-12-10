@@ -13,7 +13,24 @@ public class AddressBean extends Entity {
     private String tel_phone;
     private String true_name;
     private String area_name;
+    private String longitude;
+    private String latitude;
 
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
 
     public String getArea_name() {
         return area_name;
