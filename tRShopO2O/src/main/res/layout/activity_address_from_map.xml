@@ -86,7 +86,7 @@
             android:layout_marginBottom="10dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:onClick="onClick"
+            android:onClick="click"
             android:src="@mipmap/mian_dingwei"
             />
         <ImageView

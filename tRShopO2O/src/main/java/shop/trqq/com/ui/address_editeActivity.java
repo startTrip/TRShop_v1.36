@@ -76,6 +76,7 @@ public class address_editeActivity extends BaseActivity {
         tel = (EditText) findViewById(R.id.address_manage2_tel);
         addressDetail = (EditText) findViewById(R.id.address_manage2_detail);
         address = (TextView) findViewById(R.id.address_manage2_address);
+
         save = (Button) findViewById(R.id.address_manage2_save);
         name.setText(addressBean.getTrue_name());
         phone.setText(addressBean.getMob_phone());
@@ -181,8 +182,8 @@ public class address_editeActivity extends BaseActivity {
             }
         });
     }
-	 
-/*	 @Override	
+
+/*	 @Override
 		public void onActivityResult(int requestCode, int resultCode, Intent data) {
 			super.onActivityResult(requestCode, resultCode, data);
 

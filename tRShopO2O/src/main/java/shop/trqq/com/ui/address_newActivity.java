@@ -125,9 +125,15 @@ public class Address_newActivity extends BaseActivity {
         if (suggestionInfo != null) {
             mLocation.setText(" "+suggestionInfo.key);
             LatLng latLng = suggestionInfo.pt;
-            Log.d("poiInfo",suggestionInfo.city+"|"+suggestionInfo.district);
             mAddressInfo.setLatitude(latLng.latitude+"");
             mAddressInfo.setLongitude(latLng.longitude+"");
+
+            String city = suggestionInfo.city;
+            String district = suggestionInfo.district;
+
+            add_address.setText(""+city+" "+district);
+            // 得到从 地图上选择的 地图的 省和市的id
+            loadAddressId(city,district);
         }
     }
 
@@ -270,7 +276,7 @@ public class Address_newActivity extends BaseActivity {
 
     private void setListener(){
 
-        // 默认选中 广东省湛江市赤坎区
+        // 点击选择跳转的 地图上我的位置
         mLocation.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {

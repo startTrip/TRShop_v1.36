@@ -150,7 +150,7 @@ public class AddressSearchActivity extends AppCompatActivity implements OnGetSug
             showNetWorkError();
         }
         if (suggestionResult == null || suggestionResult.getAllSuggestions() == null) {
-            Log.d("suggest","suggestion");
+
             return;
         }
 

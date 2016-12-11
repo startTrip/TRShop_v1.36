@@ -42,6 +42,7 @@ import com.vlonjatg.progressactivity.ProgressActivity;
 import java.util.ArrayList;
 import java.util.List;
 
+import shop.trqq.com.AppContext;
 import shop.trqq.com.R;
 import shop.trqq.com.supermarket.adapters.AddressInfoAdapter;
 import shop.trqq.com.util.ToastUtils;
@@ -70,6 +71,7 @@ public class AddressFromMapActivity extends AppCompatActivity implements BDLocat
     private String mArea;
     private ImageView mMarketReLocation;
     private LatLng mMarketLatLng;
+    private String mProvince;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +81,6 @@ public class AddressFromMapActivity extends AppCompatActivity implements BDLocat
         initData();
 
         setData();
-
         setListener();
     }
 
@@ -117,6 +118,9 @@ public class AddressFromMapActivity extends AppCompatActivity implements BDLocat
         mAddressInfoAdapter = new AddressInfoAdapter(this,mListData);
         mListView.setAdapter(mAddressInfoAdapter);
 
+        // 超市的位置
+        mMarketLatLng = new LatLng(AppContext.marketLatitude,AppContext.marketLongitude);
+
     }
 
 
@@ -125,8 +129,8 @@ public class AddressFromMapActivity extends AppCompatActivity implements BDLocat
 
         mBaiduMap.getUiSettings().setCompassEnabled(false);
 
-            // 开启定位
-            startLocation();
+        // 开启定位
+        startLocation();
 
     }
         //  开始定位
@@ -137,25 +141,16 @@ public class AddressFromMapActivity extends AppCompatActivity implements BDLocat
 
         mOption = new LocationClientOption();
 
-        mOption.setOpenGps(false);
-
-
-        mOption.setScanSpan(10000);
-
         mOption.setCoorType("bd09ll");
-
         // 在定位的时候，返回地址信息
         mOption.setIsNeedAddress(true);
-
         mOption.setIsNeedLocationDescribe(true);//可选，默认false，设置是否需要位置语义化结果，可以在BDLocation.getLocationDescribe里得到，结果类似于“在北京天安门附近”
         mOption.setIsNeedLocationPoiList(true);//可选，默认false，设置是否需要POI结果，可以在BDLocation.getPoiList里得到
         mOption.setIgnoreKillProcess(false);//可选，默认true，定位SDK内部是一个SERVICE，并放到了独立进程，设置是否在stop的时候杀死这个进程，默认不杀死
         mOption.SetIgnoreCacheException(false);//可选，默认false，设置是否收集CRASH信息，默认收集
         mOption.setEnableSimulateGps(false);//可选，默认false，设置是否需要过滤GPS仿真结果，默认需要
-
         // 设置定位模式
         mOption.setLocationMode(LocationClientOption.LocationMode.Battery_Saving);
-
         mLocationClient.setLocOption(mOption);
         mLocationClient.start();
     }
@@ -163,6 +158,8 @@ public class AddressFromMapActivity extends AppCompatActivity implements BDLocat
     // 定位成功的回调方法
     @Override
     public void onReceiveLocation(BDLocation bdLocation) {
+
+        mLocationClient.stop();
 
         int locType = bdLocation.getLocType();
 
@@ -177,12 +174,12 @@ public class AddressFromMapActivity extends AppCompatActivity implements BDLocat
                         .direction(100).latitude(bdLocation.getLatitude())
                         .longitude(bdLocation.getLongitude()).build();
                 mBaiduMap.setMyLocationData(locData);
-
+                Log.d("relocation", "setReLocation: "+21);
                 if (isFirstLoc) {//首次定位
                     isFirstLoc = false;
-
+                    Log.d("relocation", "setReLocation: "+2);
                     mCity = bdLocation.getCity();
-
+                    mProvince = bdLocation.getProvince();
                     // 得到定位的纬度
                     double latitude = bdLocation.getLatitude();
                     // 得到位置的经度
@@ -210,11 +207,13 @@ public class AddressFromMapActivity extends AppCompatActivity implements BDLocat
 
     private void setListener() {
 
+
         // 点击定位到超市 ImageView 定位到超市的位置
         mMarketReLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                Log.d("relocation", "setReLocation: "+3);
                 MapStatusUpdate update = MapStatusUpdateFactory.newLatLngZoom(mMarketLatLng,14);
                 mBaiduMap.animateMapStatus(update);
             }
@@ -268,8 +267,6 @@ public class AddressFromMapActivity extends AppCompatActivity implements BDLocat
 
         mCenter = mapStatus.bound.getCenter();
 
-        Log.d("addressfromMapActivity","地图改变完成");
-
 //         Poi 检索搜索附近
         searchNeayBy(mCenter);
     }
@@ -321,7 +318,6 @@ public class AddressFromMapActivity extends AppCompatActivity implements BDLocat
                     for (PoiInfo poiInfo : allPoi) {
                         String name = poiInfo.name;
                         String address = poiInfo.address;
-                        Log.d("addressfromMapActivity","name"+name+"|address"+address+"");
                     }
                     mAddressInfoAdapter.addDatas(result.getAllPoi());
 
@@ -397,12 +393,8 @@ public class AddressFromMapActivity extends AppCompatActivity implements BDLocat
         }else {
             ReverseGeoCodeResult.AddressComponent addressDetail = result.getAddressDetail();
             String address1 = result.getAddress();
-            Log.d("addressfromMapActivity","|location"+result.getLocation());
-            Log.d("addressfromMapActivity","|address"+address1);
-            Log.d("addressfromMapActivity","|address"+addressDetail.city+addressDetail.district);
 
             if (mPoiInfo != null) {
-                Log.d("addressfromMapActivity","|location1"+mPoiInfo.location);
                 Intent intent = new Intent();
                 intent.putExtra("poiInfo",mPoiInfo);
                 intent.putExtra("address",addressDetail);
@@ -413,7 +405,7 @@ public class AddressFromMapActivity extends AppCompatActivity implements BDLocat
         }
     }
 
-    public void onClick(View view) {
+    public void click(View view) {
         switch (view.getId()) {
             case R.id.relocation:
                 setReLocation();
@@ -427,11 +419,9 @@ public class AddressFromMapActivity extends AppCompatActivity implements BDLocat
         isFirstLoc = true;   // 可以重新定位
         mMapView.setClickable(false);// 不让底层的mapview截获点击事件
 
-        if (mOption.isOpenGps()) {
-            mOption.setOpenGps(false);
-        }
         mLocationClient.setLocOption(mOption);
         mLocationClient.start();// 重新定位一下
+        Log.d("relocation", "setReLocation: "+1);
     }
 
     public void imageClick(View view) {
