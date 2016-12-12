@@ -53,7 +53,6 @@ public class address_editeActivity extends BaseActivity {
         city_id = addressBean.getCity_id();
         initTitleBarView();
         initView();
-
         //  loadingGetCityData("0");
         //  ADDAddressData();
     }

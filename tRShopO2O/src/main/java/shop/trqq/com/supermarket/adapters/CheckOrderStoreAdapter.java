@@ -71,13 +71,13 @@ public class CheckOrderStoreAdapter extends ListViewBaseAdapter<GoodsInfo> {
                 Float i= Float.parseFloat(store_goods_total)+10;
                 holder.mSum_money.setText("￥ "+i);
             }
-          //   设置到达时间
-            String arrive_time = goodsInfo.getArrive_time();
-            if(arrive_time.equals("请填写地址")){
-                holder.mArrive_time.setText("请填写地址");
-            }else {
-                holder.mArrive_time.setText(arrive_time);
-            }
+//          //   设置到达时间
+//            String arrive_time = goodsInfo.getArrive_time();
+//            if(arrive_time.equals("请填写地址")){
+//                holder.mArrive_time.setText("请填写地址");
+//            }else {
+//                holder.mArrive_time.setText(arrive_time);
+//            }
             List<GoodsInfo.GoodsListBean> goods_list = goodsInfo.getGoods_list();
             mCheckOrderGoodsAdapter = new CheckOrderGoodsAdapter(mContext,goods_list);
             holder.mListView.setAdapter(mCheckOrderGoodsAdapter);
@@ -95,7 +95,7 @@ public class CheckOrderStoreAdapter extends ListViewBaseAdapter<GoodsInfo> {
             mStoreName = (TextView)itemview.findViewById(R.id.store_name);
             mListView = (ListView)itemview.findViewById(R.id.goods_list);
             mFreight = (TextView)itemview.findViewById(R.id.freight);
-            mArrive_time = (TextView)itemview.findViewById(R.id.arrive_time);
+//            mArrive_time = (TextView)itemview.findViewById(R.id.arrive_time);
             mGoodsInfo = (TextView)itemview.findViewById(R.id.store_goods_info);
             mSum_money = (TextView) itemview.findViewById(R.id.sum_money);
         }

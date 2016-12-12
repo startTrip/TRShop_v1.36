@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -52,6 +51,7 @@ public class Address_newActivity extends BaseActivity {
 
     private TextView mLocation;
     private AddressInfo mAddressInfo;
+    private LatLng mLatLng;
 
     private void SendCityData(AddressInfo addressInfo) {
         if (addressInfo == null) {
@@ -92,7 +92,7 @@ public class Address_newActivity extends BaseActivity {
                                 if (new JSONObject(jsonString).getJSONObject(
                                         "datas").getString("address_id") != null) {
                                     ToastUtils.showMessage(mContext, "添加成功");
-                                    // 锟斤拷映晒锟斤拷锟?finish activity
+                                    // 添加成功 finish activity
                                     finish();
                                 }
                             }
@@ -124,9 +124,9 @@ public class Address_newActivity extends BaseActivity {
 
         if (suggestionInfo != null) {
             mLocation.setText(" "+suggestionInfo.key);
-            LatLng latLng = suggestionInfo.pt;
-            mAddressInfo.setLatitude(latLng.latitude+"");
-            mAddressInfo.setLongitude(latLng.longitude+"");
+            mLatLng = suggestionInfo.pt;
+            mAddressInfo.setLatitude(mLatLng.latitude+"");
+            mAddressInfo.setLongitude(mLatLng.longitude+"");
 
             String city = suggestionInfo.city;
             String district = suggestionInfo.district;
@@ -185,6 +185,8 @@ public class Address_newActivity extends BaseActivity {
                                 city_id = option2;
                         area_id = options3;
                         ToastUtils.showMessage(mContext, mAddResult);
+                        mLocation.setText(" 点击选择");
+                        addressDetail.setText("");
                         add_address.setText(mAddResult);
                     }
                 });
@@ -282,7 +284,16 @@ public class Address_newActivity extends BaseActivity {
             public void onClick(View view) {
                 // 跳转到订单页面
                 Intent intent = new Intent(mContext,AddressFromMapActivity.class);
-
+                String area = add_address.getText().toString();
+                String location = mLocation.getText().toString();
+                if(!TextUtils.equals("所在地区",area)){   // 如果手动选了地址
+                    intent.putExtra("area",area);
+                    intent.putExtra("hasSelected",true);
+                    if(!TextUtils.equals(" 点击选择",location)){  // 已经是返回回来以后的,重新点击以后跳转到刚才的位置
+                        intent.putExtra("hasLatlng",true);
+                        intent.putExtra("latlng",mLatLng);
+                    }
+                }
                 startActivityForResult(intent,200);
                 overridePendingTransition(R.anim.push_right_in,R.anim.push_left_out);
             }
@@ -299,9 +310,9 @@ public class Address_newActivity extends BaseActivity {
                 ReverseGeoCodeResult.AddressComponent addressDetail = data.getParcelableExtra("address");
                 if (poiInfo != null) {
                     mLocation.setText(" "+ poiInfo.name);
-                    LatLng latLng = poiInfo.location;
-                    mAddressInfo.setLatitude(latLng.latitude+"");
-                    mAddressInfo.setLongitude(latLng.longitude+"");
+                    mLatLng = poiInfo.location;
+                    mAddressInfo.setLatitude(mLatLng.latitude+"");
+                    mAddressInfo.setLongitude(mLatLng.longitude+"");
                 }
                 if (addressDetail!= null) {
                     String province = addressDetail.province;
@@ -310,9 +321,9 @@ public class Address_newActivity extends BaseActivity {
                     String location = province+" "+city+" "+district;
                     // 省市区
                     String address = add_address.getText().toString().trim();
-                    Log.d("address",1+"");
+
                     if(!TextUtils.equals(address,location)){  // 用户的 省市区和返回的不一样
-                        Log.d("address",2+"");
+
                         add_address.setText(province+" "+city+" "+district);
                         // 得到从 地图上选择的 地图的 省和市的id
                         loadAddressId(city,district);

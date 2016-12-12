@@ -82,7 +82,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
                     GoodsInfo goodsInfo = mGson.fromJson(string, GoodsInfo.class);
 
                     // 设置送达时间
-                    goodsInfo.setStore_shipping("0.0");
+                    goodsInfo.setStore_shipping("0");
                     goodsInfo.setArrive_time("请选择地址");
                     int size = goodsInfo.getGoods_list().size();
                     mStoreData.add(goodsInfo);

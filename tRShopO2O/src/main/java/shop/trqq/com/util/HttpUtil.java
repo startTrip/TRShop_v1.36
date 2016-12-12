@@ -20,6 +20,8 @@ public class HttpUtil {
 
     public static final String URL_BINDER_CARD= HOST + "?act=shopcard_interface&op=card_info";
 
+    // 超市的首页接口
+    public static final String URL_MARKET_HOME = HOST+"?act=wnj_show_store&op=index&store_id=126";
     // 超市中的分类接口
     public static final String URL_MARKET_CLASSIFY=HOST + "/mobile/index.php?act=wnj_store_goods_class&op=index&store_id=126";
 

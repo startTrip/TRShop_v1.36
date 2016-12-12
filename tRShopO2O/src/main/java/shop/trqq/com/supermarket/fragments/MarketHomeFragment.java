@@ -336,8 +336,7 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
     private void getRecommendData() {
 
         RequestParams requestParams = new RequestParams();
-        requestParams.add("store_id","126");
-        HttpUtil.get(HttpUtil.URL_STORE_DETAIL, requestParams, new AsyncHttpResponseHandler() {
+        HttpUtil.get(HttpUtil.URL_MARKET_HOME, requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
 

@@ -99,11 +99,10 @@
             android:layout_above="@id/relocation"
             android:src="@mipmap/chaoshi"
             />
-        <LinearLayout
+        <RelativeLayout
             android:layout_alignParentTop="true"
             android:layout_width="match_parent"
             android:layout_height="25dp"
-            android:orientation="horizontal"
             android:background="@color/colorAlpha"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
@@ -118,7 +117,28 @@
                 android:textSize="12sp"
                 />
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/distance"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:textColor="@color/btn_bg_green_down"
+                android:textSize="13sp"
+                />
+
+            <TextView
+                android:id="@+id/text"
+                android:layout_toLeftOf="@id/distance"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="距超市"
+                android:textSize="12sp"
+                />
+
+        </RelativeLayout>
     </RelativeLayout>
 
     <View style="@style/dividerline"/>
