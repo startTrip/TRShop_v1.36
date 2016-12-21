@@ -83,15 +83,15 @@ public class ClassifyRightFragment extends Fragment implements ClassifyRightAdap
     // 点击右边的内容的标题跳转到详情页面并将 ID 传过去
     @Override
     public void onClassifyRightClick(int position) {
-//        Intent intent = new Intent(getActivity(), MarketClassifyDetailActivity.class);
-//        Bundle bundle = new Bundle();
-//        bundle.putString("source","classify");
-//        bundle.putString("id",mSonItemsList.get(position).getId());
-//        intent.putExtras(bundle);
-//
-//        Log.d("id",mSonItemsList.get(position).getId());
-//        getActivity().startActivity(intent);
-        UIHelper.showShop(getActivity(), "", "", "126", "");
+
+        ClassifyData.DatasBean.ChildrenBean childrenBean = mSonItemsList.get(position);
+
+        if (childrenBean != null) {
+
+            String stc_id = childrenBean.getStc_id();
+            String store_id = childrenBean.getStore_id();
+            UIHelper.showMarketGoodList(getActivity(),store_id,stc_id, "");
+        }
     }
 
 }

@@ -21,7 +21,7 @@
             android:gravity="center"
             android:text="万能居超市购物车"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="@dimen/medium_text_size"
             />
         <View
             android:layout_width="match_parent"
@@ -78,7 +78,7 @@
                 android:paddingRight="10dp"
                 android:text="合计：0元"
                 android:textColor="#F00"
-                android:textSize="18sp"
+                android:textSize="@dimen/text_big_size"
                 />
             <TextView
                 android:layout_below="@id/tv_gocart_price"
@@ -97,7 +97,7 @@
             android:id="@+id/bt_main_ensure"
             android:background="@drawable/selector_button_press"
             android:textColor="@color/white"
-            android:textSize="17sp"
+            android:textSize="@dimen/text_big_size"
             android:text="结算(0)"/>
 
     </LinearLayout>

@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutParams;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -40,6 +41,7 @@ import shop.trqq.com.adapter.recycler.RecViewGoodsSpAdapter;
 import shop.trqq.com.bean.GoodsBean;
 import shop.trqq.com.util.HttpUtil;
 import shop.trqq.com.util.ToastUtils;
+import shop.trqq.com.util.YkLog;
 import shop.trqq.com.widget.recyclerview.OnRcvScrollListener;
 
 /**
@@ -94,6 +96,7 @@ public class Fragment_Goods extends Fragment implements OnClickListener {
     private String brand;
 
     private View rootView;// 缓存Fragment view
+    private String mStc_id;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -106,16 +109,20 @@ public class Fragment_Goods extends Fragment implements OnClickListener {
         gson = new Gson();
 //		Intent intent = getIntent();
         Bundle bundle = getArguments();
-        try {
-            keyword = bundle.getString("keyword");
-            gc_id = bundle.getString("gc_id");
+        mStc_id = bundle.getString("stc_id");
+        key = bundle.getString("key");
+        order = bundle.getString("order");
+        keyword = bundle.getString("keyword");
+        if (mStc_id ==null) {
+            try {
+                gc_id = bundle.getString("gc_id");
+                store_id = bundle.getString("store_id");
+                brand = bundle.getString("brand");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else {
             store_id = bundle.getString("store_id");
-            brand = bundle.getString("brand");
-            key = bundle.getString("key");
-            order = bundle.getString("order");
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
         informationList = new ArrayList<GoodsBean>();
 
@@ -211,23 +218,31 @@ public class Fragment_Goods extends Fragment implements OnClickListener {
      * 加载商品列表
      */
     private void loadOnlineInformationData() {
+
         // 加载商品列表
         RequestParams requestParams = new RequestParams();
         requestParams.add("page", "10");
         requestParams.add("curpage", curpageIndex + "");
         requestParams.add("key", key + "");
-        requestParams.add("order", order + "");
+        requestParams.add("order",order + "");
         String uri;
         if (store_id.length() == 0 || store_id == null) {
             requestParams.add("brand", brand);
             requestParams.add("keyword", keyword + "");
             requestParams.add("gc_id", gc_id + "");
             uri = HttpUtil.URL_GOODSLIST;
-        } else {
+            YkLog.e("lujing","商城");
+        } else if(!TextUtils.isEmpty(mStc_id)){    // 如果是超市根据分类来查找
+            requestParams.add("stc_id",mStc_id);
+            requestParams.add("inkeyword", keyword + "");
+            requestParams.add("store_id", store_id + "");
+            uri = HttpUtil.URL_MARKET_GOODS_LIST;
+            YkLog.e("lujing","超市通过分类");
+        }else {  // 如果是搜索店铺的关键字
             requestParams.add("inkeyword", keyword + "");
             requestParams.add("store_id", store_id + "");
             uri = HttpUtil.URL_STORE;
-            // loadOnlineStoreData();
+            YkLog.e("lujing","超市通过搜索");
         }
         HttpUtil.get(uri, requestParams, new AsyncHttpResponseHandler() {
             @Override
@@ -322,11 +337,17 @@ public class Fragment_Goods extends Fragment implements OnClickListener {
         curpageIndex++;
         requestParams.add("curpage", curpageIndex + "");
         String uri;
+        // 如果是根据 id 去请求商城外面的
         if (store_id.length() == 0 || store_id == null) {
             requestParams.add("keyword", keyword + "");
             requestParams.add("gc_id", gc_id + "");
             uri = HttpUtil.URL_GOODSLIST;
-        } else {
+        } else if(!TextUtils.isEmpty(mStc_id)){    // 如果是超市的
+                requestParams.add("stc_id",mStc_id);
+                requestParams.add("inkeyword", keyword + "");
+                requestParams.add("store_id", store_id + "");
+                uri = HttpUtil.URL_MARKET_GOODS_LIST;
+        }else {  // 如果是搜索店铺的关键字
             requestParams.add("inkeyword", keyword + "");
             requestParams.add("store_id", store_id + "");
             uri = HttpUtil.URL_STORE;
@@ -383,7 +404,6 @@ public class Fragment_Goods extends Fragment implements OnClickListener {
                 mHomePullToRefreshListView.onRefreshComplete();
                 isfinish = true;
             }
-
         });
 
     }

@@ -3,6 +3,7 @@ package shop.trqq.com.supermarket.adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +11,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import java.util.ArrayList;
 
 import shop.trqq.com.R;
 import shop.trqq.com.supermarket.bean.HomeClassifyTitle;
+import shop.trqq.com.supermarket.utils.ToRoundBitmap;
 
 /**
  * Project: TRShop_v1.36
@@ -55,19 +58,29 @@ public class HomeClassifyAdapter extends RecyclerView.Adapter<HomeClassifyAdapte
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
         HomeClassifyTitle homeClassifyTitle = mList.get(position);
-//        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) holder.imageView.getLayoutParams();
-//        params.height=mWidthPixels/10;
-//        params.width =mWidthPixels/10;
-//        holder.imageView.setLayoutParams(params);
-//        holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//        ImageLoader.getInstance()
-//                .displayImage(homeClassifyTitle.getImgurl(),holder.imageView,
-//                        ImageLoadUtils.getoptions(),ImageLoadUtils.getAnimateFirstDisplayListener());
-        Picasso.with(mContext)
-                .load(homeClassifyTitle.getImgurl()).resize(mWidthPixels/10,mWidthPixels/10)
-                .config(Bitmap.Config.RGB_565).into(holder.imageView);
 
-        holder.mName.setText(homeClassifyTitle.getName());
+        String stc_img_path = homeClassifyTitle.getStc_img_path();
+        if (!TextUtils.isEmpty(stc_img_path)) {
+            // Ô²ÐÎÍ¼Æ¬
+            Picasso.with(mContext)
+                    .load(stc_img_path).resize(mWidthPixels*2/15,mWidthPixels*2/15).centerCrop()
+                    .config(Bitmap.Config.RGB_565).transform(new Transformation() {
+                @Override
+                public Bitmap transform(Bitmap bitmap) {
+                    Bitmap roundBitmap = ToRoundBitmap.toRoundBitmap(bitmap);
+                    if (roundBitmap!=bitmap) {
+                        bitmap.recycle();
+                    }
+                    return roundBitmap;
+                }
+                @Override
+                public String key() {
+                    return "picasso";
+                }
+            }).into(holder.imageView);
+        }
+
+        holder.mName.setText(homeClassifyTitle.getStc_name());
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,4 +109,6 @@ public class HomeClassifyAdapter extends RecyclerView.Adapter<HomeClassifyAdapte
             mName = (TextView) itemView.findViewById(R.id.tv_home_classify_item);
         }
     }
+
+
 }

@@ -134,16 +134,10 @@
             </LinearLayout>
         </LinearLayout>
 
-        <FrameLayout
-            android:layout_width="fill_parent"
-            android:layout_height="80dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <View
-                style="@style/horizontal_cut_line"
-                android:layout_width="match_parent"
-                android:layout_marginTop="5dp" />
+        <View
+            style="@style/horizontal_cut_line"
+            android:layout_width="match_parent"
+            android:layout_marginTop="5dp" />
 
             <!--
                  <View
@@ -172,8 +166,9 @@
             -->
 
             <LinearLayout
+                android:id="@+id/confirm_layout"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
                 android:layout_gravity="right|center_vertical"
                 android:orientation="horizontal">
 
@@ -188,16 +183,7 @@
                     android:textColor="#333333"
                     android:textSize="13dp" />
                 -->
-                <Button
-                    android:id="@+id/trade_item_free"
-                    android:layout_width="70dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="right|center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:background="@color/red"
-                    android:text="申请免单"
-                    android:textColor="#ffffff"
-                    android:textSize="13sp" />
+
                 <Button
                     android:id="@+id/trade_item_receive"
                     android:layout_width="70dp"
@@ -205,7 +191,18 @@
                     android:layout_gravity="right|center_vertical"
                     android:layout_marginLeft="10dp"
                     android:background="@color/green"
-                    android:text="确认订单"
+                    android:text="确认收货"
+                    android:textColor="#ffffff"
+                    android:textSize="13sp" />
+
+                <Button
+                    android:id="@+id/trade_item_free"
+                    android:layout_width="70dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:background="@color/gray_1"
+                    android:text="申请免单"
                     android:textColor="#ffffff"
                     android:textSize="13sp" />
 
@@ -231,7 +228,19 @@
                     android:textColor="#ffffff"
                     android:textSize="13sp" />
             </LinearLayout>
-        </FrameLayout>
+
+        <TextView
+            android:id="@+id/alert_message"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text=""
+            android:paddingTop="10dp"
+            android:paddingBottom="5dp"
+            android:textColor="@color/orange"
+            android:textSize="14sp"
+            />
     </LinearLayout>
 
 </LinearLayout>

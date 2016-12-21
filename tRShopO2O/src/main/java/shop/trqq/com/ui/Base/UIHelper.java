@@ -93,10 +93,18 @@ public class UIHelper {
         context.startActivity(intent);
     }
 
-    // 跳转到超市界面
+    // 跳转到超市界面, 店铺的分类id
     public static void showMarket(Context context) {
         Intent intent = new Intent(context, MarketMainActivity.class);
+        context.startActivity(intent);
+    }
 
+    // 跳转到超市的商品列表分类界面
+    public static void showMarketGoodList(Context context,String store_id,String stc_id,String keyword){
+        Intent intent = new Intent(context,GoodsActivity.class);
+        intent.putExtra("store_id",store_id);
+        intent.putExtra("stc_id",stc_id);
+        intent.putExtra("keyword",keyword);
         context.startActivity(intent);
     }
 
@@ -127,7 +135,6 @@ public class UIHelper {
         intent.putExtra("brand", brand);
         context.startActivity(intent);
     }
-
 
     /**
      * 显示商品详情界面

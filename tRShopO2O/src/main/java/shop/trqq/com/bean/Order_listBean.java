@@ -81,6 +81,16 @@ public class Order_listBean extends Entity {
 
     private boolean if_deliver;
 
+    public String getIs_free_charge() {
+        return is_free_charge;
+    }
+
+    public void setIs_free_charge(String is_free_charge) {
+        this.is_free_charge = is_free_charge;
+    }
+
+    private String is_free_charge;
+
     public boolean isIf_free() {
         return if_free;
     }

@@ -26,19 +26,21 @@
             progressActivity:errorTitleTextColor="@color/black_text_color"
             progressActivity:loadingBackgroundColor="#FFFFFF">
 
-            <com.roamer.slidelistview.SlideListView xmlns:slide="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/address_manage_list"
-                android:layout_width="match_parent"
-                android:layout_height="fill_parent"
-                android:layout_marginBottom="70dp"
-                android:background="@drawable/body_cont_bg"
-                android:divider="#c4c4c4"
-                android:dividerHeight="0.1dp"
-                android:footerDividersEnabled="false"
-                android:headerDividersEnabled="false"
-                slide:slideAnimationTime="200"
-                slide:slideLeftAction="scroll"
-                slide:slideMode="both" />
+            <com.roamer.slidelistview.SlideListView android:id="@+id/address_manage_list"
+                                                    xmlns:slide="http://schemas.android.com/apk/res-auto"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="fill_parent"
+                                                    android:layout_marginBottom="70dp"
+                                                    android:background="@drawable/body_cont_bg"
+                                                    android:divider="#c4c4c4"
+                                                    android:dividerHeight="0.1dp"
+                                                    android:footerDividersEnabled="false"
+                                                    android:headerDividersEnabled="false"
+                                                    android:scrollbars="none"
+                                                    slide:slideAnimationTime="200"
+                                                    slide:slideLeftAction="scroll"
+                                                    slide:slideMode="both"
+                />
         </com.vlonjatg.progressactivity.ProgressActivity>
 
         <LinearLayout
@@ -54,7 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:background="@color/red_text_color"
+                android:background="@drawable/selector_red_buttom"
                 android:gravity="center"
                 android:text="新增收货地址"
                 android:textColor="@color/white_text_color"

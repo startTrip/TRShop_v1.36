@@ -97,6 +97,8 @@ public class Fragment_My extends Fragment implements OnClickListener,SwipeRefres
     TextView wallet_consumepay;
     @Bind(R.id.wallet_productpay)
     TextView wallet_productpay;
+    @Bind(R.id.tongyong_pay)
+    TextView wallet_tongyongpay;
 
     //@Bind(R.id.userIcon_imageView)
     //CustomShapeImageView mUserIcon;
@@ -374,28 +376,31 @@ public class Fragment_My extends Fragment implements OnClickListener,SwipeRefres
                                   byte[] responseBody) {
                 try {
                     String jsonString = new String(responseBody);
-                    YkLog.t("Taifubao", jsonString);
+
                     try {
                         JSONObject jsonObject = new JSONObject(jsonString);
                         String credit = jsonObject.getString("credit");
-                        YkLog.t("credit", credit);
+                        String consume = jsonObject.getString("consume");
+                        String product = jsonObject.getString("product");
+                        String tongyong = jsonObject.getString("tyong");
                         wallet_Taifubao.setText(credit + "\n泰付宝");
-                        wallet_consumepay.setText(jsonObject
-                                .getString("consume") + "\n消费积分");
-                        wallet_productpay.setText(jsonObject
-                                .getString("product") + "\n产品积分");
+                        wallet_consumepay.setText(consume + "\n消费积分");
+                        wallet_productpay.setText(product + "\n产品积分");
+                        wallet_tongyongpay.setText(tongyong+"\n通用积分");
                     } catch (Exception e) {
                         //连接泰付宝网络错误
                         if ("0".equals(jsonString)) {
                             wallet_Taifubao.setText("网络错误\n泰付宝");
                             wallet_consumepay.setText("网络错误\n消费积分");
                             wallet_productpay.setText("网络错误\n产品积分");
+                            wallet_tongyongpay.setText("网络错误\n通用积分");
                         }
                         //非一卡通用户
                         if ("1".equals(jsonString)) {
                             wallet_Taifubao.setText("0.00\n泰付宝");
                             wallet_consumepay.setText("0.00\n消费积分");
                             wallet_productpay.setText("0.00\n产品积分");
+                            wallet_tongyongpay.setText("0.00\n通用积分");
                         }
                     }
                 } catch (Exception e) {
@@ -601,6 +606,7 @@ public class Fragment_My extends Fragment implements OnClickListener,SwipeRefres
                 wallet_Taifubao.setText("0.00\n泰付宝");
                 wallet_consumepay.setText("0.00\n消费积分");
                 wallet_productpay.setText("0.00\n产品积分");
+                wallet_tongyongpay.setText("0.00\n通用积分");
                 onResume();
                 break;
             case R.id.My_Favorites:// 关注的商品

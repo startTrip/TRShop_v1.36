@@ -198,7 +198,7 @@ public class AddressFromMapActivity extends AppCompatActivity implements BDLocat
             mCity = city;
             if (mHasLatlng) {
                 // 点击定位到自己的位置，定位成功 更新地图
-                MapStatusUpdate update = MapStatusUpdateFactory.newLatLngZoom(mMyLatlng, 14);
+                MapStatusUpdate update = MapStatusUpdateFactory.newLatLngZoom(mMyLatlng, 16);
                 mBaiduMap.animateMapStatus(update);
                 setSearchData(mMyLatlng);
             } else {
@@ -280,7 +280,7 @@ public class AddressFromMapActivity extends AppCompatActivity implements BDLocat
             @Override
             public void onClick(View view) {
                 mCity = "湛江市";
-                MapStatusUpdate update = MapStatusUpdateFactory.newLatLngZoom(mMarketLatLng,14);
+                MapStatusUpdate update = MapStatusUpdateFactory.newLatLngZoom(mMarketLatLng,16);
                 mBaiduMap.animateMapStatus(update);
             }
         });

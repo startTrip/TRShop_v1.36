@@ -14,7 +14,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:padding="13dp"
+            android:paddingTop="13dp"
+            android:paddingBottom="13dp"
+            android:textSize="@dimen/text_mid_size"
             android:text="你好"
             android:textColor="@color/black"
             />

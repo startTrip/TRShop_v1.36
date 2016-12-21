@@ -12,6 +12,7 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -71,6 +72,7 @@ public class Goods_DetaillActivity extends BaseFragmentActivity {
     private String mStore_id;
     private String goodNumber;
     private LinearLayout mLinearLayout;
+    private ImageView mImageBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +106,16 @@ public class Goods_DetaillActivity extends BaseFragmentActivity {
 
     private void initView() {
         setContentView(R.layout.activity_goods_detail);
+
+        mImageBack = (ImageView) findViewById(R.id.title_back);
+        mImageBack.setVisibility(View.VISIBLE);
+        mImageBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         dm = getResources().getDisplayMetrics();
         // ·â×°µÄ ViewPager
         pager = (MutipleTouchVerticalViewPager) findViewById(R.id.pager);

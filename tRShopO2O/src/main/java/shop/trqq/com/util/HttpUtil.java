@@ -22,17 +22,21 @@ public class HttpUtil {
 
     // 超市的首页接口
     public static final String URL_MARKET_HOME = HOST+"?act=wnj_show_store&op=index&store_id=126";
+
     // 超市中的分类接口
     public static final String URL_MARKET_CLASSIFY=HOST + "/mobile/index.php?act=wnj_store_goods_class&op=index&store_id=126";
 
+    public static final String URL_MARKET_GOODS_LIST = HOST +"?act=wnj_show_store&op=goods_all";
     // 申请 免单的接口
     public static final String URL_APPLY_FREE = HOST + "?act=wnj_order_fee&op=apply_order_fee";
     // 请求地图上面 id 的接口
     public static final String URL_ADDRESS_ID= HOST + "?act=wnj_area&op=get_area_id";
 
+
     //public static final String HOST  "http://192.168.23.1/haoshop/mobile/index.php";
     public static final String URL_SHOP = HOST + "?act=shop&op=index";
     public static final String URL_SHOP_CLASS = HOST + "?act=shop_class&op=index";
+
     public static final String URL_STORE = HOST
             + "?act=show_store&op=goods_all";
 

@@ -17,6 +17,7 @@
     <color name="top_color">#ffffff</color>
     <color name="activity_bg">#ffffff</color>
     <color name="red_text_color">#ff5d5e</color>
+    <color name="red_text_color_press">#fd8080</color>
     <color name="start_bg_color">#d83e4a</color>
     <color name="pink_bg_color">#ff7676</color>
     <color name="pink_light_bg_color">#fefcf2</color>
@@ -43,6 +44,7 @@
     <color name="bg_gray">#efeff4</color>
     <color name="grey_ca">#C9CACA</color>
     <color name="white">#FFFFFF</color>
+    <color name="popupbg">#8f000000</color>
     <color name="text_blue">#35b7f3</color>
     <color name="marketbg">#f3f2f0</color>
     <color name="black">#000000</color>

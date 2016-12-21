@@ -140,7 +140,6 @@ public class Fragment_Cart extends Fragment implements OnItemClickListener {
         checkOut.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
                 String str1 = "";
                 for (int i = 0; ; i++) {
                     if (i >= cartIDList.size()) {

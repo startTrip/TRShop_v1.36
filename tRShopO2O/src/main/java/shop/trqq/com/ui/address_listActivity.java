@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.baidu.mapapi.model.LatLng;
@@ -66,6 +67,7 @@ public class address_listActivity extends BaseActivity {
     private int mPos;
     private double mDistance1;
     private int mIfmarket;
+    private ImageView mImageBack;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -84,7 +86,8 @@ public class address_listActivity extends BaseActivity {
         mIfcart = intent.getStringExtra("ifcart");
         mCart_id = intent.getStringExtra("cart_id");
         mIfmarket = intent.getIntExtra("ifmarket",0);
-        Log.d("mIfmarket",mIfmarket+"");
+        Drawable drawable = getResources().getDrawable(R.drawable.selector_listview);
+        listView.setSelector(drawable);
         listView.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
@@ -137,6 +140,14 @@ public class address_listActivity extends BaseActivity {
      * 锟斤拷始锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷图
      */
     private void initTitleBarView() {
+        mImageBack = (ImageView) findViewById(R.id.title_back);
+        mImageBack.setVisibility(View.VISIBLE);
+        mImageBack.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         mHeadTitleTextView = (TextView) findViewById(R.id.head_title_textView);
         mHeadTitleTextView.setText("收货地址管理");
     }
@@ -278,7 +289,7 @@ public class address_listActivity extends BaseActivity {
                                     }
                                 }
                         }else {  // 不是超市就回传这些数据
-//                        bundle.putString("distance",distance);
+//
                             bundle.putString("content",content);
                             bundle.putString("offpay_hash",offpay_hash);
                             bundle.putString("offpay_hash_batch",offpay_hash_batch);

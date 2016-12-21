@@ -33,6 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -42,8 +43,6 @@ import com.loopj.android.http.RequestParams;
 import com.vlonjatg.progressactivity.ProgressActivity;
 
 import org.apache.http.Header;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,22 +50,17 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import shop.trqq.com.AppContext;
 import shop.trqq.com.NetworkStateService;
 import shop.trqq.com.R;
 import shop.trqq.com.bean.Mb_SlidersBean;
-import shop.trqq.com.supermarket.MarketMainActivity;
 import shop.trqq.com.supermarket.adapters.HomeClassifyAdapter;
 import shop.trqq.com.supermarket.adapters.HomeNewAdapter;
 import shop.trqq.com.supermarket.adapters.HomePagerAdapter;
 import shop.trqq.com.supermarket.adapters.HomeRecommendAdapter;
 import shop.trqq.com.supermarket.bean.HomeClassifyTitle;
 import shop.trqq.com.supermarket.bean.HomeRecommendData;
-import shop.trqq.com.supermarket.bean.HomeTopImage;
-import shop.trqq.com.supermarket.config.NetConfig;
 import shop.trqq.com.ui.Base.UIHelper;
 import shop.trqq.com.util.HttpUtil;
-import shop.trqq.com.util.YkLog;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -87,10 +81,8 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
     private ArrayList<HomeClassifyTitle> mClassifyData;
     private HomeClassifyAdapter mHomeClassifyAdapter;
     private boolean mClassifyComplete;
-    private boolean mTopComplete;
     private Gson mGson;
-    private TimerTask mTask;
-    // é»˜è®¤è½®æ’­
+
     private boolean mIsSwitch = true;
     private GridView mGvRecommend;
     private GridView mGvNew;
@@ -110,7 +102,6 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
         @Override
         public void onReceive(Context context, Intent intent) {
             String city = intent.getStringExtra("city");
-            Log.d(TAG, "onReceive: "+city);
             if (city != null) {
                 mHome_location.setText(city);
             }
@@ -155,7 +146,7 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
         mClassifyRecyclerView = (RecyclerView)view.findViewById(R.id.home_classify);
         mIndicatorContainer = (LinearLayout)view.findViewById(R.id.home_dot_indicator_container);
         mTvAllGoods = (TextView)view.findViewById(R.id.market_home_all);
-        // æ˜¾ç¤ºè¿›åº¦
+        // ÉèÖÃ½ø¶È
         mProgressActivity = (ProgressActivity)view.findViewById(R.id.market_home_progress);
 
         mGvRecommend = (GridView)view.findViewById(R.id.market_home_recommend);
@@ -180,7 +171,7 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
 
         mGson =  new Gson();
 
-        // å¾—åˆ°æ‰‹æœºçš„Dpi
+        // »ñÈ¡ÆÁÄ»µÄ dpi
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         mDensityDpi = displayMetrics.densityDpi;
 
@@ -194,7 +185,7 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
 
         mClassifyData = new ArrayList<>();
         mHomeClassifyAdapter = new HomeClassifyAdapter(getActivity(),mClassifyData);
-        // ä¸‹æ–¹æ¨èçš„æ•°ï¿?
+        // ÍÆ¼ö
         mRecommendedList = new ArrayList<>();
         mHomeRecommendAdapter = new HomeRecommendAdapter(getActivity(),mRecommendedList);
 
@@ -212,7 +203,7 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
         mClassifyRecyclerView.setAdapter(mHomeClassifyAdapter);
 
         mGvRecommend.setNumColumns(2);
-//        mGvRecommend.setSelector(getResources().getDrawable(R.drawable.selector_tab_background));
+
         mGvRecommend.setAdapter(mHomeRecommendAdapter);
         Drawable drawable = getResources().getDrawable(R.drawable.selector_listview_item);
         mGvRecommend.setSelector(drawable);
@@ -225,13 +216,13 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
     @Override
     public void onPause() {
         super.onPause();
-        mIsSwitch = false ;   // åœæ­¢è½®æ’­
+        mIsSwitch = false ;   // Í£Ö¹ÂÖ²¥
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mIsSwitch = true ;   // ï¿?ï¿½ï¿½è½®æ’­
+        mIsSwitch = true ;   // ¿ªÆôÂÖ²¥
         IntentFilter intentFilter = new IntentFilter("city");
         getActivity().registerReceiver(mBroadcastReceive,intentFilter);
     }
@@ -248,7 +239,7 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
                 },
                 4000, 4000);
     }
-    // è‡ªå®šä¹‰Handler,å¤„ç†å®šæ—¶å™¨çš„é¡µé¢åˆ‡æ¢
+    // ÉèÖÃhandlerÈ¥¸Ä±äViewPager
     private Handler pagerSwitchHandler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -260,7 +251,7 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
         }
     };
 
-    // è®¾ç½®ç›‘å¬ï¿?
+    // ÉèÖÃ¼àÌıÆ÷
     private void setListener() {
         mIvSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -271,11 +262,11 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
         mViewPager.addOnPageChangeListener(this);
 
         mHomeClassifyAdapter.setClassifyClickCallback(this);
-        // ä¸‹æ‹‰åˆ·æ–° ç›‘å¬äº‹ä»¶
+        // ÉèÖÃÏÂÀ­Ë¢ĞÂµÄ¼àÌı
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // Ë¢ï¿½ï¿½ï¿½ï¿½ï¿?
+                // Ë¢ĞÂÊı¾İ
                 RefreshData();
             }
         });
@@ -301,7 +292,7 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
                 return false;
             }
         });
-        // ç‚¹å‡» åŠ è½½å…¨éƒ¨å•†å“
+        // ÉèÖÃÈ«²¿ÉÌÆ·µÄµã»÷¼àÌı
         mTvAllGoods.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -314,21 +305,15 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
     }
 
     private void RefreshData() {
-        mTopComplete = false;
-        mClassifyComplete = false;
+
         mRecommendComplete = false;
-        // TODO : ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½ï¿½Ôºï¿½ ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½İ»ï¿½Ã»ï¿½Ğ¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ?
+
         getData();
     }
 
     private void getData() {
 
-        YkLog.i("onfailure1", AppContext.getInstance().getNetworkType()+"");
-        // å¾—åˆ°å¤´éƒ¨è½®æ’­å›¾çš„æ•°æ®
-//        getTopData();
-        // å¾—åˆ°ä¸­é—´åˆ†ç±»çš„æ•°ï¿?
-        getClassifyTitle();
-        // å¾—åˆ°ä¸‹æ–¹æ¨èçš„æ•°ï¿?
+        // µÃµ½ÍÆ¼öµÄÊı¾İ
         getRecommendData();
 
     }
@@ -343,10 +328,11 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
                 if (responseBody != null) {
 
                     String response = new String(responseBody);
+                    Log.d("response",response);
                     HomeRecommendData homeRecommendData = mGson.fromJson(response, HomeRecommendData.class);
                     HomeRecommendData.DatasBean datas = homeRecommendData.getDatas();
                     HomeRecommendData.DatasBean.GoodsListInfoBean goods_list_info = datas.getGoods_list_info();
-                    // å¾—åˆ° çƒ­é—¨æ¨èæ•°æ®
+                    // µÃµ½ÉÌÆ·ÍÆ¼öµÄ Êı¾İ
                     List<HomeRecommendData.DatasBean.GoodsListInfoBean.RecommendedGoodsListBean> recommended_goods_list = goods_list_info.getRecommended_goods_list();
                     if ( recommended_goods_list!= null) {
                         mRecommendedList.clear();
@@ -354,7 +340,7 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
                     }
                         mHomeRecommendAdapter.notifyDataSetChanged();
 
-                    // å¾—åˆ°æ–°å“æ¨èæ•°æ®
+                    // µÃµ½ĞÂÆ· µÄÊı¾İ
                     List<HomeRecommendData.DatasBean.GoodsListInfoBean.NewGoodsListBean> new_goods_list = goods_list_info.getNew_goods_list();
                     if (new_goods_list != null) {
                         mHomeNewList.clear();
@@ -370,6 +356,7 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
                                 .getAsJsonObject("goods_list_info");
                         JsonObject goodsstore = goodslist_info
                                 .getAsJsonObject("goods_store");
+                    // ï¿½Ãµï¿½ï¿½Ö²ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿?
                         if (goodsstore.get("mb_sliders").isJsonObject()) {
                             mTopData.clear();
                             mViewPager.setVisibility(View.VISIBLE);
@@ -406,7 +393,19 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
                         }else {
                             mViewPager.setVisibility(View.GONE);
                         }
+                    JsonArray j = goodslist_info.getAsJsonArray("top_goods_class_list");
 
+                    String type = mGson.toJson(j);
+                    List<HomeClassifyTitle> homeClassifyTitles = mGson.fromJson(type, new TypeToken<List<HomeClassifyTitle>>(){}.getType());
+
+                    if (homeClassifyTitles != null) {
+                        mClassifyData.clear();
+                        mClassifyData.addAll(homeClassifyTitles);
+                    }
+
+                    mHomeClassifyAdapter.notifyDataSetChanged();
+
+                    // µÃµ½ÖĞ¼ä·ÖÀàµÄÊı¾İ
                     mRecommendComplete = true;
                     // Õ¹Ê¾Êı¾İ
                     showContent();
@@ -419,10 +418,10 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
                 mRecommendComplete=true;
                     Boolean isNet = mNetworkStateService.getIsNet();
                     if(!isNet){
-                        //  ï¿½ï¿½ï¿½ï¿½Ê§ï¿½Üµï¿½ï¿½ï¿½ï¿?
+                        //  ÉèÖÃ´íÎóµÄÊı¾İ
                         setOnFailure();
                     }else {
-                        // Ë¢ï¿½ï¿½ï¿½ï¿½ï¿?
+                        // Ë¢ĞÂÊı¾İ
                         RefreshData();
                     }
             }
@@ -431,136 +430,12 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
             public void onFinish() {
                 super.onFinish();
 
-            }
-        });
-    }
-
-    // å¾—åˆ°ä¸­é—´åˆ†ç±»æ•°æ®
-    private void getClassifyTitle() {
-
-        RequestParams requestParams = new RequestParams();
-        requestParams.add("agent_id","101");
-
-        HttpUtil.post(NetConfig.BASEHOMECLASSIFY, requestParams, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                try {
-
-                    String jsonString = new String(responseBody);
-
-                    JSONObject jsonObject = new JSONObject(jsonString);
-
-                    JSONObject infor = jsonObject.optJSONObject("infor");
-                    String type = infor.optString("type");
-
-                    List<HomeClassifyTitle> homeClassifyTitles = mGson.fromJson(type, new TypeToken<List<HomeClassifyTitle>>(){}.getType());
-
-                    if (homeClassifyTitles != null) {
-                        mClassifyData.clear();
-                        mClassifyData.addAll(homeClassifyTitles);
-                    }
-
-                    mHomeClassifyAdapter.notifyDataSetChanged();
-
-                    mClassifyComplete = true;
-                    // Õ¹Ê¾Êı¾İ
-                    showContent();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
-                mClassifyComplete = true;
-                // ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½
-                    Boolean isNet = mNetworkStateService.getIsNet();
-                    if(!isNet){
-                        //  ï¿½ï¿½ï¿½ï¿½Ê§ï¿½Üµï¿½ï¿½ï¿½ï¿?
-                        setOnFailure();
-                    }else {
-                        // Ë¢ï¿½ï¿½ï¿½ï¿½ï¿?
-                        RefreshData();
-                    }
-
-            }
-            @Override
-            public void onFinish() {
-                super.onFinish();
-            }
-        });
-    }
-
-
-    // å¾—åˆ°å¤´éƒ¨ï¿?è½®æ’­å›¾æ•°ï¿?
-    private void getTopData() {
-
-        HttpUtil.get(NetConfig.DISCOVERBANNER, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-
-                String response = new String (responseBody);
-
-                HomeTopImage homeTopImage = mGson.fromJson(response, HomeTopImage.class);
-
-                List<HomeTopImage.DataBean> data = homeTopImage.getData();
-
-                // åˆ¤æ–­æ˜¯ä¸æ˜¯ä¸ºnull
-                if (data != null) {
-                    mTopData.clear();
-//                    mTopData.addAll(data);
-                }
-                mTopAdapter = new HomePagerAdapter(getActivity(), mTopData, mViewPager);
-                mViewPager.setAdapter(mTopAdapter);
-
-                if (mTopAdapter != null) {
-
-                    mTopAdapter.setOnBannerImageClickListener(new HomePagerAdapter.onBannerImageClickListener() {
-                        @Override
-                        public void onBannerImageClick(int i) {
-                            // æŒ‰ä¸‹   åœæ­¢è½®æ’­
-                            if(i==0){
-                                mIsSwitch = false;
-                            }else if (i==1){   // æŠ¬èµ·  ç»§ç»­è½®æ’­
-                                mIsSwitch = true;;
-                            }
-                        }
-                    });
-                }
-                initIndicatorsDot();
-
-                mViewPager.setCurrentItem(1,false);
-
-                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-                mTopComplete = true;
-                showContent();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
-                mTopComplete = true;
-                    Boolean isNet = mNetworkStateService.getIsNet();
-
-                    YkLog.i("onfailure", AppContext.getInstance().getNetworkType()+"");
-                    if(!isNet){
-                        setOnFailure();
-                    }else {
-                        // Ë¢ï¿½ï¿½ï¿½ï¿½ï¿?
-                       RefreshData();
-                    }
-            }
-
-            @Override
-            public void onFinish() {
-                super.onFinish();
             }
         });
     }
 
     private void showContent(){
-        if (mClassifyComplete&&mRecommendComplete){
+        if (mRecommendComplete){
 
             if(mSwipeRefreshLayout.isRefreshing()){
                 mSwipeRefreshLayout.setRefreshing(false);
@@ -570,7 +445,7 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
             }
         }
     }
-    // ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿?
+    // µ±¼ÓÔØ´íÎóÊ±ÏÔÊ¾´íÎóµÄĞÅÏ¢
     private void setOnFailure() {
 
         Drawable errorDrawable = ContextCompat.getDrawable(getActivity(), R.drawable.wifi_off);
@@ -581,18 +456,18 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
                     public void onClick(View v) {
                         // TODO Auto-generated method stub
                         mProgressActivity.showLoading();
-                        mClassifyComplete = false;
                         mRecommendComplete = false;
                         getData();
                     }
                 });
     }
 
-    // åˆå§‹åŒ–å°åœ†ç‚¹
+    // ³õÊ¼»¯Ö¸Ê¾Æ÷Ğ¡Ô²µã
     private void initIndicatorsDot() {
 
         if(mTopData.size()>1) {
-            if(mTopIndicators.size()==0){
+            // µ±Ğ¡Ô²µãÃ»ÓĞµÄÊ±ºò²ÅÍùÀïÃæ¼Ó
+            if(mTopIndicators.size() ==0){
                 int dp = mDensityDpi/160;
                 for (int i = 0; i < mTopData.size(); i++) {
                     ImageView iv = new ImageView(getActivity());
@@ -609,6 +484,7 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
                 }
             }
         }else {
+            //
             mTopIndicators.clear();
             mIndicatorContainer.removeAllViews();
         }
@@ -617,10 +493,11 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
     @Override
     public void onDestroy() {
 
-        super.onDestroy();
         if (mBroadcastReceive != null) {
             getActivity().unregisterReceiver(mBroadcastReceive);
         }
+
+        super.onDestroy();
     }
 
     @Override
@@ -628,44 +505,38 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
 
     }
 
+    // µ±ViewPager »¬¶¯ÍêÒÔºóµ÷ÓÃ
     @Override
     public void onPageSelected(int position) {
 
-        for (int i = 0; i < mTopIndicators.size(); i++) {
-            mTopIndicators.get(i).setImageResource(R.mipmap.dot_gary);
-        }
-
-        if(position==mTopIndicators.size()+1){
-            mTopIndicators.get(0).setImageResource(R.mipmap.dot_read);;
-        }else if(position==0){
-            mTopIndicators.get(mTopIndicators.size()-1).setImageResource(R.mipmap.dot_read);
-        }else {
-            mTopIndicators.get(position-1).setImageResource(R.mipmap.dot_read);
+        if(mTopIndicators.size()>1){
+            for (int i = 0; i < mTopIndicators.size(); i++) {
+                mTopIndicators.get(i).setImageResource(R.mipmap.dot_gary);
+            }
+            if(position==mTopIndicators.size()+1){
+                mTopIndicators.get(0).setImageResource(R.mipmap.dot_read);;
+            }else if(position==0){
+                mTopIndicators.get(mTopIndicators.size()-1).setImageResource(R.mipmap.dot_read);
+            }else {
+                mTopIndicators.get(position-1).setImageResource(R.mipmap.dot_read);
+            }
         }
     }
 
     @Override
     public void onPageScrollStateChanged(int state) {
-
     }
 
 
     @Override
     public void onClassifyClick(int position) {
 
-        if(position==0||position==1||position==2||position==5||position==6||position==7||position==8){
-//            String id = mClassifyData.get(position).getId();
-//            Intent intent = new Intent(getActivity(), MarketClassifyDetailActivity.class);
-//            Bundle bundle = new Bundle();
-//            bundle.putString("id",id);
-//            bundle.putString("source","home");
-//            intent.putExtras(bundle);
-//            getActivity().startActivity(intent);
-            UIHelper.showShop(getActivity(), "", "", "126", "");
-        }else if(position==9){
-
-            ((MarketMainActivity)getActivity()).showClassifyFragment();
-
+        HomeClassifyTitle homeClassifyTitle = mClassifyData.get(position);
+        if (homeClassifyTitle != null) {
+            // ¸ù¾İId È¥Ìø×ªµ½ÏàÓ¦µÄ
+            String stc_id = homeClassifyTitle.getStc_id();
+            String store_id = homeClassifyTitle.getStore_id();
+            UIHelper.showMarketGoodList(getActivity(),store_id,stc_id,"");
         }
     }
 

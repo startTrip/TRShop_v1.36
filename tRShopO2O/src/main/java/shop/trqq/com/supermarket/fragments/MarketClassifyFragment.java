@@ -86,20 +86,23 @@ public class MarketClassifyFragment extends Fragment implements View.OnClickList
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String response = new String(responseBody);
                 ClassifyData classifyData = mGson.fromJson(response, ClassifyData.class);
-                mListItems = classifyData.getDatas();
-                if ( mListItems!= null) {
+                if (classifyData != null) {
 
-                    int size = mListItems.size();
-                    for (int i = 0; i < size; i++) {
-                        // 得到分类
-                        mLeftData.add(mListItems.get(i).getStc_name());
+                    mListItems = classifyData.getDatas();
+                    if ( mListItems!= null) {
+
+                        int size = mListItems.size();
+                        for (int i = 0; i < size; i++) {
+                            // 得到分类
+                            mLeftData.add(mListItems.get(i).getStc_name());
+                        }
+                        addViewToLayout();
+                        setFragment();
+
+                        // 初始化数据 默认选中第一个Fragment
+                        setTextColor(0);
+                        switchFragment(0);
                     }
-                    addViewToLayout();
-                    setFragment();
-
-                    // 初始化数据 默认选中第一个Fragment
-                    setTextColor(0);
-                    switchFragment(0);
                 }
             }
 

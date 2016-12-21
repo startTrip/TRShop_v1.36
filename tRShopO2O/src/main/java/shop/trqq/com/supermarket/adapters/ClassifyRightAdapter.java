@@ -71,7 +71,7 @@ public class ClassifyRightAdapter extends RecyclerView.Adapter<ClassifyRightAdap
                 Picasso.with(mContext)
                         .load(stc_img_path)
                         .placeholder(R.drawable.icon_downloading)
-                        .resize(mWidthPixels*1/5,mWidthPixels)
+                        .resize(mWidthPixels*1/5,mWidthPixels*1/5)
                         .centerInside().
                         error(R.mipmap.empty_picture)
                         .config(Bitmap.Config.RGB_565).into(holder.mImageView);

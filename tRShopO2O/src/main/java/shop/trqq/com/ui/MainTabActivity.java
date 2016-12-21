@@ -35,7 +35,6 @@ import shop.trqq.com.ui.Fragment.Fragment_Cart;
 import shop.trqq.com.ui.Fragment.Fragment_Categroy;
 import shop.trqq.com.ui.Fragment.Fragment_Home;
 import shop.trqq.com.ui.Fragment.Fragment_My;
-import shop.trqq.com.ui.Fragment.Fragment_Search;
 import shop.trqq.com.util.UpdateManager;
 import shop.trqq.com.util.YkLog;
 
@@ -55,16 +54,16 @@ public class MainTabActivity extends BaseFragmentActivity {
 
     // 定义数组来存放Fragment界面
     private Class fragmentArray[] = {Fragment_Home.class,
-            Fragment_Categroy.class, Fragment_Search.class,
+            Fragment_Categroy.class,
             Fragment_Cart.class, Fragment_My.class};
 
     // 定义数组来存放按钮图片
     private int mImageViewArray[] = {R.drawable.tab_home_btn,
-            R.drawable.tab_message_btn, R.drawable.tab_square_btn,
+            R.drawable.tab_message_btn,
             R.drawable.tab_selfinfo_btn, R.drawable.tab_more_btn};
 
     // Tab选项卡的文字
-    private String mTextviewArray[] = {"首页", "分类", "搜索", "购物车", "我"};
+    private String mTextviewArray[] = {"首页", "分类", "购物车", "我"};
     // IM socketIOWebView
     private WebView socketIOWebView;
     private NetworkStateService mNetworkStateService;

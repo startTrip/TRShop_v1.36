@@ -8,7 +8,7 @@
         android:id="@+id/vB"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#33000000" />
+        android:background="@color/popupbg" />
 
     <LinearLayout
         android:id="@+id/ll"

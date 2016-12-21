@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -26,6 +27,7 @@ import org.litepal.LitePalApplication;
 import java.lang.Thread.UncaughtExceptionHandler;
 
 import butterknife.ButterKnife;
+import cn.jpush.android.api.JPushInterface;
 import shop.trqq.com.im.ui.JavaScriptObject;
 import shop.trqq.com.util.HttpUtil;
 import shop.trqq.com.util.StringUtils;
@@ -44,6 +46,7 @@ import shop.trqq.com.util.YkLog;
 public class AppContext extends LitePalApplication {
 
     private static final String TAG = "AppContext";
+    private static final String TAG1 = "JPush";
 
     public static Double marketLongitude =110.396436;
 
@@ -102,6 +105,10 @@ public class AppContext extends LitePalApplication {
 
         SDKInitializer.initialize(getApplicationContext());
 
+        Log.d(TAG1, "[ExampleApplication] onCreate");
+        // 初始化 极光推送
+        JPushInterface.setDebugMode(true); 	// 设置开启日志,发布时请关闭日志
+        JPushInterface.init(this);     		// 初始化 JPush
     }
 
     public WebView getSocketIOWebView() {

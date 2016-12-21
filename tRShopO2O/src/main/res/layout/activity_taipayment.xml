@@ -48,9 +48,12 @@
         <EditText
             android:id="@+id/TaiPay_Password"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_margin="10dp"
+            android:paddingLeft="16dp"
+            android:background="@drawable/shape_binder"
             android:hint="输入支付密码"
+            android:textColorHint="@color/grey_ca"
             android:ems="10"
             android:inputType="textPassword">
 
@@ -62,11 +65,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:background="@color/red_text_color"
+            android:background="@drawable/selector_red_buttom"
             android:padding="10dp"
             android:text="  确定   "
             android:textColor="@color/white_text_color"
             android:textSize="@dimen/large_text_size" />
     </LinearLayout>
+
 
 </LinearLayout>

@@ -3,12 +3,13 @@ package shop.trqq.com.supermarket.view;
 import android.app.Activity;
 import android.graphics.drawable.ColorDrawable;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
-import android.view.animation.AnimationUtils;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
+import android.view.animation.TranslateAnimation;
 import android.widget.PopupWindow;
 import android.widget.PopupWindow.OnDismissListener;
 
@@ -16,13 +17,13 @@ import shop.trqq.com.R;
 
 
 public class MyPopupWindow {
+
 	private static MyPopupWindow instance;
 
 	public PopupWindow mPopupWindow;
 
 	private MyPopupWindow() {
 	}
-
 	public static MyPopupWindow getInstance() {
 		if (instance == null) {
 			instance = new MyPopupWindow();
@@ -30,72 +31,84 @@ public class MyPopupWindow {
 		return instance;
 	}
 
-	/***
-	 * 
-	 * 底部ppupwindow
-	 * 
-	 * @param view
-	 *            ,要填充的布局view'
-	 * @param viewId
-	 *            ，放位置的控件(最外层布局的id)
-	 * @param direction
-	 *            ,弹框要显示的位置 1：底部 2：中间
-	 */
-	@SuppressWarnings("deprecation")
-	public void showAsPopuWindow(final Activity activity, final View view,
-			int direction, final int viewId) {
-		// 实例化popupWindow
-		mPopupWindow = new PopupWindow();
-		mPopupWindow.setContentView(view);
-		mPopupWindow.setWidth(LayoutParams.MATCH_PARENT);
-		mPopupWindow.setHeight(LayoutParams.MATCH_PARENT);
-		// setBackgroundAlpha(activity, 0.6f);// 设置屏幕透明度，这个方法在大屏手机有时候不起作用（比如华为）
-		// 控制键盘是否可以获得焦点
+	/**
+	 *
+	 * @param activity
+	 * @param popupView     弹出的视图
+	 * @param dismissView    点击消失的视图
+	 * @param animView			动画视图
+     * @param dissmiss			点击消失动画是否消失
+     */
+	public void showNormalPopupWindow(Activity activity, View popupView, View dismissView, View animView, final boolean dissmiss){
+
+		// 触摸时获取焦点
+		popupView.setFocusableInTouchMode(true);
+		mPopupWindow = new PopupWindow(popupView,LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT);
+		//指定透明背景，back键相关
+		mPopupWindow.setBackgroundDrawable(new ColorDrawable());
 		mPopupWindow.setFocusable(true);
-		ColorDrawable cd = new ColorDrawable(0xb0000000);
-		mPopupWindow.setBackgroundDrawable(cd);
 		mPopupWindow.setOutsideTouchable(true);
-		// 在PopupWindow里面就加上下面代码，让键盘弹出时，不会挡住pop窗口。
-		mPopupWindow.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
-		// 设置popupWindow弹出窗体的背景
-		// mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
-		if (direction == 1) {
-			mPopupWindow.showAtLocation(view.findViewById(viewId),
-					Gravity.BOTTOM, 0, 0);
-			// 开始动画
-			view.startAnimation(AnimationUtils.loadAnimation(activity,
-					R.anim.slid_in_bottom));
-		} else if (direction == 2) {
-			mPopupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
-		}
-		// popupWindow隐藏时回复屏幕原来的正常透明度
-		mPopupWindow.setOnDismissListener(new OnDismissListener() {
 
-			@Override
-			public void onDismiss() {
-				setBackgroundAlpha(activity, 1.0f);
+		mPopupWindow.setAnimationStyle(R.style.PopupAnimaFade);
 
-			}
-		});
-		view.setOnTouchListener(new OnTouchListener() {
-
-			@Override
-			public boolean onTouch(View arg0, MotionEvent event) {
-				int height = view.findViewById(viewId).getTop();
-				int yy = (int) event.getY();
-				if (event.getAction() == MotionEvent.ACTION_UP) {
-					if (yy < height) {
+		if (dismissView != null) {
+			dismissView.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if(dissmiss){
 						mPopupWindow.dismiss();
 					}
 				}
-				return true;
-			}
-		});
+			});
+			if (animView != null) {
+				animView.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
 
+					}
+				});
+			}
+		}
+
+		Animation showAnimation = getDefaultScaleAnimation();
+		mPopupWindow.showAtLocation(activity.findViewById(android.R.id.content), Gravity.NO_GRAVITY, 0,0);
+		if (showAnimation != null && animView != null) {
+			animView.clearAnimation();
+			animView.startAnimation(showAnimation);
+		}
 	}
 
 	/**
-	 * 品目中间的popupwindow
+	 * 生成自定义ScaleAnimation
+	 */
+	protected Animation getDefaultScaleAnimation() {
+		Animation scaleAnimation = new ScaleAnimation(0f, 1f, 0f, 1f, Animation.RELATIVE_TO_SELF, 0.5f,
+				Animation.RELATIVE_TO_SELF, 0.5f
+		);
+		scaleAnimation.setDuration(300);
+		scaleAnimation.setInterpolator(new AccelerateInterpolator());
+		scaleAnimation.setFillEnabled(true);
+		scaleAnimation.setFillAfter(true);
+		return scaleAnimation;
+	}
+
+	/**
+	 * 生成TranslateAnimation
+	 *
+	 * @param durationMillis 动画显示时间
+	 * @param start          初始位置
+	 */
+	protected Animation getTranslateAnimation(int start, int end, int durationMillis) {
+		Animation translateAnimation = new TranslateAnimation(0, 0, start, end);
+		translateAnimation.setDuration(durationMillis);
+		translateAnimation.setFillEnabled(true);
+		translateAnimation.setFillAfter(true);
+		return translateAnimation;
+	}
+
+
+	/**
+	 * 屏幕中间的popupwindow
 	 * 
 	 * @param activity
 	 * @param view

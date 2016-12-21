@@ -9,46 +9,76 @@ public class HomeClassifyTitle {
 
 
     /**
-     * id : 39
-     * name : Á¸ÓÍµ÷Î¶
-     * imgurl : http://123.57.81.236/sixmarket/sixmarket/uploadfiles/2016/05/201605020928072351_thumb.png
-     * ad_img : null
+     * stc_id : 346
+     * stc_name : Êß²ËË®¹û
+     * stc_parent_id : 0
+     * stc_state : 1
+     * store_id : 126
+     * stc_sort : 0
+     * stc_img_path : http://shop.wushi3.com/data/upload/shop/store/126/346/ggg
      */
 
-    private String id;
-    private String name;
-    private String imgurl;
-    private Object ad_img;
+    private String stc_id;
+    private String stc_name;
+    private String stc_parent_id;
+    private String stc_state;
+    private String store_id;
+    private String stc_sort;
+    private String stc_img_path;
 
-    public String getId() {
-        return id;
+    public String getStc_id() {
+        return stc_id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setStc_id(String stc_id) {
+        this.stc_id = stc_id;
     }
 
-    public String getName() {
-        return name;
+    public String getStc_name() {
+        return stc_name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setStc_name(String stc_name) {
+        this.stc_name = stc_name;
     }
 
-    public String getImgurl() {
-        return imgurl;
+    public String getStc_parent_id() {
+        return stc_parent_id;
     }
 
-    public void setImgurl(String imgurl) {
-        this.imgurl = imgurl;
+    public void setStc_parent_id(String stc_parent_id) {
+        this.stc_parent_id = stc_parent_id;
     }
 
-    public Object getAd_img() {
-        return ad_img;
+    public String getStc_state() {
+        return stc_state;
     }
 
-    public void setAd_img(Object ad_img) {
-        this.ad_img = ad_img;
+    public void setStc_state(String stc_state) {
+        this.stc_state = stc_state;
+    }
+
+    public String getStore_id() {
+        return store_id;
+    }
+
+    public void setStore_id(String store_id) {
+        this.store_id = store_id;
+    }
+
+    public String getStc_sort() {
+        return stc_sort;
+    }
+
+    public void setStc_sort(String stc_sort) {
+        this.stc_sort = stc_sort;
+    }
+
+    public String getStc_img_path() {
+        return stc_img_path;
+    }
+
+    public void setStc_img_path(String stc_img_path) {
+        this.stc_img_path = stc_img_path;
     }
 }

@@ -5,10 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.baidu.mapapi.model.LatLng;
@@ -26,6 +29,7 @@ import shop.trqq.com.R;
 import shop.trqq.com.UserManager;
 import shop.trqq.com.supermarket.activitys.AddressFromMapActivity;
 import shop.trqq.com.supermarket.bean.AddressInfo;
+import shop.trqq.com.supermarket.view.MyPopupWindow;
 import shop.trqq.com.ui.AddressPopupWindow.OnOptionsSelectListener;
 import shop.trqq.com.ui.Base.BaseActivity;
 import shop.trqq.com.util.HttpUtil;
@@ -33,7 +37,7 @@ import shop.trqq.com.util.ToastUtils;
 import shop.trqq.com.util.YkLog;
 
 /**
- * 锟斤拷锟斤拷碌牡锟街?
+ * 新增地址界面
  */
 public class Address_newActivity extends BaseActivity {
 
@@ -52,6 +56,9 @@ public class Address_newActivity extends BaseActivity {
     private TextView mLocation;
     private AddressInfo mAddressInfo;
     private LatLng mLatLng;
+    private ImageView mImageBack;
+    private View mPopupView;
+    private MyPopupWindow mMyPopupWindow;
 
     private void SendCityData(AddressInfo addressInfo) {
         if (addressInfo == null) {
@@ -68,6 +75,7 @@ public class Address_newActivity extends BaseActivity {
         requestParams.add("address", addressInfo.getLocation()+addressInfo.getAddressDetail());
         requestParams.add("tel_phone", addressInfo.getTel_phone());
         requestParams.add("mob_phone", addressInfo.getPhoneNumber());
+        requestParams.add("garden",addressInfo.getLocation());
         requestParams.add("latitude",addressInfo.getLatitude());
         requestParams.add("longitude",addressInfo.getLongitude());
         YkLog.e("intent",requestParams.toString());
@@ -112,7 +120,6 @@ public class Address_newActivity extends BaseActivity {
                         super.onFinish();
                     }
                 });
-
     }
 
     @Override
@@ -160,6 +167,11 @@ public class Address_newActivity extends BaseActivity {
 
     public void initView() {
 
+        mPopupView = LayoutInflater.from(mContext).inflate(R.layout.popup_center_layout, null);
+
+        mImageBack = (ImageView) findViewById(R.id.title_back);
+        mImageBack.setVisibility(View.VISIBLE);
+
         mHeadTitleTextView = (TextView) findViewById(R.id.head_title_textView);
         mHeadTitleTextView.setText("添加地址");
         name = (EditText) findViewById(R.id.add_address_name);
@@ -182,7 +194,7 @@ public class Address_newActivity extends BaseActivity {
                         add_flag = true;
                         mAddResult = options1;
                         // 锟矫碉拷锟斤拷锟叫和碉拷锟斤拷锟絠d
-                                city_id = option2;
+                        city_id = option2;
                         area_id = options3;
                         ToastUtils.showMessage(mContext, mAddResult);
                         mLocation.setText(" 点击选择");
@@ -214,9 +226,7 @@ public class Address_newActivity extends BaseActivity {
                         mAddressInfo.setLocation(location);
                         // 检查所填信息是否正确
                         CheckAddressInfo(mAddressInfo);
-
                     }
-
                     // 地理编码 去得到该地址的 经纬度
                 }
             }
@@ -258,10 +268,10 @@ public class Address_newActivity extends BaseActivity {
             return;
         }
         if (TextUtils.isEmpty(addressInfo.getAddressDetail())) {
-            ToastUtils.showMessage(mContext, "请输入楼号等信息,否则快递小哥会着急的");
+            ToastUtils.showMessage(mContext, "请输入地址详细信息,否则快递小哥会着急的");
             return;
         }
-        if(TextUtils.equals(addressInfo.getLatitude(),"点击选择")){
+        if(TextUtils.equals(addressInfo.getLatitude()," 点击选择")){
             ToastUtils.showMessage(mContext,"请选择小区/大厦/学校");
             return;
         }
@@ -273,10 +283,18 @@ public class Address_newActivity extends BaseActivity {
 
         mAddressInfo = new AddressInfo();
 
+        mMyPopupWindow = MyPopupWindow.getInstance();
 
     }
 
     private void setListener(){
+
+        mImageBack.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         // 点击选择跳转的 地图上我的位置
         mLocation.setOnClickListener(new OnClickListener() {
@@ -359,5 +377,34 @@ public class Address_newActivity extends BaseActivity {
 
             }
         });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode==KeyEvent.KEYCODE_BACK){
+            // 警告是否保存当前的地址信息
+            showAlertPopupWindow();
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void showAlertPopupWindow() {
+        View animView = mPopupView.findViewById(R.id.popup_anima);
+        View dismissView = mPopupView.findViewById(R.id.dismiss_view);
+        // 点击确认销毁 activity
+        animView.findViewById(R.id.confirm).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        animView.findViewById(R.id.cancel).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mMyPopupWindow.cancel();
+            }
+        });
+        mMyPopupWindow.showNormalPopupWindow(Address_newActivity.this,mPopupView,dismissView,animView,false);
     }
 }

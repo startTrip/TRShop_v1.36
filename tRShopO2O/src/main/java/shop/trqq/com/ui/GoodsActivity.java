@@ -9,11 +9,13 @@ import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -93,6 +95,9 @@ public class GoodsActivity extends BaseFragmentActivity implements OnClickListen
      */
     final static int MSG_WHAT = ('F' << 16) + ('T' << 8) + 'A';
     final static int MSG_SHOW_DIALOG = 1;
+    private boolean hasSelected = true;
+    private ImageView mImageBack;
+    private String mStc_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,9 +110,13 @@ public class GoodsActivity extends BaseFragmentActivity implements OnClickListen
         Intent intent = getIntent();
         try {
             keyword = intent.getStringExtra("keyword");
+            // 商城的分类id
             gc_id = intent.getStringExtra("gc_id");
             store_id = intent.getStringExtra("store_id");
             brand = intent.getStringExtra("brand");
+            // 店铺的分类 id
+            mStc_id = intent.getStringExtra("stc_id");
+            Log.d(TAG, "keyword"+keyword+"|gc_id"+gc_id+"|store_id"+store_id+"|brand"+brand);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -118,9 +127,20 @@ public class GoodsActivity extends BaseFragmentActivity implements OnClickListen
         } else {
             key = "3";
         }
+        Log.d(TAG, "key"+key);
         informationList = new ArrayList<GoodsBean>();
         initTitleBarView();
         initViews();
+        setListener();
+    }
+
+    private void setListener() {
+        mImageBack.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     /**
@@ -130,7 +150,9 @@ public class GoodsActivity extends BaseFragmentActivity implements OnClickListen
     private void initTitleBarView() {
         YkLog.i(TAG, "初始化标题栏视图");
         mHeadTitleTextView = (TextView) findViewById(R.id.head_title_textView);
-        if (keyword.length() == 0 || keyword == null) {
+        mImageBack = (ImageView) findViewById(R.id.title_back);
+        mImageBack.setVisibility(View.VISIBLE);
+        if ( keyword == null||keyword.length()== 0 ) {
             mHeadTitleTextView.setText("商品列表");
         } else if (keyword != "" && keyword != null) {
             mHeadTitleTextView.setText(keyword);
@@ -186,10 +208,11 @@ public class GoodsActivity extends BaseFragmentActivity implements OnClickListen
 
     private void initViews() {
         inflater = LayoutInflater.from(this);
+        store_search_layout = (LinearLayout) findViewById(R.id.store_search_layout);
+        store_search_edit = (EditText) findViewById(R.id.store_search_edit);
+        store_search_button = (TextView) findViewById(R.id.store_search_button);
         if (store_id.length() != 0 && store_id != null) {
-            store_search_layout = (LinearLayout) findViewById(R.id.store_search_layout);
-            store_search_edit = (EditText) findViewById(R.id.store_search_edit);
-            store_search_button = (TextView) findViewById(R.id.store_search_button);
+
             store_search_layout.setVisibility(View.VISIBLE);
             // 点击搜索按钮 加入关键词搜索；
             store_search_button.setOnClickListener(new OnClickListener() {
@@ -198,9 +221,13 @@ public class GoodsActivity extends BaseFragmentActivity implements OnClickListen
                 public void onClick(View v) {
                     // TODO Auto-generated method stub
                     keyword = store_search_edit.getText().toString();
+                    //鐐规悳绱㈢殑鏃跺?鍙互鎼滅储搴楅摵涓殑鎵?湁鐨勫晢鍝?
+                    mStc_id = "";
                     fragmentTransaction();
                 }
             });
+        }else {
+            store_search_layout.setVisibility(View.GONE);
         }
         topShopView = (LinearLayout) inflater.inflate(R.layout.item_shop_top,
                 null);
@@ -208,12 +235,13 @@ public class GoodsActivity extends BaseFragmentActivity implements OnClickListen
         shopSales = (TextView) findViewById(R.id.shop_sales);
         shopPrice = (TextView) findViewById(R.id.shop_price);
         shopPopularity = (TextView) findViewById(R.id.shop_popularity);
+
+        shopSales.setEnabled(false);
         shopNew.setOnClickListener(this);
         shopSales.setOnClickListener(this);
         shopPrice.setOnClickListener(this);
         shopPopularity.setOnClickListener(this);
         fragmentTransaction();
-
 
     }
 
@@ -255,6 +283,9 @@ public class GoodsActivity extends BaseFragmentActivity implements OnClickListen
                 }
                 prices = 0;
                 order = "1";
+                shopSales.setEnabled(true);
+                shopNew.setEnabled(false);
+                shopPopularity.setEnabled(true);
                 shopNew.setTextColor(getResources()
                         .getColor(R.color.red_text_color));
                 shopSales.setTextColor(getResources().getColor(
@@ -263,6 +294,8 @@ public class GoodsActivity extends BaseFragmentActivity implements OnClickListen
                         R.color.black_text_color));
                 shopPopularity.setTextColor(getResources().getColor(
                         R.color.black_text_color));
+
+                Log.d(TAG, "key"+key+"|prices"+prices+"|order"+order);
                 break;
             case R.id.shop_sales:// 销量
                 if (store_id.length() == 0 || store_id == null) {
@@ -271,7 +304,10 @@ public class GoodsActivity extends BaseFragmentActivity implements OnClickListen
                     key = "3";
                 }
                 prices = 0;
-                order = "0";
+                order = "0";               // 销量降序
+                shopSales.setEnabled(false);
+                shopNew.setEnabled(true);
+                shopPopularity.setEnabled(true);
                 shopSales.setTextColor(getResources().getColor(
                         R.color.red_text_color));
                 shopNew.setTextColor(getResources().getColor(
@@ -280,6 +316,7 @@ public class GoodsActivity extends BaseFragmentActivity implements OnClickListen
                         R.color.black_text_color));
                 shopPopularity.setTextColor(getResources().getColor(
                         R.color.black_text_color));
+                Log.d(TAG, "key"+ key+"|prices"+prices+"|order"+order);
                 break;
             case R.id.shop_price:// 价格
                 if (store_id.length() == 0 || store_id == null) {
@@ -294,6 +331,9 @@ public class GoodsActivity extends BaseFragmentActivity implements OnClickListen
                     prices = 2;
                     order = "1";
                 }
+                shopSales.setEnabled(true);
+                shopNew.setEnabled(true);
+                shopPopularity.setEnabled(true);
                 shopPrice.setTextColor(getResources().getColor(
                         R.color.red_text_color));
                 shopNew.setTextColor(getResources().getColor(
@@ -302,8 +342,10 @@ public class GoodsActivity extends BaseFragmentActivity implements OnClickListen
                         R.color.black_text_color));
                 shopPopularity.setTextColor(getResources().getColor(
                         R.color.black_text_color));
+                Log.d(TAG, "key"+key+"|prices"+prices+"|order"+order);
                 break;
             case R.id.shop_popularity:// 人气
+
                 if (store_id.length() == 0 || store_id == null) {
                     key = "2";
                 } else {
@@ -311,6 +353,9 @@ public class GoodsActivity extends BaseFragmentActivity implements OnClickListen
                 }
                 order = "0";
                 prices = 0;
+                shopSales.setEnabled(true);
+                shopNew.setEnabled(true);
+                shopPopularity.setEnabled(false);
                 shopPopularity.setTextColor(getResources().getColor(
                         R.color.red_text_color));
                 shopNew.setTextColor(getResources().getColor(
@@ -319,6 +364,7 @@ public class GoodsActivity extends BaseFragmentActivity implements OnClickListen
                         R.color.black_text_color));
                 shopPrice.setTextColor(getResources().getColor(
                         R.color.black_text_color));
+                Log.d(TAG, "key"+key+"|prices"+prices+"|order"+order);
                 break;
 
         }
@@ -380,12 +426,20 @@ public class GoodsActivity extends BaseFragmentActivity implements OnClickListen
                                         .beginTransaction();
                                 Fragment_Goods fragment = new Fragment_Goods();
                                 Bundle bundle = new Bundle();
-                                bundle.putString("keyword", keyword);
-                                bundle.putString("gc_id", gc_id);
-                                bundle.putString("store_id", store_id);
-                                bundle.putString("brand", brand);
                                 bundle.putString("key", key);
                                 bundle.putString("order", order);
+                                bundle.putString("keyword", keyword);
+                                // 通过 stc_id 来判断是不是请求店铺分类
+                                if(mStc_id==null){
+                                    bundle.putString("gc_id", gc_id);
+                                    bundle.putString("store_id", store_id);
+                                    bundle.putString("brand", brand);
+                                    Log.d("lujing","商城");
+                                }else {
+                                    bundle.putString("store_id",store_id);
+                                    bundle.putString("stc_id",mStc_id);
+                                    Log.d("lujing","超市分类id");
+                                }
                                 fragment.setArguments(bundle);
                                 // 加到Activity中
                                 fragmentTransaction.replace(R.id.fragment, fragment);

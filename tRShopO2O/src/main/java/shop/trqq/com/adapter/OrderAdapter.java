@@ -25,6 +25,7 @@ import shop.trqq.com.R;
 import shop.trqq.com.UserManager;
 import shop.trqq.com.bean.OrderGroupHomeListBean;
 import shop.trqq.com.ui.Base.UIHelper;
+import shop.trqq.com.ui.OrderActivity;
 import shop.trqq.com.util.HttpUtil;
 import shop.trqq.com.util.ToastUtils;
 import shop.trqq.com.util.YkLog;
@@ -192,6 +193,7 @@ public class OrderAdapter extends CommonAdapter<OrderGroupHomeListBean> {
                                                                     pay_sn,
                                                                     pay_amount,
                                                                     "taifubao");
+                                                            ((OrderActivity)mContext).overridePendingTransition(R.anim.push_right_in,R.anim.push_left_out);
                                                             break;
 
                                                         // ��ѻ��
@@ -201,6 +203,7 @@ public class OrderAdapter extends CommonAdapter<OrderGroupHomeListBean> {
                                                                     pay_sn,
                                                                     pay_amount,
                                                                     "consumepay");
+                                                            ((OrderActivity)mContext).overridePendingTransition(R.anim.push_right_in,R.anim.push_left_out);
                                                             break;
                                                         case 2:
                                                             // ��Ʒ���?
@@ -209,6 +212,7 @@ public class OrderAdapter extends CommonAdapter<OrderGroupHomeListBean> {
                                                                     pay_sn,
                                                                     pay_amount,
                                                                     "productpay");
+                                                            ((OrderActivity)mContext).overridePendingTransition(R.anim.push_right_in,R.anim.push_left_out);
                                                             break;
                                                         case 3:
                                                             // ��ͨ���?
@@ -217,6 +221,7 @@ public class OrderAdapter extends CommonAdapter<OrderGroupHomeListBean> {
                                                                     pay_sn,
                                                                     pay_amount,
                                                                     "tyongpay");
+                                                            ((OrderActivity)mContext).overridePendingTransition(R.anim.push_right_in,R.anim.push_left_out);
                                                             break;
 //                                                        case 4:
 //                                                            Intent intent = new Intent(mContext,BinderCardActivity.class);
@@ -269,7 +274,6 @@ public class OrderAdapter extends CommonAdapter<OrderGroupHomeListBean> {
                     } catch (Exception e) {
                         ToastUtils.showMessage(mContext, jsonObject.toString());
                     }
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -278,17 +282,14 @@ public class OrderAdapter extends CommonAdapter<OrderGroupHomeListBean> {
             @Override
             public void onFailure(int statusCode, Header[] headers,
                                   byte[] responseBody, Throwable error) {
-                // TODO Auto-generated method stub
                 ToastUtils.showMessage(mContext, R.string.get_informationData_failure);
             }
         });
     }
 
-    /* ʱ���ת�����ַ�?*/
     public static String getDateToString(long time) {
         Date d = new Date(time);
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         return sf.format(d);
     }
-
 }

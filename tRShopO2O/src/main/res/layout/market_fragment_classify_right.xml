@@ -2,7 +2,6 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-              android:paddingTop="10dp"
               android:orientation="vertical"
               android:background="@color/white"
              tools:context="supermarket.fragments.ClassifyRightFragment"
@@ -21,10 +20,11 @@
                                                     progressActivity:emptyBackgroundColor="#FFFFFF"
                                                     progressActivity:errorBackgroundColor="#FFFFFF">
     <android.support.v7.widget.RecyclerView
+        android:paddingTop="10dp"
         android:id="@+id/classify_right_rv"
         android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         >
 
     </android.support.v7.widget.RecyclerView>

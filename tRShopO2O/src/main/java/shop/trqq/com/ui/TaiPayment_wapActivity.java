@@ -1,12 +1,14 @@
 package shop.trqq.com.ui;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.ContextThemeWrapper;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.CookieManager;
@@ -14,6 +16,7 @@ import android.webkit.CookieSyncManager;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -164,6 +167,15 @@ public class TaiPayment_wapActivity extends BaseActivity {
 
     private void initTitleBarView() {
         mHeadTitleTextView = (TextView) findViewById(R.id.head_title_textView);
+        ImageView back = (ImageView) findViewById(R.id.title_back);
+        back.setVisibility(View.VISIBLE);
+        back.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                overridePendingTransition(R.anim.push_left_in,R.anim.push_right_out);
+            }
+        });
         String HeadTitle = "";
         if ("taifubao".equals(payment_code)) {
             HeadTitle = "泰付宝支付";
@@ -190,6 +202,21 @@ public class TaiPayment_wapActivity extends BaseActivity {
         // String uri ="http://shop.trqq.com/mobile/index.php?act=member_index";
         HttpUtil.post(HttpUtil.URL_ORDER_TAIPAYMENT, requestParams,
                 new AsyncHttpResponseHandler() {
+                    ProgressDialog pd;
+                    @Override
+                    public void onStart() {
+                        super.onStart();
+                        pd = ProgressDialog.show(mContext, null,
+                                "正在支付...", true, true,
+                                new DialogInterface.OnCancelListener() {
+                                    @Override
+                                    public void onCancel(DialogInterface dialog) {
+                                        sendCancelMessage();
+                                    }
+                                });
+                        pd.setCanceledOnTouchOutside(false);
+                    }
+
                     @Override
                     public void onSuccess(int statusCode, Header[] headers,
                                           byte[] responseBody) {
@@ -244,6 +271,9 @@ public class TaiPayment_wapActivity extends BaseActivity {
                             case 10:
                                 message = "异常处理成功";
                                 break;
+                            case 11:
+                                message = "非万能居,大浪淘沙,泰润国际大酒店,战略联盟商家产品不可使用消费积分兑换支付!";
+                                break;
                             default:
                                 message = "未知错误";
                                 break;
@@ -273,6 +303,12 @@ public class TaiPayment_wapActivity extends BaseActivity {
                                           byte[] responseBody, Throwable error) {
                         // TODO Auto-generated method stub
                         ToastUtils.showMessage(mContext, "网络数据获取失败");
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        super.onFinish();
+                        pd.dismiss();
                     }
                 });
     }
@@ -334,5 +370,15 @@ public class TaiPayment_wapActivity extends BaseActivity {
         } catch (Exception e) {
             YkLog.t("Nat: webView.syncCookie failed", e.toString());
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode==KeyEvent.KEYCODE_BACK){
+            finish();
+            overridePendingTransition(R.anim.push_left_in,R.anim.push_right_out);
+            return  false;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

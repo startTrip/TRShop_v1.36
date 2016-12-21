@@ -10,27 +10,44 @@
     <LinearLayout
         android:id="@+id/store_search_layout"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="36dp"
         android:layout_margin="5dp"
         android:orientation="horizontal"
         android:visibility="visible">
 
-        <EditText
-            android:id="@+id/store_search_edit"
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="2"
-            android:hint="搜索店内商品"
-            android:textSize="18sp"
-            />
+            android:layout_height="36dp"
+            android:layout_weight="3"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/shape_binder"
+            >
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:padding="8dp"
+                android:src="@drawable/main_bottom_tab_search_normal"
+                />
+
+            <EditText
+                android:id="@+id/store_search_edit"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:background="@null"
+                android:hint="搜索店内商品"
+                android:paddingLeft="5dp"
+                android:textSize="16sp"
+                />
+        </LinearLayout>
         <TextView
             android:id="@+id/store_search_button"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="8dp"
             android:layout_weight="1"
-            android:background="@color/orange"
+            android:background="@drawable/selector_add_cart"
             android:gravity="center"
             android:text="店内搜索"
             android:textColor="@color/white_text_color" />

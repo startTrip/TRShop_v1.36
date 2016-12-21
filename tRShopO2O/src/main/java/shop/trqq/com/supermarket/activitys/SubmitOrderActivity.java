@@ -117,26 +117,27 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
                 mChangeAdressLayout.setVisibility(View.GONE);
                 mNoAddressLayout.setVisibility(View.VISIBLE);
                 mCheckSubmit.setEnabled(false);
+                // 暂时不用预付款和充值卡
 //                }
-                // 使用预存款支付
-                String predeposit = jsonObject
-                        .optString("available_predeposit");
-                if (!predeposit.equals("null")) {
-                    available_predeposit.setText("使用预付款支付（可用余额为￥："
-                            + predeposit + ")");
-                    available_predeposit.setVisibility(View.VISIBLE);
-                    availableLayout.setVisibility(View.VISIBLE);
-                }
-                // 使用充值卡支付
-                String rc_balance = jsonObject
-                        .optString("available_rc_balance");
-                //YkLog.t(rc_balance);
-                if (!"null".equals(rc_balance)) {
-                    available_rc_balance.setText("使用充值卡支付（充值卡余额为￥："
-                            + rc_balance + ")");
-                    available_rc_balance.setVisibility(View.VISIBLE);
-                    availableLayout.setVisibility(View.VISIBLE);
-                }
+//                // 使用预存款支付
+//                String predeposit = jsonObject
+//                        .optString("available_predeposit");
+//                if (!predeposit.equals("null")) {
+//                    available_predeposit.setText("使用预付款支付（可用余额为￥:"
+//                            + predeposit + ")");
+//                    available_predeposit.setVisibility(View.VISIBLE);
+//                    availableLayout.setVisibility(View.VISIBLE);
+//                }
+//                // 使用充值卡支付
+//                String rc_balance = jsonObject
+//                        .optString("available_rc_balance");
+//
+//                if (!"null".equals(rc_balance)) {
+//                    available_rc_balance.setText("使用充值卡支付（充值卡余额为￥:"
+//                            + rc_balance + ")");
+//                    available_rc_balance.setVisibility(View.VISIBLE);
+//                    availableLayout.setVisibility(View.VISIBLE);
+//                }
                 if (mProgressActivity.isLoading()) {
                     mProgressActivity.showContent();
                 }
@@ -360,8 +361,8 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
         requestParams.add("pay_name", "online");
         requestParams.add("invoice_id", "");
         requestParams.add("voucher","");// 代金券，voucher_t_id|store_id|voucher_price，多个店铺用逗号分割
-        requestParams.add("pd_pay", available[1]);// 是否使用预存款支付 1-使用 0-不使用
-        requestParams.add("rcb_pay", available[0]);// 是否使用充值卡支付 1-使用 0-不使用
+        requestParams.add("pd_pay", "0");// 是否使用预存款支付 1-使用 0-不使用
+        requestParams.add("rcb_pay", "0");// 是否使用充值卡支付 1-使用 0-不使用
         requestParams.add("fcode","");
         HttpUtil.post(HttpUtil.URL_BUY_STEP2, requestParams, new AsyncHttpResponseHandler() {
             @Override

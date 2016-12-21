@@ -1,8 +1,10 @@
 package shop.trqq.com.adapter;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -32,7 +34,9 @@ import shop.trqq.com.R;
 import shop.trqq.com.UserManager;
 import shop.trqq.com.bean.Order_goodsBean;
 import shop.trqq.com.bean.Order_listBean;
+import shop.trqq.com.supermarket.view.MyPopupWindow;
 import shop.trqq.com.ui.Base.UIHelper;
+import shop.trqq.com.ui.OrderActivity;
 import shop.trqq.com.util.HttpUtil;
 import shop.trqq.com.util.ImageLoadUtils;
 import shop.trqq.com.util.ToastUtils;
@@ -51,13 +55,17 @@ public class Order_CellAdapter extends CommonAdapter<Order_listBean> {
     private String state_desc;
     private Handler handler;
     private String filter;
+    private final MyPopupWindow mMyPopupWindow;
+    private Button mFree;
+    private TextView mAlertMessage;
+    private View mButtonLayout;
 
     public Order_CellAdapter(Handler handler, Context context, String filter) {
         super(context, new ArrayList<Order_listBean>(), R.layout.order_cell);
         YkLog.i(TAG, "订单适配器构造方法");
         this.filter = filter;
         this.handler = handler;
-
+        mMyPopupWindow = MyPopupWindow.getInstance();
     }
 
     @Override
@@ -79,7 +87,9 @@ public class Order_CellAdapter extends CommonAdapter<Order_listBean> {
         Button receive = (Button) holder.getView(R.id.trade_item_receive);
         Button cancel = (Button) holder.getView(R.id.trade_item_cancel);
         Button deliver = (Button) holder.getView(R.id.trade_item_deliver);
-        Button free = (Button) holder.getView(R.id.trade_item_free);
+        mFree = (Button) holder.getView(R.id.trade_item_free);
+        mAlertMessage = holder.getView(R.id.alert_message);
+        mButtonLayout = holder.getView(R.id.confirm_layout);
         store_name.setText(":  " + bean.getStore_name());
         trade_number.setText(":  " + bean.getOrder_sn());
         fee.setText("运费: ￥" + bean.getShipping_fee());
@@ -126,40 +136,29 @@ public class Order_CellAdapter extends CommonAdapter<Order_listBean> {
             // return ;
         }
         final String order_id = bean.getOrder_id();
+
+        // 得到免单状态
+        String is_free_charge = bean.getIs_free_charge();
+        // 得到店铺的 id
+        String store_id = bean.getStore_id();
+
         /*
 		 * ok.setText("已取消"); ok.setOnClickListener(null);
 		 * ok.setBackgroundResource(R.color.gray_bg_color);
 		 */
+        mButtonLayout.setVisibility(View.VISIBLE);
         cancel.setVisibility(View.GONE);
         receive.setVisibility(View.GONE);
         deliver.setVisibility(View.GONE);
-        free.setVisibility(View.GONE);
+        mFree.setVisibility(View.GONE);
         // 根据商品发货状态来显示  订单取消，订单确认，查看物流, 申请免单
         if(TextUtils.equals(state_desc,"交易完成")){
-            free.setVisibility(View.VISIBLE);
-            free.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    DialogTool.createNormalDialog2(mContext,
-                            "付款后超过30分钟送达才可以申请成功哦",
-                            "申请",
-                            "取消",
-                            new DialogInterface.OnClickListener() {
-
-                                @Override
-                                public void onClick(DialogInterface dialog,
-                                                    int which) {
-                                    // 申请免单
-                                    applyForFree(order_id);
-                                }},
-                            null).show();
-
-                }
-            });
+            if(TextUtils.equals("126",store_id)){
+                // 设置提示的信息    is_free_charge 为申请免单的状态
+                setAlertMessage(order_id,is_free_charge);
+            }
         }
-        if (bean.isIf_cancel()) {
-
+        if(bean.isIf_cancel()){
             cancel.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -169,7 +168,6 @@ public class Order_CellAdapter extends CommonAdapter<Order_listBean> {
                             "确定",
                             "取消",
                             new DialogInterface.OnClickListener() {
-
                                 @Override
                                 public void onClick(DialogInterface dialog,
                                                     int which) {
@@ -196,6 +194,11 @@ public class Order_CellAdapter extends CommonAdapter<Order_listBean> {
             deliver.setVisibility(View.VISIBLE);
         }
         if (bean.isIf_receive()) {//确认收货
+            // 只有超市才可以申请免单
+            if(TextUtils.equals("126",store_id)){
+                mFree.setVisibility(View.VISIBLE);
+            }
+            receive.setVisibility(View.VISIBLE);
             receive.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -205,7 +208,6 @@ public class Order_CellAdapter extends CommonAdapter<Order_listBean> {
                             "确定",
                             "取消",
                             new DialogInterface.OnClickListener() {
-
                                 @Override
                                 public void onClick(DialogInterface dialog,
                                                     int which) {
@@ -213,16 +215,78 @@ public class Order_CellAdapter extends CommonAdapter<Order_listBean> {
                                     Order_Receive(order_id);
                                 }},
                             null).show();
-
-
                 }
             });
-            receive.setVisibility(View.VISIBLE);
+            mFree.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    DialogTool.createNormalDialog2(mContext,
+                            "确认收货以后才能申请免单哦",
+                            "确定",
+                            "",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog,
+                                                    int which) {
+                                }},
+                            null).show();
+                }
+            });
         } else if (bean.isIf_lock()) {
             // cancel.setVisibility(View.GONE);
         }
 
         // listLayout.setVisibility(View.VISIBLE);
+    }
+
+    // 设置提示的信息和显示
+    private void setAlertMessage(final String order_id,String is_free_charge) {
+        mAlertMessage.setVisibility(View.VISIBLE);   // 设置提示信息显示
+        mFree.setVisibility(View.VISIBLE);
+        switch (is_free_charge){
+            case "0":     // 默认状态,可以提交免单申请
+                if(TextUtils.isEmpty(mAlertMessage.getText())){        // 确认订单以后的信息
+                    mAlertMessage.setText("万能居超市订单付款后超过三十分钟送达可申请免单");
+                }
+                mFree.setVisibility(View.VISIBLE);
+                mFree.setBackgroundColor(Color.RED);
+                mFree.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        DialogTool.createNormalDialog2(mContext,
+                                "付款后超过30分钟送达才可以申请成功哦",
+                                "申请",
+                                "取消",
+                                new DialogInterface.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(DialogInterface dialog,
+                                                        int which) {
+                                        // 申请免单
+                                        applyForFree(order_id);
+                                    }},
+                                null).show();
+                    }
+                });
+                break;
+            case "1":     // 已经申请免单，待审核
+                mFree.setEnabled(false);
+                mFree.setText("待审核");
+                mFree.setBackgroundColor(Color.GRAY);
+                mAlertMessage.setText("您已申请免单，待审核");
+                break;
+            case "2":      // 审核免单通过
+                mButtonLayout.setVisibility(View.GONE);
+                mFree.setVisibility(View.GONE);
+                mAlertMessage.setText("你的免单申请已通过，金额已退回您的账户");
+                break;
+            case "3":       // 免单审核不通过
+                mButtonLayout.setVisibility(View.GONE);
+                mFree.setVisibility(View.GONE);
+                mAlertMessage.setText("免单审核不通过，不符合免单要求");
+                break;
+        }
+
     }
 
     // 申请免单方法
@@ -233,38 +297,59 @@ public class Order_CellAdapter extends CommonAdapter<Order_listBean> {
         requestParams.add("apply_status","apply_fee");
         requestParams.add("order_id",order_id);
         HttpUtil.post(HttpUtil.URL_APPLY_FREE, requestParams, new AsyncHttpResponseHandler() {
+            ProgressDialog pd;
+            @Override
+            public void onStart() {
+                super.onStart();
+                pd = ProgressDialog.show(mContext, null,
+                        "正在申请免单...", true, true,
+                        new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(DialogInterface dialog) {
+                                sendCancelMessage();
+                            }
+                        });
+                pd.setCanceledOnTouchOutside(false);
+            }
+
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String jsonString = new String(responseBody);
                 Log.d("free",jsonString);
                 try {
                     JSONObject jsonObject = new JSONObject(jsonString);
-                    String data = jsonObject.optString("data");
-                    if (!TextUtils.isEmpty(data)) {
-                        switch (data){
+                    JSONObject jsonObject1 = jsonObject.optJSONObject("datas");
+                    String status = jsonObject1.optString("status");
+                    String message = jsonObject1.optString("message");
+                    if (!TextUtils.isEmpty(status)) {
+                        switch (status){
                             case "0":       // 不符合免单申请要求
-                                break;
                             case "1":    // 免单申请提交成功，等待审核
-                                break;
                             case "2":       // 免单申请提交失败，请检查网络
-                                break;
                             case "-1":      // 非万能居超市不支持免单
+                                showPayResultSuccess(message);
                                 break;
                             case "-2":      // 请确认订单信息以后提交申请
 
                                 break;
                             case "-3":      // 参数提交失败
+
                                 break;
                         }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+
                 }
             }
-
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-
+                ToastUtils.showMessage(mContext,"请检查网络");
+            }
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                pd.dismiss();
             }
         });
     }
@@ -368,4 +453,23 @@ public class Order_CellAdapter extends CommonAdapter<Order_listBean> {
         return sf.format(d);
     }
 
+    /**
+     * 支付成功的弹框
+     */
+    private void showPayResultSuccess(final String message) {
+
+        View viewPop = LayoutInflater.from(mContext).inflate(R.layout.popup_pay_succes, null);
+        ((TextView)viewPop.findViewById(R.id.pay_result)).setText(message);
+        mMyPopupWindow.showPopupWindowFronCenter((OrderActivity)mContext, viewPop);
+        viewPop.findViewById(R.id.tv_pay_know).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View arg0) {
+                        mMyPopupWindow.cancel();
+                        Message msg = Message.obtain(handler);
+                        msg.what = 1;
+                        handler.sendMessage(msg);
+                    }
+                });
+    }
 }
