@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.v4.app.FragmentTabHost;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,13 +58,14 @@ public class MainTabActivity extends BaseFragmentActivity {
             Fragment_Categroy.class,
             Fragment_Cart.class, Fragment_My.class};
 
+
     // 定义数组来存放按钮图片
     private int mImageViewArray[] = {R.drawable.tab_home_btn,
             R.drawable.tab_message_btn,
             R.drawable.tab_selfinfo_btn, R.drawable.tab_more_btn};
 
     // Tab选项卡的文字
-    private String mTextviewArray[] = {"首页", "分类", "购物车", "我"};
+    private String mTextviewArray[] = {"首页", "分类","购物车", "我"};
     // IM socketIOWebView
     private WebView socketIOWebView;
     private NetworkStateService mNetworkStateService;
@@ -86,6 +88,15 @@ public class MainTabActivity extends BaseFragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_tab_layout);
+
+        Intent intent = getIntent();
+        String type = intent.getStringExtra("type");
+        if(TextUtils.equals("1",type)){
+            Intent intent1 = new Intent(this,OrderActivity.class);
+            intent1.putExtra("filter","");
+            startActivity(intent1);
+        }
+
         // 初始化双击退出助手
         mDoubleClickExitHelper = new DoubleClickExitHelper(this);
         // 初始化网络状态监听服务

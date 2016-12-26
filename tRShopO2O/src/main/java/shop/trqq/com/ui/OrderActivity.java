@@ -203,7 +203,6 @@ public class OrderActivity extends BaseActivity implements OrderAdapter.onClickA
                     JSONObject jsonObject = new JSONObject(jsonString)
                             .getJSONObject("datas");
                     try {
-
                         String errStr = jsonObject.getString("error");
                         if (errStr != null) {
                             ToastUtils.showMessage(mContext, errStr);

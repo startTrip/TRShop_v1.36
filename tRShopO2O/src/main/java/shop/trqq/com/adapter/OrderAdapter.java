@@ -25,7 +25,6 @@ import shop.trqq.com.R;
 import shop.trqq.com.UserManager;
 import shop.trqq.com.bean.OrderGroupHomeListBean;
 import shop.trqq.com.ui.Base.UIHelper;
-import shop.trqq.com.ui.OrderActivity;
 import shop.trqq.com.util.HttpUtil;
 import shop.trqq.com.util.ToastUtils;
 import shop.trqq.com.util.YkLog;
@@ -193,7 +192,6 @@ public class OrderAdapter extends CommonAdapter<OrderGroupHomeListBean> {
                                                                     pay_sn,
                                                                     pay_amount,
                                                                     "taifubao");
-                                                            ((OrderActivity)mContext).overridePendingTransition(R.anim.push_right_in,R.anim.push_left_out);
                                                             break;
 
                                                         // ï¿½ï¿½Ñ»ï¿½ï¿½
@@ -203,7 +201,6 @@ public class OrderAdapter extends CommonAdapter<OrderGroupHomeListBean> {
                                                                     pay_sn,
                                                                     pay_amount,
                                                                     "consumepay");
-                                                            ((OrderActivity)mContext).overridePendingTransition(R.anim.push_right_in,R.anim.push_left_out);
                                                             break;
                                                         case 2:
                                                             // ï¿½ï¿½Æ·ï¿½ï¿½ï¿?
@@ -212,7 +209,6 @@ public class OrderAdapter extends CommonAdapter<OrderGroupHomeListBean> {
                                                                     pay_sn,
                                                                     pay_amount,
                                                                     "productpay");
-                                                            ((OrderActivity)mContext).overridePendingTransition(R.anim.push_right_in,R.anim.push_left_out);
                                                             break;
                                                         case 3:
                                                             // ï¿½ï¿½Í¨ï¿½ï¿½ï¿?
@@ -221,7 +217,6 @@ public class OrderAdapter extends CommonAdapter<OrderGroupHomeListBean> {
                                                                     pay_sn,
                                                                     pay_amount,
                                                                     "tyongpay");
-                                                            ((OrderActivity)mContext).overridePendingTransition(R.anim.push_right_in,R.anim.push_left_out);
                                                             break;
 //                                                        case 4:
 //                                                            Intent intent = new Intent(mContext,BinderCardActivity.class);

@@ -83,6 +83,7 @@ public class AddressFromMapActivity extends AppCompatActivity implements BDLocat
     private TextView mDistance;
     private boolean mHasLatlng;
     private LatLng mMyLatlng;
+    private String mFrom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +115,7 @@ public class AddressFromMapActivity extends AppCompatActivity implements BDLocat
         mContext = AddressFromMapActivity.this;
 
         Intent intent = getIntent();
+        mFrom = intent.getStringExtra("from");
         // 用户是否手动选择了地址
         mHasSelected = intent.getBooleanExtra("hasSelected", false);
         mArea = intent.getStringExtra("area");
@@ -308,7 +310,10 @@ public class AddressFromMapActivity extends AppCompatActivity implements BDLocat
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext,AddressSearchActivity.class);
-                if (mCity != null) {
+                if (mFrom != null) {
+                    intent.putExtra("from",mFrom);
+                }
+                if (mCity != null) {        // 城市
                     intent.putExtra("city",mCity);
                     intent.putExtra("center",mCenter);
                 }

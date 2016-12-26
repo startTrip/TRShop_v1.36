@@ -19,7 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.flyco.systembar.SystemBarHelper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -175,8 +174,8 @@ public class Fragment_Home extends Fragment {
         });
         LinearLayout tLinearLayout=(LinearLayout) rootView
                 .findViewById(R.id.header_relativelayout);
-        SystemBarHelper.immersiveStatusBar(getActivity(),0);
-        SystemBarHelper.setHeightAndPadding(getActivity(), tLinearLayout);
+//        SystemBarHelper.immersiveStatusBar(getActivity(),0);
+//        SystemBarHelper.setHeightAndPadding(getActivity(), tLinearLayout);
     }
 
     @Override

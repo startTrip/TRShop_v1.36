@@ -21,7 +21,6 @@ public class GoCartGoods {
      * sum : 213.30
      */
 
-
     private DatasBean datas;
 
     public int getCode() {

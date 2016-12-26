@@ -96,10 +96,7 @@ public class TaiPayment_wapActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                if(btIsUse){      // 防止多次点击
-                    btIsUse = false;
-                    loadOnlineTaiPay();
-                }
+                loadOnlineTaiPay();
             }
         });
         /*
@@ -111,14 +108,14 @@ public class TaiPayment_wapActivity extends BaseActivity {
 		 * webView
 		 * .loadUrl("http://shop.trqq.com/wap/tmpl/product_info.html?goods_id=244"
 		 * );
-		 * 
+		 *
 		 * webSettings.setJavaScriptEnabled(true); // 2) 第二个坎： 有物 //
 		 * 在运行脚本前，要有document对象，至少得load一个空白页 webView.loadData("", "text/html",
 		 * "UTF-8");
-		 * 
+		 *
 		 * webView.setWebViewClient(new MyWebViewClient() { //
 		 * 这个方法在用户试图点开页面上的某个链接时被调用 自动跳转
-		 * 
+		 *
 		 * @Override public boolean shouldOverrideUrlLoading(WebView view,
 		 * String url) { if (url != null) { // 如果想继续加载目标页面则调用下面的语句
 		 * view.loadUrl(url); // 如果不想那url就是目标网址，如果想获取目标网页的内容那你可以用HTTP的API把网页扒下来。
@@ -221,9 +218,9 @@ public class TaiPayment_wapActivity extends BaseActivity {
                     public void onSuccess(int statusCode, Header[] headers,
                                           byte[] responseBody) {
                         String msgString = new String(responseBody);
-                        YkLog.t("URL_ORDER_TAIPAYMENT_old：", msgString);
+                        YkLog.e("URL_ORDER_TAIPAYMENT_old：", msgString);
                         msgString = msgString.replaceAll("\\s*|\t|\r|\n", "");
-                        YkLog.t("URL_ORDER_TAIPAYMENT：", msgString);
+                        YkLog.e("URL_ORDER_TAIPAYMENT：", msgString);
                         int msg;
                         try {
                             msg = Integer.parseInt(msgString);

@@ -304,6 +304,7 @@ public class Address_newActivity extends BaseActivity {
                 Intent intent = new Intent(mContext,AddressFromMapActivity.class);
                 String area = add_address.getText().toString();
                 String location = mLocation.getText().toString();
+                intent.putExtra("from","new");
                 if(!TextUtils.equals("所在地区",area)){   // 如果手动选了地址
                     intent.putExtra("area",area);
                     intent.putExtra("hasSelected",true);
@@ -346,13 +347,13 @@ public class Address_newActivity extends BaseActivity {
                         // 得到从 地图上选择的 地图的 省和市的id
                         loadAddressId(city,district);
                     }
-
                 }
             }
         }
     }
 
     private void loadAddressId(String city, String district) {
+
         RequestParams requestParams = new RequestParams();
         String key = UserManager.getUserInfo().getKey();
         requestParams.add("key",key);

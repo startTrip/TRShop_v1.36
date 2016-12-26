@@ -28,6 +28,7 @@ import java.util.List;
 
 import shop.trqq.com.R;
 import shop.trqq.com.supermarket.adapters.AddressListAdapter;
+import shop.trqq.com.ui.Address_editeActivity;
 import shop.trqq.com.ui.Address_newActivity;
 
 public class AddressSearchActivity extends AppCompatActivity implements OnGetSuggestionResultListener {
@@ -42,6 +43,7 @@ public class AddressSearchActivity extends AppCompatActivity implements OnGetSug
     private Context mContext;
     private AddressListAdapter mAddressListAdapter;
     private ImageView mBack;
+    private String mFrom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +70,7 @@ public class AddressSearchActivity extends AppCompatActivity implements OnGetSug
         mContext = AddressSearchActivity.this;
         Intent intent = getIntent();
         mCity = intent.getStringExtra("city");
+        mFrom = intent.getStringExtra("from");
 
         mBack = (ImageView) findViewById(R.id.title_back);
 
@@ -88,9 +91,15 @@ public class AddressSearchActivity extends AppCompatActivity implements OnGetSug
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(mContext,Address_newActivity.class);
-                intent.putExtra("address",mSearchData.get(i));
-                startActivity(intent);
+                if(TextUtils.equals("new",mFrom)){
+                    Intent intent = new Intent(mContext,Address_newActivity.class);
+                    intent.putExtra("address",mSearchData.get(i));
+                    startActivity(intent);
+                }else if (TextUtils.equals("edite",mFrom)){
+                    Intent intent = new Intent(mContext, Address_editeActivity.class);
+                    intent.putExtra("address",mSearchData.get(i));
+                    startActivity(intent);
+                }
             }
         });
 

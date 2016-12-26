@@ -209,7 +209,8 @@
             />
         <!-- 编辑地址界面 -->
         <activity
-            android:name=".ui.address_editeActivity"
+            android:name=".ui.Address_editeActivity"
+            android:launchMode="singleTask"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
             />
@@ -669,7 +670,7 @@
 
         <!-- User defined.  For test only  用户自定义的广播接收器-->
         <receiver
-            android:name="com.jpush.MyReceiver"
+            android:name="com.jpush.JPushReceiver"
             android:exported="false"
             android:enabled="true">
             <intent-filter>

@@ -205,3 +205,14 @@
 
 -keep class shop.trqq.com.supermarket.bean.** { *; }
 -keep class shop.trqq.com.supermarket.config.** { *; }
+
+# 极光推送混淆
+-dontwarn cn.jpush.**
+-keep class cn.jpush.** { *; }
+
+-dontwarn cn.jiguang.**
+-keep class cn.jiguang.** { *; }
+
+-dontwarn com.google.**
+-keep class com.google.gson.** {*;}
+-keep class com.google.protobuf.** {*;}

@@ -7,8 +7,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,7 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.flyco.systembar.SystemBarHelper;
+import com.jpush.ExampleUtil;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -30,9 +32,12 @@ import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
 
 import java.util.List;
+import java.util.Set;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
 import de.greenrobot.event.EventBus;
 import shop.trqq.com.AppConfig;
 import shop.trqq.com.AppContext;
@@ -50,6 +55,7 @@ import shop.trqq.com.widget.BadgeView;
 
 public class Fragment_My extends Fragment implements OnClickListener,SwipeRefreshLayout.OnRefreshListener {
 
+    private static final String TAG = Fragment_My.class.getSimpleName();
     private View rootView;// 缓存Fragment view
     private Context mContext;
     private Button login;
@@ -103,7 +109,7 @@ public class Fragment_My extends Fragment implements OnClickListener,SwipeRefres
     //@Bind(R.id.userIcon_imageView)
     //CustomShapeImageView mUserIcon;
 
-    // private TextView Daifukuan,Daishouhuo,Daipingjia; //代付款，待收货，待评价
+    // private TextView Daifukuan,Daishouhuo,Daipingjia; //锟斤拷睿拷锟斤拷栈锟斤拷锟斤拷锟斤拷锟斤拷锟?
 
 
     @Override
@@ -198,7 +204,7 @@ public class Fragment_My extends Fragment implements OnClickListener,SwipeRefres
         mVoucherLayout.setOnClickListener(this);
         mStoreLayout.setOnClickListener(this);
         imchat.setOnClickListener(this);
-        SystemBarHelper.immersiveStatusBar(getActivity(),0);
+//        SystemBarHelper.immersiveStatusBar(getActivity(),0);
         //mUserIcon.setOnClickListener(this);
        /* }
         // 缓存的rootView需要判断是否已经被加过parent，如果有parent需要从parent删除，要不然会发生这个rootview已经有parent的错误。
@@ -217,6 +223,7 @@ public class Fragment_My extends Fragment implements OnClickListener,SwipeRefres
         if (UserManager.isLogin()) {
             // 获取网络上信息
             loadOnlineMydata();
+
             // 设置登陆后界面
             mNicknameTextView.setText(UserManager.getUserInfo().getNickname());
             Logoff = (TextView) rootView.findViewById(R.id.item_logoff_text);
@@ -254,7 +261,65 @@ public class Fragment_My extends Fragment implements OnClickListener,SwipeRefres
         // YkLog.t("msgnum", num+"");
         setMsgBadge(num);
         super.onResume();
+        Log.d("username","onresume");
+        IntentFilter intentFilter = new IntentFilter("alias");
+        getActivity().registerReceiver(mBroadcastReceive,intentFilter);
     }
+
+    private static final int MSG_SET_ALIAS = 1001;
+
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(android.os.Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case MSG_SET_ALIAS:
+                    Log.d(TAG, "Set alias in handler.");
+                    JPushInterface.setAliasAndTags(mContext.getApplicationContext(), (String) msg.obj, null, mAliasCallback);
+                    break;
+                default:
+                    Log.i(TAG, "Unhandled msg - " + msg.what);
+            }
+        }
+    };
+
+    private final TagAliasCallback mAliasCallback = new TagAliasCallback() {
+
+        @Override
+        public void gotResult(int code, String alias, Set<String> tags) {
+            String logs;
+            switch (code) {
+                case 0:
+                    logs = "Set tag and alias success";
+                    Log.i(TAG, logs);
+                    break;
+
+                case 6002:
+                    logs = "Failed to set alias and tags due to timeout. Try again after 60s.";
+                    Log.i(TAG, logs);
+                    if (ExampleUtil.isConnected(mContext.getApplicationContext())) {
+                        mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_SET_ALIAS, alias), 1000 * 60);
+                    } else {
+                        Log.i(TAG, "No network");
+                    }
+                    break;
+
+                default:
+                    logs = "Failed with errorCode = " + code;
+            }
+        }
+    };
+
+    // 广播接收者去接收 设置别名的消息
+    private BroadcastReceiver mBroadcastReceive = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String username = intent.getStringExtra("username");
+            Log.d("username",username);
+            //调用JPush API设置Alias
+            mHandler.sendMessage(mHandler.obtainMessage(MSG_SET_ALIAS, username));
+        }
+    };
 
     private void setMsgBadge(int num) {
         if (num > 0) {
@@ -358,6 +423,7 @@ public class Fragment_My extends Fragment implements OnClickListener,SwipeRefres
                     public void onFinish() {
                         // TODO Auto-generated method stub
                         super.onFinish();
+                        // 下载泰付宝的信息;
                         Taifubao();
                     }
 
@@ -577,8 +643,8 @@ public class Fragment_My extends Fragment implements OnClickListener,SwipeRefres
                 }
                 break;
 		/*
-		 * case R.id.daifukuan: UIHelper.showOrder(getActivity(),"待付款"); break;
-		 * case R.id.daishouhuo: UIHelper.showOrder(getActivity(),"待收货"); break;
+		 * case R.id.daifukuan: UIHelper.showOrder(getActivity(),"锟斤拷锟?); break;
+		 * case R.id.daishouhuo: UIHelper.showOrder(getActivity(),"锟斤拷锟秸伙拷"); break;
 		 */
             case R.id.vr_order_layout:// 虚拟订单
                 if (UserManager.isLogin()) {

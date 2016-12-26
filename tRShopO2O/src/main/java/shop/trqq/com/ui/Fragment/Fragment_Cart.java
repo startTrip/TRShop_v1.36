@@ -20,7 +20,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.flyco.systembar.SystemBarHelper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -61,7 +60,7 @@ public class Fragment_Cart extends Fragment implements OnItemClickListener {
     private TextView checkOut;
     private ArrayList<CartInfoBean> cartInfoList;
     private TextView Sum;
-    private float SumNumber;
+    private float SumNumber = 0f;
     private ArrayList<String> cartIDList = new ArrayList<String>();
     private ArrayList<CartInfoBean> mCartData;
 
@@ -85,6 +84,7 @@ public class Fragment_Cart extends Fragment implements OnItemClickListener {
         // TODO Auto-generated method stub
         super.onResume();
         cartInfoList = new ArrayList<CartInfoBean>();
+        SumNumber = 0.0f;
         loadOnlineCartListData();
     }
 
@@ -116,8 +116,8 @@ public class Fragment_Cart extends Fragment implements OnItemClickListener {
         mHeadTitleTextView.setText("购物车");
         LinearLayout tLinearLayout=(LinearLayout) rootView
                 .findViewById(R.id.header_relativelayout);
-        SystemBarHelper.immersiveStatusBar(getActivity(),0);
-        SystemBarHelper.setHeightAndPadding(getActivity(), tLinearLayout);
+//        SystemBarHelper.immersiveStatusBar(getActivity(),0);
+//        SystemBarHelper.setHeightAndPadding(getActivity(), tLinearLayout);
     }
 
     private void initViews() {
@@ -198,10 +198,14 @@ public class Fragment_Cart extends Fragment implements OnItemClickListener {
                         for (int i = 0; i < mCartData.size(); i++) {
                             // 如果是万能居超市 去掉，必须到万能居超市购物车结算
                             if(!TextUtils.equals(mCartData.get(i).getStore_id(),"126")){
-                                cartInfoList.add(mCartData.get(i));
+                                CartInfoBean cartInfoBean = mCartData.get(i);
+                                cartInfoList.add(cartInfoBean);
+                                String goods_price = cartInfoBean.getGoods_price();
+                                SumNumber=SumNumber+Float.parseFloat(goods_price);
                             }
                         }
                     }
+                    Sum.setText("总计：" + SumNumber + "元");
                     YkLog.e(TAG, cartInfoList.size()+"");
                     cartIDList.clear();
                     System.err.println(cart_list);
@@ -218,9 +222,8 @@ public class Fragment_Cart extends Fragment implements OnItemClickListener {
                     }
                     listCartAdapter.setData(cartInfoList);
                     listCartAdapter.notifyDataSetChanged();
-                    SumNumber = Float.parseFloat(jsonObjects.getString("sum"));
                     // System.err.println(SumNumber);
-                    Sum.setText("总计：" + SumNumber + "元");
+
                     for (int i = 0; i < cartInfoList.size(); i++) {
                         cartIDList.add("," + cartInfoList.get(i).getCart_id()
                                 + "|" + cartInfoList.get(i).getGoods_num());

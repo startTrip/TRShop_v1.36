@@ -15,6 +15,26 @@ public class AddressBean extends Entity {
     private String area_name;
     private String longitude;
     private String latitude;
+    private String garden;
+
+    @Override
+    public String toString() {
+        return "AddressBean{" +
+                "address='" + address + '\'' +
+                ", address_id='" + address_id + '\'' +
+                ", area_id='" + area_id + '\'' +
+                ", area_info='" + area_info + '\'' +
+                ", city_id='" + city_id + '\'' +
+                ", member_id='" + member_id + '\'' +
+                ", mob_phone='" + mob_phone + '\'' +
+                ", tel_phone='" + tel_phone + '\'' +
+                ", true_name='" + true_name + '\'' +
+                ", area_name='" + area_name + '\'' +
+                ", longitude='" + longitude + '\'' +
+                ", latitude='" + latitude + '\'' +
+                ", garden='" + garden + '\'' +
+                '}';
+    }
 
     public String getLatitude() {
         return latitude;
@@ -112,4 +132,11 @@ public class AddressBean extends Entity {
         this.true_name = true_name;
     }
 
+    public String getGarden() {
+        return garden;
+    }
+
+    public void setGarden(String garden) {
+        this.garden = garden;
+    }
 }

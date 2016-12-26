@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -106,6 +107,7 @@ public class address_listActivity extends BaseActivity {
                 }
             }
         });
+
         address_add.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -113,8 +115,6 @@ public class address_listActivity extends BaseActivity {
                 UIHelper.showAddressNew(mContext);
             }
         });
-
-
     }
 
     @Override
@@ -194,8 +194,7 @@ public class address_listActivity extends BaseActivity {
             public void onFailure(int statusCode, Header[] headers,
                                   byte[] responseBody, Throwable error) {
                 try {
-                    Drawable errorDrawable = getResources().getDrawable(
-                            R.drawable.wifi_off);
+                    Drawable errorDrawable = ContextCompat.getDrawable(mContext, R.drawable.wifi_off);
                     progressActivity.showError(errorDrawable, "网络开了小差",
                             "连接不上网络，请确认一下您的网络开关，或者服务器网络正忙，请稍后再试",
                             "重新连接",

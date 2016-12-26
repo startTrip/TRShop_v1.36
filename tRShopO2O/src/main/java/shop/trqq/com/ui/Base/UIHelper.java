@@ -29,6 +29,7 @@ import shop.trqq.com.im.ui.MainIMActivity;
 import shop.trqq.com.supermarket.MarketMainActivity;
 import shop.trqq.com.supermarket.activitys.MarketGoCartActivity;
 import shop.trqq.com.ui.AboutActivity;
+import shop.trqq.com.ui.Address_newActivity;
 import shop.trqq.com.ui.CartActivity;
 import shop.trqq.com.ui.CheckOutActivity;
 import shop.trqq.com.ui.FavoritesListActivity;
@@ -54,9 +55,8 @@ import shop.trqq.com.ui.SystemMsgActivity;
 import shop.trqq.com.ui.TaiPayment_wapActivity;
 import shop.trqq.com.ui.Voucher_ListActivity;
 import shop.trqq.com.ui.Vr_buy1Activity;
-import shop.trqq.com.ui.address_editeActivity;
+import shop.trqq.com.ui.Address_editeActivity;
 import shop.trqq.com.ui.address_listActivity;
-import shop.trqq.com.ui.Address_newActivity;
 import shop.trqq.com.ui.invoice_listActivity;
 import shop.trqq.com.ui.product_infoActivity;
 import shop.trqq.com.util.HttpUtil;
@@ -213,7 +213,7 @@ public class UIHelper {
      */
     public static void showAddressEdite(Context context, AddressBean bean) {
         YkLog.i(TAG, "跳转到修改地址界面");
-        Intent intent = new Intent(context, address_editeActivity.class);
+        Intent intent = new Intent(context, Address_editeActivity.class);
         intent.putExtra("AddressBean", bean);
         context.startActivity(intent);
     }
@@ -341,6 +341,7 @@ public class UIHelper {
         intent.putExtra("pay_amount", pay_amount);
         intent.putExtra("payment_code", payment_code);
         context.startActivity(intent);
+        ((OrderActivity)context).overridePendingTransition(R.anim.push_right_in,R.anim.push_left_out);
     }
 
     // 物流信息
@@ -533,8 +534,15 @@ public class UIHelper {
                                                 dialog.show();
                                         }
                                     } catch (Exception e) {
-                                        String userInfo = new JSONObject(
-                                                jsonStr).getString("datas");
+                                        JSONObject jsonObject1 = new JSONObject(
+                                                jsonStr);
+                                        String userInfo = jsonObject1.getString("datas");
+                                        String username = jsonObject.getString("username");
+                                        //发广播去设置 jpush 用户的别名
+                                        Intent intent = new Intent("alias");
+                                        intent.putExtra("username",username);
+                                        context.sendBroadcast(intent);
+
                                         YkLog.t("Login", jsonStr);
                                         // 将数据插入本地配置，成功就跳转到主界面
                                         if (UserManager.jsonToBean(context,
@@ -601,6 +609,5 @@ public class UIHelper {
             }
         });
     }
-
 
 }

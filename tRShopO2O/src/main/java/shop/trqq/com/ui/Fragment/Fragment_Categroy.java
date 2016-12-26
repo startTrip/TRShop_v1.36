@@ -20,7 +20,6 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.flyco.systembar.SystemBarHelper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -125,8 +124,8 @@ public class Fragment_Categroy extends Fragment {
         });
         LinearLayout tLinearLayout=(LinearLayout) rootView
                 .findViewById(R.id.header_relativelayout);
-        SystemBarHelper.immersiveStatusBar(getActivity(),0);
-        SystemBarHelper.setHeightAndPadding(getActivity(), tLinearLayout);
+//        SystemBarHelper.immersiveStatusBar(getActivity(),0);
+//        SystemBarHelper.setHeightAndPadding(getActivity(), tLinearLayout);
     }
 
     @Override

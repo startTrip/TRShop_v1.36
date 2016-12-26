@@ -288,7 +288,7 @@ public class MarketGoCartFragment extends Fragment implements View.OnClickListen
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
 
-                Drawable errorDrawable = getActivity().getResources().getDrawable(R.drawable.wifi_off);
+                Drawable errorDrawable = ContextCompat.getDrawable(getActivity(), R.drawable.wifi_off);
                 mProgressActivity.showError(errorDrawable,"网络开了小差",
                         "连接不上网络，请确认一下您的网络开关，或者服务器网络正忙，请稍后再试","重新连接",
                         new View.OnClickListener() {
