@@ -9,14 +9,22 @@
         android:layout_alignParentTop="true"
         android:id="@+id/title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:background="@color/white"
         >
-
+        <ImageView
+            android:id="@+id/checkout_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:visibility="gone"
+            android:src="@mipmap/tm_actionbar_btn_back"
+            />
         <TextView
             android:id="@+id/cart_title"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="match_parent"
             android:layout_alignParentTop="true"
             android:gravity="center"
             android:text="万能居超市购物车"
@@ -26,7 +34,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:layout_below="@id/cart_title"
+            android:layout_alignParentBottom="true"
             android:background="@color/gray_1"
             />
 
@@ -122,7 +130,6 @@
             android:scrollbars="none"
             >
             <RelativeLayout
-
                 android:background="@color/background"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

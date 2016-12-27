@@ -286,9 +286,14 @@ public class product_detail_Fragment extends Fragment implements OnClickListener
                     try {
                         String errStr = jsonObject.getString("error");
                         ToastUtils.showMessage(mContext, errStr);
+
                         if (!TextUtils.isEmpty(errStr)) {
+                            if(TextUtils.equals("商品不存在",errStr)){
+                                getActivity().finish();          // 商品不存在销毁activity
+                            }else {
                                 UIHelper.showPersonalActivity(getActivity());
                                 getActivity().finish();
+                            }
                         }
                     } catch (Exception erre) {
                         String gooddata = jsonObject.optString("goods_info");

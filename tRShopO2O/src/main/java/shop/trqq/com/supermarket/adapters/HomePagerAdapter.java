@@ -6,7 +6,6 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +17,7 @@ import java.util.ArrayList;
 
 import shop.trqq.com.R;
 import shop.trqq.com.bean.Mb_SlidersBean;
-import shop.trqq.com.supermarket.bean.HomeTopImage;
 import shop.trqq.com.ui.Base.UIHelper;
-import shop.trqq.com.util.ToastUtils;
 import shop.trqq.com.util.YkLog;
 
 /**
@@ -104,7 +101,8 @@ public class HomePagerAdapter extends PagerAdapter implements ViewPager.OnPageCh
             if (!TextUtils.isEmpty(img_url)) {
 
                 Picasso.with(mContext).load(img_url)
-                        .config(Bitmap.Config.RGB_565).resize(mWidthPixels, (int) (180*mDensity)).placeholder(R.mipmap.empty_picture)
+                        .config(Bitmap.Config.RGB_565).resize(mWidthPixels, (int) (180*mDensity))
+                        .placeholder(R.mipmap.empty_picture)
                         .into(imageView);
             }
 
@@ -149,7 +147,6 @@ public class HomePagerAdapter extends PagerAdapter implements ViewPager.OnPageCh
                     clickimg(type,link);
                 }
             });
-
             container.addView(imageView);
         }
         return imageView;

@@ -12,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -73,6 +74,7 @@ public class OrderActivity extends BaseActivity implements OrderAdapter.onClickA
 
     private boolean isResume = true;
     private MyPopupWindow mMyPopup;
+    private ImageView mImageBack;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -94,6 +96,13 @@ public class OrderActivity extends BaseActivity implements OrderAdapter.onClickA
 
     private void setListener() {
         orderAdapter.setOnClickAliPay(this);
+
+        mImageBack.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     @Override
@@ -125,6 +134,10 @@ public class OrderActivity extends BaseActivity implements OrderAdapter.onClickA
      * 初始化标题栏视图
      */
     private void initTitleBarView() {
+
+        mImageBack = (ImageView) findViewById(R.id.title_back);
+        mImageBack.setVisibility(View.VISIBLE);
+
         mHeadTitleTextView = (TextView) findViewById(R.id.head_title_textView);
         mHeadTitleTextView.setText(filter + "订单");
     }

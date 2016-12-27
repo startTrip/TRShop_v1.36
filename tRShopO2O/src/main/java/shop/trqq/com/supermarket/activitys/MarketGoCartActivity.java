@@ -16,7 +16,11 @@ public class MarketGoCartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_market_go_cart2);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.add(R.id.gocart_fragment_container,new MarketGoCartFragment());
+        MarketGoCartFragment fragment = new MarketGoCartFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("cart","1");
+        fragment.setArguments(bundle);
+        transaction.add(R.id.gocart_fragment_container, fragment);
         transaction.commit();
     }
 }

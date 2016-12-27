@@ -18,7 +18,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.flyco.systembar.SystemBarHelper;
 import com.google.gson.Gson;
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.InitListener;
@@ -226,8 +225,8 @@ public class Fragment_Search extends Fragment {
         });
         LinearLayout tLinearLayout=(LinearLayout) rootView
                 .findViewById(R.id.header_relativelayout);
-        SystemBarHelper.immersiveStatusBar(getActivity(),0);
-        SystemBarHelper.setHeightAndPadding(getActivity(), tLinearLayout);
+//        SystemBarHelper.immersiveStatusBar(getActivity(),0);
+//        SystemBarHelper.setHeightAndPadding(getActivity(), tLinearLayout);
     }
 
     /**

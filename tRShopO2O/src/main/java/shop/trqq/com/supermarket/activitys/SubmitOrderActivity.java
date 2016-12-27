@@ -224,6 +224,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnCli
 
     private void initData() {
 
+
         mContext = SubmitOrderActivity.this;
 
         Intent intent = getIntent();

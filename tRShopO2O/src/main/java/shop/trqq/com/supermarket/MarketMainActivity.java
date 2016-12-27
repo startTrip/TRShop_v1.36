@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.RadioGroup;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class MarketMainActivity extends AppCompatActivity implements RadioGroup.
 
     private RadioGroup mRadioGroup;
     private ArrayList<Fragment> mList;
+    private int currntTab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +30,7 @@ public class MarketMainActivity extends AppCompatActivity implements RadioGroup.
         // 初始化视图
         initView();
         // 初始化数据
-        initData();
+        initData(savedInstanceState);
 
         // 设置监听器
         setListener();
@@ -39,28 +41,69 @@ public class MarketMainActivity extends AppCompatActivity implements RadioGroup.
         mRadioGroup.setOnCheckedChangeListener(this);
     }
 
-    private void initData() {
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("CURRENTTAB", currntTab);
+    }
 
-        mList = new ArrayList<>();
-
-        mList.add(new MarketHomeFragment());
-        mList.add(new MarketClassifyFragment());
-        mList.add(new MarketGoCartFragment());
-        mList.add(new MarketLbsFragment());
+    private void initData(Bundle savedInstanceState) {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
+        // 第一次初始化 将Fragment 添加到 管理器中
+        mList = new ArrayList<>();
+        if(savedInstanceState==null){
 
-        // 将4个 Fragment添加到容器中,并隐藏
-        for (Fragment fragment : mList) {
-            transaction.add(R.id.main_container,fragment);
-            transaction.hide(fragment);
+            mList.add(new MarketHomeFragment());
+            mList.add(new MarketClassifyFragment());
+            mList.add(new MarketGoCartFragment());
+            mList.add(new MarketLbsFragment());
+
+            // 将4个 Fragment添加到容器中,并隐藏
+            for (int i = 0; i < mList.size(); i++) {
+                transaction.add(R.id.main_container,mList.get(i),i+"");
+                transaction.hide(mList.get(i));
+            }
+            currntTab = 0;
+            transaction.show(mList.get(0));
+            setCurrentTab(0);
+        }else {
+            for (int i = 0; i < 4; i++) {
+                Fragment fragment = fragmentManager.findFragmentByTag(i + "");
+                mList.add(fragment);
+                transaction.hide(fragment);
+            }
+            // 得到保存的tab，切换到其中去
+            int index = savedInstanceState.getInt("CURRENTTAB");
+            Fragment fragment = fragmentManager.findFragmentByTag(index + "");
+            transaction.show(fragment);
+            setCurrentTab(index);
+
+            Log.d("market","mlist|"+mList.size()+"...."+"index"+index);
         }
-
-        transaction.show(mList.get(0));
-        mRadioGroup.check(R.id.main_tab_home);
         transaction.commit();
+    }
+
+    // 设置当前的Tab
+    private void setCurrentTab(int index) {
+        switch (index) {
+            case 0:
+                mRadioGroup.check(R.id.main_tab_home);
+                break;
+            case 1:
+                mRadioGroup.check(R.id.main_tab_classify);
+                break;
+            case 2:
+                mRadioGroup.check(R.id.main_tab_gocart);
+                break;
+            case 3:
+                mRadioGroup.check(R.id.main_tab_personal);
+                break;
+            default:
+                break;
+        }
     }
 
     private void initView() {
@@ -87,7 +130,9 @@ public class MarketMainActivity extends AppCompatActivity implements RadioGroup.
                 index = 3;
                 break;
         }
-
+        // 记录当前的 tab;
+        currntTab = index;
+        Log.d("market","index"+index);
         // 切换Fragment
         switchFragment(index);
     }
@@ -99,7 +144,7 @@ public class MarketMainActivity extends AppCompatActivity implements RadioGroup.
     private void switchFragment(int index) {
 
         int size = mList.size();
-
+        Log.d("market","mlist|"+mList.size());
         if(index>=0 && index<size){
             FragmentManager fragmentManager = getSupportFragmentManager();
 

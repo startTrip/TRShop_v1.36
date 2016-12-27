@@ -107,11 +107,11 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
             }
         }
     };
+    private Drawable mErrorDrawable;
 
     public MarketHomeFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -133,8 +133,6 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
         return view;
     }
 
-
-
     private void initView(View view) {
 
         mSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.home_refresh_layout);
@@ -155,6 +153,9 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
 
 
     private void initData() {
+
+        mErrorDrawable = ContextCompat.getDrawable(getActivity(), R.drawable.wifi_off);
+
         Intent intent = new Intent(getActivity().getApplicationContext(), NetworkStateService.class);
         getActivity().getApplicationContext().bindService(intent, new ServiceConnection(){
             @Override
@@ -448,8 +449,7 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
     // 当加载错误时显示错误的信息
     private void setOnFailure() {
 
-        Drawable errorDrawable = ContextCompat.getDrawable(getActivity(), R.drawable.wifi_off);
-        mProgressActivity.showError(errorDrawable,"网络开了小差",
+        mProgressActivity.showError(mErrorDrawable,"网络开了小差",
                 "连接不上网络，请确认一下您的网络开关，或者服务器网络正忙，请稍后再试","重新连接",
                 new View.OnClickListener() {
                     @Override

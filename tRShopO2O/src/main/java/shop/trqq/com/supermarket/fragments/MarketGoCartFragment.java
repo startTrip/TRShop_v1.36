@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -106,6 +107,8 @@ public class MarketGoCartFragment extends Fragment implements View.OnClickListen
     private boolean mIsAllSelected;
     private StringBuilder mBuilder;
     private ArrayList<GoCartGoods.DatasBean.CartListBean> mMarketGocart;
+    private Drawable mErrorDrawable;
+    private ImageView mMback;
 
     public MarketGoCartFragment() {
         // Required empty public constructor
@@ -136,6 +139,14 @@ public class MarketGoCartFragment extends Fragment implements View.OnClickListen
     }
 
     private void setListener() {
+
+        mMback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().finish();
+            }
+        });
+
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -240,6 +251,8 @@ public class MarketGoCartFragment extends Fragment implements View.OnClickListen
     // 初始化数据
     private void initData() {
 
+        mErrorDrawable = ContextCompat.getDrawable(getActivity(), R.drawable.wifi_off);
+
         mBuilder = new StringBuilder();
         mGson = new Gson();
 
@@ -288,8 +301,7 @@ public class MarketGoCartFragment extends Fragment implements View.OnClickListen
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
 
-                Drawable errorDrawable = ContextCompat.getDrawable(getActivity(), R.drawable.wifi_off);
-                mProgressActivity.showError(errorDrawable,"网络开了小差",
+                mProgressActivity.showError(mErrorDrawable,"网络开了小差",
                         "连接不上网络，请确认一下您的网络开关，或者服务器网络正忙，请稍后再试","重新连接",
                         new View.OnClickListener() {
                             @Override
@@ -322,6 +334,11 @@ public class MarketGoCartFragment extends Fragment implements View.OnClickListen
     // 初始化视图
     private void initView(View view) {
 
+        mMback = (ImageView) view.findViewById(R.id.checkout_back);
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            mMback.setVisibility(View.VISIBLE);
+        }
         mProgressActivity = (ProgressActivity) view.findViewById(R.id.market_gocart_progress);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeLayout);

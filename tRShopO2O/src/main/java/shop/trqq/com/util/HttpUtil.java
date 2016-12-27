@@ -12,7 +12,7 @@ public class HttpUtil {
 
     // 正式的 shop.trqq.com
     // 开发环境下的 shop.wushi3.com
-    public static final String HOST = "http://shop.wushi3.com/mobile/index.php";
+    public static final String HOST = "http://shop.trqq.com/mobile/index.php";
     //public static final String HOST ="http://192.168.191.1/late_shop/mobile/index.php";
 
     // 购物卡注册和绑定接口
@@ -27,6 +27,7 @@ public class HttpUtil {
     public static final String URL_MARKET_CLASSIFY=HOST + "/mobile/index.php?act=wnj_store_goods_class&op=index&store_id=126";
 
     public static final String URL_MARKET_GOODS_LIST = HOST +"?act=wnj_show_store&op=goods_all";
+
     // 申请 免单的接口
     public static final String URL_APPLY_FREE = HOST + "?act=wnj_order_fee&op=apply_order_fee";
     // 请求地图上面 id 的接口
