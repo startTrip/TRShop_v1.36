@@ -64,7 +64,7 @@ public class HomeClassifyAdapter extends RecyclerView.Adapter<HomeClassifyAdapte
             // Ô²ÐÎÍ¼Æ¬
             Picasso.with(mContext)
                     .load(stc_img_path).resize(mWidthPixels*2/15,mWidthPixels*2/15).centerCrop()
-                    .config(Bitmap.Config.RGB_565).error(R.mipmap.empty_picture).transform(new Transformation() {
+                    .config(Bitmap.Config.RGB_565).transform(new Transformation() {
                 @Override
                 public Bitmap transform(Bitmap bitmap) {
                     Bitmap roundBitmap = ToRoundBitmap.toRoundBitmap(bitmap);

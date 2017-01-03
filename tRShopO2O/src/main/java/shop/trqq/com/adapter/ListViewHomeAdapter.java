@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -138,14 +140,27 @@ public class ListViewHomeAdapter extends MultiItemCommonAdapter<HomeBean>
     private void clickimg(String type, String data) {
         if (type.equals("url")) {
             try {
-                String a[] = data.split("goods_id=");
-                UIHelper.showGoods_Detaill(mContext, a[1]);
-            } catch (Exception e) {
-                if ("".equals(data) || "http://shop.trqq.com/".equals(data) || "http://shop.trqq.com".equals(data)) {
-//				ToastUtils.showMessage(mContext, "亲！此链接不需要跳转");	
-                } else {
-                    ToastUtils.showMessage(mContext, "跳转出错，请确认是泰润官方商品");
+                String path = URLDecoder.decode(data,"UTF-8");
+                if(path.contains("store_id=")){
+                    String[] split = path.split("store_id=");
+                    if(split[1].equals("126")){
+                        UIHelper.showMarket(mContext);
+                    }else {
+                        UIHelper.showStore(mContext,split[1]);
+                    }
+                } else if(path.contains("goods_id=")){
+                    String a[] = data.split("goods_id=");
+                    UIHelper.showGoods_Detaill(mContext, a[1]);
+                }else {
+                    if ("".equals(path) || "http://shop.trqq.com/".equals(path) || "http://shop.trqq.com".equals(path)) {
+//				ToastUtils.showMessage(mContext, "亲！此链接不需要跳转");
+                    } else {
+                        ToastUtils.showMessage(mContext, "跳转出错，请确认是泰润官方商品");
+                    }
                 }
+
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
             }
         } else if (type.equals("keyword")) {
             UIHelper.showShop(mContext, data, "", "", "");

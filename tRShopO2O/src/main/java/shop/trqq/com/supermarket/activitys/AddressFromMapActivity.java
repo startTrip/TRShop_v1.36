@@ -388,7 +388,6 @@ public class AddressFromMapActivity extends AppCompatActivity implements BDLocat
         mPoiSearch.searchNearby(poiNearbySearchOption);  // 发起附近检索请求
     }
 
-
     /*
 	 * 接受周边地理位置结果
 	 */
@@ -406,7 +405,6 @@ public class AddressFromMapActivity extends AppCompatActivity implements BDLocat
 
         // 获取POI检索结果
         if (result == null || result.error == SearchResult.ERRORNO.RESULT_NOT_FOUND) {// 没有找到检索结果
-
             return;
         }
 

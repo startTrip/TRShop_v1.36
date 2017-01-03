@@ -13,7 +13,9 @@ import org.json.JSONObject;
 import java.util.Iterator;
 
 import cn.jpush.android.api.JPushInterface;
+import shop.trqq.com.supermarket.utils.SystemUtils;
 import shop.trqq.com.ui.MainTabActivity;
+import shop.trqq.com.ui.OrderActivity;
 
 /**
  * 自定义接收器
@@ -46,13 +48,22 @@ public class JPushReceiver extends BroadcastReceiver {
 		} else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
 			Log.d(TAG, "[JPushReceiver] 用户点击打开了通知");
 			int notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
-			//先打开主界面，然后打开订单页面的Activity
-			Intent i = new Intent(context, MainTabActivity.class);
-			// 通知客户确认收货
-			i.putExtra("type","1");
-			i.putExtras(bundle);
-			i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			context.startActivity(i);
+
+			if (SystemUtils.isPackageRunning(context, "shop.trqq.com")){
+				//先打开主界面，然后打开订单页面的Activity
+				Intent i = new Intent(context, OrderActivity.class);
+				// 通知客户确认收货
+				i.putExtra("filter","");
+				i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				context.startActivity(i);
+			}else {
+				//先打开主界面，然后打开订单页面的Activity
+				Intent i = new Intent(context, MainTabActivity.class);
+				// 通知客户确认收货
+				i.putExtra("type","1");
+				i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				context.startActivity(i);
+			}
 
 			JPushInterface.clearNotificationById(context, notifactionId);
 		} else if (JPushInterface.ACTION_RICHPUSH_CALLBACK.equals(intent.getAction())) {

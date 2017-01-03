@@ -93,6 +93,7 @@ public class StoreProductActivity extends BaseActivity {
     // 首先在您的Activity中添加如下成员变量
     private final UMSocialService mController = UMServiceFactory
             .getUMSocialService("com.umeng.share");
+    private ImageView mImageBack;
     ;
 
     @Override
@@ -107,6 +108,16 @@ public class StoreProductActivity extends BaseActivity {
         newGoodsList = new ArrayList<GoodsBean>();
         mHeadTitleTextView = (TextView) findViewById(R.id.head_title_textView);
         mHeadTitleTextView.setTextSize(18);
+
+        mImageBack = (ImageView) findViewById(R.id.title_back);
+        mImageBack.setVisibility(View.VISIBLE);
+        mImageBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         initViews();
     }
 

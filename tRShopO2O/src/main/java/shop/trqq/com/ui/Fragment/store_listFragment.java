@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -71,6 +73,7 @@ public class store_listFragment extends Fragment {
     private String is_strategic_alliance;
 
     private View rootView;// 缓存Fragment view
+    private ImageView mImageBack;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -90,7 +93,7 @@ public class store_listFragment extends Fragment {
         }
         YkLog.t("store_listFragment", is_strategic_alliance + "|" + sc_id + "|" + sc_name);
         mStoreList = new ArrayList<StoreListBean>();
-        initTitleBarView();
+        initTitleBarView(rootView);
         initViews();
         return rootView;
     }
@@ -98,7 +101,15 @@ public class store_listFragment extends Fragment {
     /**
      * 初始化标题栏视图
      */
-    private void initTitleBarView() {
+    private void initTitleBarView(View rootView) {
+        mImageBack = (ImageView)rootView.findViewById(R.id.title_back);
+        mImageBack.setVisibility(View.VISIBLE);
+        mImageBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().finish();
+            }
+        });
         header_layout = (RelativeLayout) rootView
                 .findViewById(R.id.header_relativelayout);
         mHeadTitleTextView = (TextView) rootView
@@ -129,7 +140,12 @@ public class store_listFragment extends Fragment {
                     public void onItemClick(AdapterView<?> parent, View view,
                                             int position, long id) {
                         // TODO Auto-generated method stub
-                        UIHelper.showStore(appContext, mStoreList.get(position - 1).getStore_id());
+                        String store_id = mStoreList.get(position - 1).getStore_id();
+                        if(TextUtils.equals("126",store_id)){
+                            UIHelper.showMarket(getActivity());
+                        }else {
+                            UIHelper.showStore(appContext,store_id);
+                        }
                     }
                 });
         mHomePullToRefreshListView.setAdapter(mListViewStoreAdapter);
@@ -162,7 +178,7 @@ public class store_listFragment extends Fragment {
     /**
      * 加载店铺列表
      *
-     * @param information_id
+     * @param
      */
     private void loadOnlineInformationData() {
         // 加载商品列表

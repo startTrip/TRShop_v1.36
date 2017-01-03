@@ -6,6 +6,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import shop.trqq.com.R;
 import shop.trqq.com.bean.Mb_SlidersBean;
 import shop.trqq.com.ui.Base.UIHelper;
 import shop.trqq.com.util.YkLog;
@@ -84,13 +84,15 @@ public class HomePagerAdapter extends PagerAdapter implements ViewPager.OnPageCh
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
 
+        Log.d("AAA",position+"");
         ImageView imageView = mList.get(position);
 
-        if (mDataBeen.size() > 0) {
+        int size = mDataBeen.size();
+        if (size > 0) {
 
             Mb_SlidersBean dataBean;
             if (position == 0) {
-                dataBean = mDataBeen.get(mDataBeen.size() - 1);
+                dataBean = mDataBeen.get(size - 1);
             } else if (position == mList.size() - 1) {
                 dataBean = mDataBeen.get(0);
             } else {
@@ -101,8 +103,9 @@ public class HomePagerAdapter extends PagerAdapter implements ViewPager.OnPageCh
             if (!TextUtils.isEmpty(img_url)) {
 
                 Picasso.with(mContext).load(img_url)
-                        .config(Bitmap.Config.RGB_565).resize(mWidthPixels, (int) (180*mDensity))
-                        .placeholder(R.mipmap.empty_picture)
+                        .config(Bitmap.Config.RGB_565)
+                        .resize(mWidthPixels, (int) (180*mDensity))
+                        .centerInside()
                         .into(imageView);
             }
 
@@ -132,6 +135,7 @@ public class HomePagerAdapter extends PagerAdapter implements ViewPager.OnPageCh
 
             // 图片的点击事件 监听
             imageView.setOnClickListener(new View.OnClickListener() {
+
                 @Override
                 public void onClick(View v) {
                     int i = 0;
@@ -154,8 +158,13 @@ public class HomePagerAdapter extends PagerAdapter implements ViewPager.OnPageCh
 
     private void clickimg(String type, String data) {
         if (type.equals("1")) {
-//                String a[] = data.split("goods_id=");
-//                UIHelper.showGoods_Detaill(mContext, a[1]);
+            if(data.contains("goods_id=")){
+                String a[] = data.split("goods_id=");
+                UIHelper.showGoods_Detaill(mContext, a[1]);
+            }else if(data.contains("store_id=")&&data.contains("stc_id=")){
+                String[] split = data.split("stc_id=");
+                UIHelper.showMarketGoodList(mContext,"126",split[1],"");
+            }
         } else if (type.equals("2")) {
             UIHelper.showGoods_Detaill(mContext, data);
         }

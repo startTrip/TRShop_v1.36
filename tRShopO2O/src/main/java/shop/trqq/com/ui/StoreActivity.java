@@ -5,7 +5,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import shop.trqq.com.R;
@@ -26,6 +28,7 @@ public class StoreActivity extends BaseFragmentActivity {
     private String[] titles = {"ËùÓÐµÄµêÆÌ", "µêÆÌ·ÖÀà"};
     private String is_strategic_alliance;
     private TextView mHeadTitleTextView;
+    private ImageView mImageBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +39,17 @@ public class StoreActivity extends BaseFragmentActivity {
     }
 
     /**
-     * ³õÊ¼»¯±êÌâÀ¸ÊÓÍ¼
+     * ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼
      */
     private void initTitleBarView() {
+        mImageBack = (ImageView) findViewById(R.id.title_back);
+        mImageBack.setVisibility(View.VISIBLE);
+        mImageBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         mHeadTitleTextView = (TextView) findViewById(R.id.head_title_textView);
         mHeadTitleTextView.setText("µêÆÌÁÐ±í");
         if ("1".equals(is_strategic_alliance)) {

@@ -182,7 +182,8 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
         mTopIndicators = new ArrayList<>();
 
         mSwipeRefreshLayout.setColorSchemeColors(Color.parseColor("#ff552d"));
-        mSwipeRefreshLayout.setDistanceToTriggerSync(100);
+        mSwipeRefreshLayout.setDistanceToTriggerSync(200);
+
 
         mClassifyData = new ArrayList<>();
         mHomeClassifyAdapter = new HomeClassifyAdapter(getActivity(),mClassifyData);
@@ -192,11 +193,11 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
 
         mHomeNewList = new ArrayList<>();
         mHomeNewAdapter = new HomeNewAdapter(getActivity(),mHomeNewList);
-
     }
 
     private void setData() {
 
+        // ø™∆Ù¬÷≤•
         startPagerSwitch();
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 5);
@@ -228,7 +229,6 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
         getActivity().registerReceiver(mBroadcastReceive,intentFilter);
     }
 
-    // 5Áßí‰ª•ÂêéÂêØÂä®ÔºåÔø?3 ÁßíÂàáÊç¢‰∏ÄÔø?
     private void startPagerSwitch(){
         mTimer = new Timer();
         mTimer.schedule(
@@ -238,7 +238,7 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
                         pagerSwitchHandler.sendEmptyMessage(0);
                     }
                 },
-                4000, 4000);
+                5000, 4000);
     }
     // …Ë÷√handler»•∏ƒ±‰ViewPager
     private Handler pagerSwitchHandler=new Handler(){
@@ -357,7 +357,7 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
                                 .getAsJsonObject("goods_list_info");
                         JsonObject goodsstore = goodslist_info
                                 .getAsJsonObject("goods_store");
-                    // ÔøΩ√µÔøΩÔøΩ÷≤ÔøΩÕºÔøΩÔøΩÔøΩÔøΩÔø?
+
                         if (goodsstore.get("mb_sliders").isJsonObject()) {
                             mTopData.clear();
                             mViewPager.setVisibility(View.VISIBLE);
@@ -426,7 +426,6 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
                         RefreshData();
                     }
             }
-
             @Override
             public void onFinish() {
                 super.onFinish();
@@ -496,7 +495,12 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
         if (mBroadcastReceive != null) {
             getActivity().unregisterReceiver(mBroadcastReceive);
         }
-
+        if (pagerSwitchHandler != null) {
+            pagerSwitchHandler.removeCallbacksAndMessages(null);
+        }
+        if (mTimer != null) {
+            mTimer.cancel();
+        }
         super.onDestroy();
     }
 
