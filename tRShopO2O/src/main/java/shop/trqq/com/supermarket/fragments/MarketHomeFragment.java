@@ -207,12 +207,12 @@ public class MarketHomeFragment extends Fragment implements ViewPager.OnPageChan
         mGvRecommend.setNumColumns(2);
 
         mGvRecommend.setAdapter(mHomeRecommendAdapter);
-        Drawable drawable = getResources().getDrawable(R.drawable.selector_listview_item);
-        mGvRecommend.setSelector(drawable);
+//        Drawable drawable = getResources().getDrawable(R.drawable.selector_listview_item);
+//        mGvRecommend.setSelector(drawable);
 
         mGvNew.setNumColumns(2);
         mGvNew.setAdapter(mHomeNewAdapter);
-        mGvNew.setSelector(drawable);
+//        mGvNew.setSelector(drawable);
     }
 
     @Override
