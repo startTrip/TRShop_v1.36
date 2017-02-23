@@ -15,9 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -50,7 +48,7 @@ import shop.trqq.com.util.YkLog;
 /**
  * 首页
  */
-public class Fragment_Home extends Fragment {
+public class Fragment_Home extends Fragment implements OnClickListener {
 
     private static final String TAG = "FragmentPage1";
     private View rootView;// 缓存Fragment view
@@ -58,13 +56,6 @@ public class Fragment_Home extends Fragment {
     // Gson工具
     private Gson gson;
 
-    // 标题栏标题
-    private TextView mHeadTitleTextView;
-    private ImageView mHeadLeftImg;
-    private EditText mHeadEditText;
-    private ImageView mHeadRightImg;
-    private LinearLayout mLeftLayout;
-    private LinearLayout mRightLayout;
     private ViewGroup parent;
     private ListViewHomeAdapter listViewHomeAdapter;
     // 加载进度Activity
@@ -72,7 +63,6 @@ public class Fragment_Home extends Fragment {
     private PullToRefreshListView mHomePullToRefreshListView;
     // 加载更多，脚部布局
     private View footView;
-    private Button mLoadMoreButton;
     private LayoutInflater inflater;
     private boolean isEnabledScrollLast = true;
     /**
@@ -87,6 +77,10 @@ public class Fragment_Home extends Fragment {
     private long refreshTime;
     private Handler mHandler;
     private MainTabActivity mMainTabActivity;
+    private ImageView mScanView;
+    private Button mLoadMoreButton;
+    private EditText mEt_Search;
+    private ImageView mIv_Search;
 
     @Override
     public void onAttach(Activity activity) {
@@ -115,6 +109,7 @@ public class Fragment_Home extends Fragment {
         return rootView;
     }
 
+    // 懒加载
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
 
@@ -133,37 +128,15 @@ public class Fragment_Home extends Fragment {
      */
     private void initTitleBarView() {
         YkLog.i(TAG, "初始化标题栏视图");
-        mHeadLeftImg = (ImageView) rootView
-                .findViewById(R.id.head_left_imageView);
-        mHeadRightImg = (ImageView) rootView
-                .findViewById(R.id.head_right_imageView);
-        mLeftLayout = (LinearLayout) rootView
-                .findViewById(R.id.head_left_img_linearLayout);
-        mRightLayout = (LinearLayout) rootView
-                .findViewById(R.id.head_right_img_linearLayout);
-        mHeadEditText = (EditText) rootView.findViewById(R.id.head_search_edit);
-        // mHeadLeftImg.setImageResource(R.drawable.home_logo);
-        mLeftLayout.setVisibility(View.VISIBLE);
+        mScanView =(ImageView) rootView.findViewById(R.id.scanning);
+        mEt_Search = (EditText) rootView.findViewById(R.id.search_content);
+        mIv_Search = (ImageView)rootView.findViewById(R.id.home_search);
+        mEt_Search.setFocusable(false);
+        // 搜索的监听
+        mEt_Search.setOnClickListener(this);
+        mIv_Search.setOnClickListener(this);
 
-        mHeadEditText.setVisibility(View.VISIBLE);
-        mHeadRightImg.setImageResource(R.drawable.barcode_normal);
-        // mHeadRightImg.setVisibility(View.VISIBLE);
-        mRightLayout.setVisibility(View.VISIBLE);
-        mHeadEditText.setFocusable(false);
-        mHeadEditText.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                // 跳转搜索Fragment方式
-				/*
-				 * Message msg3 = new Message(); msg3.what = 2;
-				 * mHandler.sendMessage(msg3);
-				 */
-                // 跳转搜索Activity方式
-                UIHelper.showSearch(mContext);
-            }
-        });
-        mHeadRightImg.setOnClickListener(new OnClickListener() {
+        mScanView.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -172,8 +145,7 @@ public class Fragment_Home extends Fragment {
                 startActivityForResult(openCameraIntent, 0);
             }
         });
-        LinearLayout tLinearLayout=(LinearLayout) rootView
-                .findViewById(R.id.header_relativelayout);
+
 //        SystemBarHelper.immersiveStatusBar(getActivity(),0);
 //        SystemBarHelper.setHeightAndPadding(getActivity(), tLinearLayout);
     }
@@ -497,4 +469,19 @@ public class Fragment_Home extends Fragment {
 
     }
 
+    // 点击的监听事件
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+
+            case R.id.scanning:
+            case R.id.search_content:
+                // 跳转搜索Activity
+                UIHelper.showSearch(mContext);
+                break;
+            case R.id.search_voice:
+
+                break;
+        }
+    }
 }

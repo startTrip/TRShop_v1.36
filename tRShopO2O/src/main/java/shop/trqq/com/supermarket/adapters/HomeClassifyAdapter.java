@@ -49,7 +49,7 @@ public class HomeClassifyAdapter extends RecyclerView.Adapter<HomeClassifyAdapte
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(mContext).inflate(R.layout.market_layout_home_classify_item,null);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.market_layout_home_classify_item,parent,false);
 
         return new ViewHolder(view);
     }
@@ -61,7 +61,7 @@ public class HomeClassifyAdapter extends RecyclerView.Adapter<HomeClassifyAdapte
 
         String stc_img_path = homeClassifyTitle.getStc_img_path();
         if (!TextUtils.isEmpty(stc_img_path)) {
-            // Բ��ͼƬ
+            // Բ��ͼƬ
             Picasso.with(mContext)
                     .load(stc_img_path).resize(mWidthPixels*2/15,mWidthPixels*2/15).centerCrop()
                     .config(Bitmap.Config.RGB_565).transform(new Transformation() {

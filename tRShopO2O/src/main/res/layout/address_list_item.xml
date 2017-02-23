@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/white"
+    >
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/address_bg"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:layout_marginBottom="10dp"
+        >
+        <TextView
+            android:id="@+id/name"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="马玉"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/small_text_size"
+            />
+
+        <TextView
+            android:id="@+id/phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="10dp"
+            android:text="12345678901"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/small_text_size"
+            />
+
+        <TextView
+            android:id="@+id/area_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/name"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:text="广东省深圳市南山大冲商务中心"
+            android:textColor="@color/text_color1"
+            android:textSize="@dimen/micro_text_size"
+            />
+        <View
+            android:id="@+id/divide"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/area_info"
+            android:background="@color/address_bg"
+            />
+
+        <TextView
+            android:id="@+id/delete"
+            android:clickable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/divide"
+            android:text="删除"
+            android:gravity="center"
+            android:textSize="12sp"
+            android:textColor="@color/text_color1"
+            android:background="@drawable/selector_delete_address"
+            />
+
+        <TextView
+            android:id="@+id/edit"
+            android:clickable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_below="@id/divide"
+            android:layout_toLeftOf="@id/delete"
+            android:gravity="center"
+            android:text="编辑"
+            android:textSize="12sp"
+            android:textColor="@color/text_color1"
+            android:background="@drawable/selector_delete_address"
+            />
+    </RelativeLayout>
+
+</LinearLayout>

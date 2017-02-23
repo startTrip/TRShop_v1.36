@@ -175,6 +175,7 @@
         <item name="android:button">@drawable/selector_checkbox</item>
     </style>
 
+    <!-- 分割线 -->
     <style name="dividerline">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0.5dp</item>

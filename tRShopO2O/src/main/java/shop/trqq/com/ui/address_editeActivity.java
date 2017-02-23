@@ -4,13 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.baidu.mapapi.model.LatLng;
@@ -29,6 +29,7 @@ import shop.trqq.com.UserManager;
 import shop.trqq.com.bean.AddressBean;
 import shop.trqq.com.supermarket.activitys.AddressFromMapActivity;
 import shop.trqq.com.supermarket.bean.AddressInfo;
+import shop.trqq.com.supermarket.view.MyPopupWindow;
 import shop.trqq.com.ui.Base.BaseActivity;
 import shop.trqq.com.util.HttpUtil;
 import shop.trqq.com.util.ToastUtils;
@@ -40,7 +41,7 @@ public class Address_editeActivity extends BaseActivity {
     private Context mContext;
     private EditText name, phone, tel, addressDetail;
     private TextView address;
-    private Button save;
+    private FrameLayout save;
     private AddressBean addressBean;
     private String area_id = "-1";
     private String city_id = "-1";
@@ -52,7 +53,8 @@ public class Address_editeActivity extends BaseActivity {
     private TextView mLocation;
     private LatLng mLatLng;
     private AddressInfo mAddressInfo;
-    private ImageView mImageBack;
+    private View mPopupView;
+    private MyPopupWindow mMyPopupWindow;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -100,14 +102,13 @@ public class Address_editeActivity extends BaseActivity {
     }
 
     private void initTitleBarView() {
-        mHeadTitleTextView = (TextView) findViewById(R.id.head_title_textView);
-        mHeadTitleTextView.setText("修改收货地址");
+        mHeadTitleTextView = (TextView) findViewById(R.id.title_address);
+        mHeadTitleTextView.setText("修改地址");
     }
 
     public void initView() {
 
-        mImageBack = (ImageView) findViewById(R.id.title_back);
-        mImageBack.setVisibility(View.VISIBLE);
+        mPopupView = LayoutInflater.from(mContext).inflate(R.layout.popup_center_layout, null);
 
         name = (EditText) findViewById(R.id.address_manage2_name);
         phone = (EditText) findViewById(R.id.address_manage2_mobileNum);
@@ -119,11 +120,13 @@ public class Address_editeActivity extends BaseActivity {
         // 手动填写的
         addressDetail = (EditText) findViewById(R.id.add_address_detail);
 
-        save = (Button) findViewById(R.id.address_manage2_save);
+        save = (FrameLayout) findViewById(R.id.address_manage2_save);
 
     }
 
     private void initData() {
+
+        mMyPopupWindow = MyPopupWindow.getInstance();
 
         mAddressInfo = new AddressInfo();
         Intent intent = getIntent();
@@ -137,34 +140,27 @@ public class Address_editeActivity extends BaseActivity {
         tel.setText(addressBean.getTel_phone());
         address.setText(addressBean.getArea_info());
 
-        Log.d("addressBean",addressBean.toString());
 
         String latitude = addressBean.getLatitude();
         String longitude = addressBean.getLongitude();
         String garden = addressBean.getGarden();
         String address = addressBean.getAddress();
         // 没有选择小区
-        if(TextUtils.isEmpty(garden)){
+        if(TextUtils.isEmpty(garden)||TextUtils.isEmpty(latitude)){
             mLocation.setText(" 点击选择");
             addressDetail.setText("");
         }else {
+            mAddressInfo.setLatitude(latitude);
+            mAddressInfo.setLongitude(longitude);
             mLatLng = new LatLng(Double.parseDouble(latitude),Double.parseDouble(longitude));
             mLocation.setText(garden);
-            addressDetail.setText
-                    (address.replace(garden,""));
+            addressDetail.setText(address.replace(garden,""));
         }
 
         mAddressPopupWindow = new AddressPopupWindow(mContext);
     }
 
     private void setListener() {
-
-        mImageBack.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
 
         // 点击选择跳转的 地图上我的位置
         mLocation.setOnClickListener(new OnClickListener() {
@@ -173,12 +169,12 @@ public class Address_editeActivity extends BaseActivity {
                 // 跳转到订单页面
                 Intent intent = new Intent(mContext,AddressFromMapActivity.class);
                 String area = address.getText().toString();
-                String location = mLocation.getText().toString();
+                String location = mLocation.getText().toString().trim();
                 intent.putExtra("from","edite");
                 if(!TextUtils.equals("所在地区",area)){   // 如果手动选了地址
                     intent.putExtra("area",area);
                     intent.putExtra("hasSelected",true);
-                    if(!TextUtils.equals(" 点击选择",location)){  // 已经是返回回来以后的,重新点击以后跳转到刚才的位置
+                    if(!TextUtils.equals("点击选择",location)){  // 已经是返回回来以后的,重新点击以后跳转到刚才的位置
                         intent.putExtra("hasLatlng",true);
                         intent.putExtra("latlng",mLatLng);
                     }
@@ -330,7 +326,7 @@ public class Address_editeActivity extends BaseActivity {
             ToastUtils.showMessage(mContext, "请输入地址详细信息,否则快递小哥会着急的");
             return;
         }
-        if (TextUtils.equals(addressInfo.getLatitude(), " 点击选择")) {
+        if (TextUtils.equals(addressInfo.getLocation(), "点击选择")) {
             ToastUtils.showMessage(mContext, "请选择小区/大厦/学校");
             return;
         }
@@ -402,19 +398,37 @@ public class Address_editeActivity extends BaseActivity {
         });
     }
 
-    /*	 @Override
-		public void onActivityResult(int requestCode, int resultCode, Intent data) {
-			super.onActivityResult(requestCode, resultCode, data);
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode==KeyEvent.KEYCODE_BACK){
+            // 警告是否保存当前的地址信息
+            showAlertPopupWindow();
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
-			if (resultCode == Activity.RESULT_OK) {
-				add_flag = true;
-				Bundle bundle = data.getExtras();
-				String addResult = bundle.getString("result");
-				city_id= bundle.getString("city_id");
-				area_id= bundle.getString("area_id");
-				ToastUtils.showMessage(mContext, addResult);
-				address.setText(addResult);
-				// resultTextView.setText(scanResult);
-			}
-		}*/
+    private void showAlertPopupWindow() {
+        View animView = mPopupView.findViewById(R.id.popup_anima);
+        View dismissView = mPopupView.findViewById(R.id.dismiss_view);
+        // 点击确认销毁 activity
+        animView.findViewById(R.id.confirm).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        animView.findViewById(R.id.cancel).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mMyPopupWindow.cancel();
+            }
+        });
+        mMyPopupWindow.showNormalPopupWindow(Address_editeActivity.this,mPopupView,dismissView,animView,false);
+    }
+
+    // 按返回键 销毁当前的界面
+    public void backPress(View view){
+        showAlertPopupWindow();
+    }
 }

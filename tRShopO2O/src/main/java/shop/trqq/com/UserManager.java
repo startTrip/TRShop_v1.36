@@ -2,7 +2,6 @@ package shop.trqq.com;
 
 import android.content.Context;
 import android.provider.Settings;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -89,7 +88,7 @@ public class UserManager {
      * @return
      */
     public static String getUserId() {
-        return userInfo.getUserId() == null ? "" : userInfo.getUserId();
+        return userInfo.getUserId() == null?"" : userInfo.getUserId();
     }
 
     // 获取浏览记录
@@ -125,8 +124,7 @@ public class UserManager {
             // 加载本地数据
             String json = AppConfig.getSharedPreferences(mContext).getString(
                     "historyList", "");
-            historyList = gson.fromJson(json, new TypeToken<List<GoodsBean>>() {
-            }.getType());
+            historyList = gson.fromJson(json, new TypeToken<List<GoodsBean>>(){}.getType());
         } catch (Exception e) {
             // 空指针异常，所以要重新初始化
             historyList = new ArrayList<GoodsBean>();

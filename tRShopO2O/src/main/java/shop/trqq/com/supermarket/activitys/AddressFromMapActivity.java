@@ -405,6 +405,7 @@ public class AddressFromMapActivity extends AppCompatActivity implements BDLocat
 
         // 获取POI检索结果
         if (result == null || result.error == SearchResult.ERRORNO.RESULT_NOT_FOUND) {// 没有找到检索结果
+            mProgressActivity.showEmpty(null,"附近未搜索到小区","请重新选择");
             return;
         }
 

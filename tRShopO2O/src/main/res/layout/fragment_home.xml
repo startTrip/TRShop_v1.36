@@ -4,7 +4,7 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/item_title_bar" />
+    <include layout="@layout/home_action_bar" />
 
     <com.vlonjatg.progressactivity.ProgressActivity xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:progressActivity="http://schemas.android.com/apk/res-auto"

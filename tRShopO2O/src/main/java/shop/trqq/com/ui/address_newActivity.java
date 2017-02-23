@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.baidu.mapapi.model.LatLng;
@@ -56,7 +55,6 @@ public class Address_newActivity extends BaseActivity {
     private TextView mLocation;
     private AddressInfo mAddressInfo;
     private LatLng mLatLng;
-    private ImageView mImageBack;
     private View mPopupView;
     private MyPopupWindow mMyPopupWindow;
 
@@ -169,11 +167,9 @@ public class Address_newActivity extends BaseActivity {
 
         mPopupView = LayoutInflater.from(mContext).inflate(R.layout.popup_center_layout, null);
 
-        mImageBack = (ImageView) findViewById(R.id.title_back);
-        mImageBack.setVisibility(View.VISIBLE);
+        mHeadTitleTextView = (TextView) findViewById(R.id.title_address);
+        mHeadTitleTextView.setText(R.string.add_address);
 
-        mHeadTitleTextView = (TextView) findViewById(R.id.head_title_textView);
-        mHeadTitleTextView.setText("添加地址");
         name = (EditText) findViewById(R.id.add_address_name);
         phone = (EditText) findViewById(R.id.add_address_mobileNum);
         // email=(EditText)findViewById(R.id.add_address_email);
@@ -190,7 +186,7 @@ public class Address_newActivity extends BaseActivity {
                     @Override
                     public void onOptionsSelect(String options1,
                                                 String option2, String options3) {
-                        // TODO Auto-generated method stub
+
                         add_flag = true;
                         mAddResult = options1;
                         // 锟矫碉拷锟斤拷锟叫和碉拷锟斤拷锟絠d
@@ -271,7 +267,7 @@ public class Address_newActivity extends BaseActivity {
             ToastUtils.showMessage(mContext, "请输入地址详细信息,否则快递小哥会着急的");
             return;
         }
-        if(TextUtils.equals(addressInfo.getLatitude()," 点击选择")){
+        if(TextUtils.equals(addressInfo.getLocation(),"点击选择")){
             ToastUtils.showMessage(mContext,"请选择小区/大厦/学校");
             return;
         }
@@ -288,13 +284,6 @@ public class Address_newActivity extends BaseActivity {
     }
 
     private void setListener(){
-
-        mImageBack.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
 
         // 点击选择跳转的 地图上我的位置
         mLocation.setOnClickListener(new OnClickListener() {
@@ -362,7 +351,7 @@ public class Address_newActivity extends BaseActivity {
         HttpUtil.post(HttpUtil.URL_ADDRESS_ID, requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                    String string = new String(responseBody);
+                String string = new String(responseBody);
                 try {
                     JSONObject jsonObject = new JSONObject(string);
                     JSONObject jsonObject1 = jsonObject.optJSONObject("datas");
@@ -407,5 +396,10 @@ public class Address_newActivity extends BaseActivity {
             }
         });
         mMyPopupWindow.showNormalPopupWindow(Address_newActivity.this,mPopupView,dismissView,animView,false);
+    }
+
+    // 按返回键 销毁当前的界面
+    public void backPress(View view){
+        finish();
     }
 }

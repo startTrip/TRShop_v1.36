@@ -8,9 +8,19 @@
     <color name="colorAlpha">#200000ff</color>
     <color name="colorAlpha1">#20ff6c6c</color>
     <color name="mainTabFont">#757575</color>
-    <color name="gray_1">#CCCCCC</color>
+    <color name="gray_1">#ebebeb</color>
     <color name="background">#f1eeee</color>
     <color name="red_1">#d91d1d</color>
+
+
+    <!-- 地址模块颜色-->
+    <color name="address_bg">#ebebeb</color>
+    <color name="text_color1">#adadad</color>
+    <color name="text_color">#232323</color>
+    <color name="edit_press">#cc2922</color>
+    <color name="search_edit">#cdcdcd</color>
+
+
 
     <color name="bg_Gray_light">#EEEEEE</color>
     <color name="translucence">#506050</color>

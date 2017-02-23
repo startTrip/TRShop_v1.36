@@ -16,13 +16,13 @@
     <string name="manage2_email">Email</string>
     <string name="manage2_phone">手机号码</string>
     <string name="manage2_address">详细地址</string>
-    <string name="address_tel">电话号码（选填）</string>
+    <string name="address_tel">电话号码 (选填)</string>
     <string name="address_area">所在地区</string>
     <string name="save">保存</string>
-    <string name="address_address">详细地址（必填）</string>
+    <string name="address_address">详细地址(必填)</string>
     <string name="address_add">添加地址</string>
-    <string name="address_phone">手机号码（必填）</string>
-    <string name="address_consignee">收货人姓名（必填）</string>
+    <string name="address_phone">手机号码 (必填)</string>
+    <string name="address_consignee">收货人姓名(必填)</string>
     <string name="tradeitem_number">订单编号</string>
     <string name="tradeitem_rental">总额</string>
     <string name="non_address">您还没有添加收货地址</string>
@@ -143,5 +143,9 @@
     <string name="load_finish">已加载全部数据</string>
     <string name="reload">轻触屏幕，重新加载</string>
     <string name="content_null">内容不能为空</string>
+
+    <string name="add_address">新增收货地址</string>
+    <string name="delete_success">删除成功</string>
+    <string name="delete_failure">修改失败</string>
 
 </resources>

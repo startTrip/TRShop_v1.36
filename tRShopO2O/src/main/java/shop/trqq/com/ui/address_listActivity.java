@@ -7,13 +7,13 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.baidu.mapapi.model.LatLng;
@@ -35,9 +35,8 @@ import java.util.List;
 import shop.trqq.com.AppContext;
 import shop.trqq.com.R;
 import shop.trqq.com.UserManager;
-import shop.trqq.com.adapter.ListViewAddressAdapter;
+import shop.trqq.com.adapter.RecyclerAddressListAdapter;
 import shop.trqq.com.bean.AddressBean;
-import shop.trqq.com.supermarket.utils.DistanceUtils;
 import shop.trqq.com.ui.Base.BaseActivity;
 import shop.trqq.com.ui.Base.UIHelper;
 import shop.trqq.com.util.HttpUtil;
@@ -45,30 +44,28 @@ import shop.trqq.com.util.ToastUtils;
 import shop.trqq.com.widget.DialogTool;
 
 /**
- * ï¿½ï¿½Ö·ï¿½Ð±ï¿½
+ * µØÖ·ÁÐ±í½çÃæ
  */
-public class address_listActivity extends BaseActivity {
+public class address_listActivity extends BaseActivity implements RecyclerAddressListAdapter.onRecyclerItemClick {
 
     private Context mContext;
-    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     private TextView mHeadTitleTextView;
-    // ï¿½ï¿½ï¿½Ø½ï¿½ï¿½Activity
+
     private ProgressActivity progressActivity;
-    private TextView address_add;
+    private LinearLayout address_add;
     private SlideListView listView;
     private ArrayList<AddressBean> addressList;
-    private ListViewAddressAdapter addressAdapter;
     private Gson gson;
     private Boolean flag = false;
     private String freight_hash;
     private String mIfcart;
     private String mCart_id;
-    private DistanceUtils mDistanceUtils;
     private int mPos;
-    private double mDistance1;
     private int mIfmarket;
-    private ImageView mImageBack;
     private Drawable mErrorDrawable;
+    private RecyclerView mRecyclerView;
+    private LinearLayoutManager mLayoutManager;
+    private RecyclerAddressListAdapter mRecyclerAddressListAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,36 +76,33 @@ public class address_listActivity extends BaseActivity {
         gson = new Gson();
         addressList = new ArrayList<AddressBean>();
         initTitleBarView();
+        initView();
+
+        initData();
+    }
+
+    private void initView() {
         progressActivity = (ProgressActivity) findViewById(R.id.Addresslist_progress);
-        listView = (SlideListView) findViewById(R.id.address_manage_list);
-        addressAdapter = new ListViewAddressAdapter(mContext, addressList);
-        address_add = (TextView) findViewById(R.id.address_add);
+        mRecyclerView = (RecyclerView)findViewById(R.id.address_recycler);
+
+        address_add = (LinearLayout) findViewById(R.id.layout_bottom);
+    }
+
+
+    private void initData() {
+
         Intent intent = getIntent();
         freight_hash =intent.getStringExtra("freight_hash");
         mIfcart = intent.getStringExtra("ifcart");
         mCart_id = intent.getStringExtra("cart_id");
         mIfmarket = intent.getIntExtra("ifmarket",0);
-        Drawable drawable = getResources().getDrawable(R.drawable.selector_listview);
-        listView.setSelector(drawable);
-        listView.setOnItemClickListener(new OnItemClickListener() {
 
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                // TODO Auto-generated method stub
-                //System.err.println(freight_hash);
-                if (freight_hash.equals("")) {
-                    // ToastUtils.showMessage(mContext, "ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½");
-                } else {
-                    mPos = position;          // ¼ÇÂ¼µã»÷µÄListView ÌõÄ¿µÄÎ»ÖÃ
-//                    String area_info = addressList.get(position).getArea_info();
-//                    String address = addressList.get(position).getAddress();
-//                    mDistanceUtils.getLocation(area_info,address);
-                    ChangeAddressListData(mPos);
-                }
-            }
-        });
+        mRecyclerAddressListAdapter = new RecyclerAddressListAdapter(mContext,addressList);
+        mLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mRecyclerAddressListAdapter);
 
+        mRecyclerAddressListAdapter.setOnRecyclerItemClick(this);
         address_add.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -138,19 +132,12 @@ public class address_listActivity extends BaseActivity {
     }
 
     /**
-     * ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼
+     * ³õÊ¼»¯±êÌâÀ¸
      */
     private void initTitleBarView() {
-        mImageBack = (ImageView) findViewById(R.id.title_back);
-        mImageBack.setVisibility(View.VISIBLE);
-        mImageBack.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-        mHeadTitleTextView = (TextView) findViewById(R.id.head_title_textView);
-        mHeadTitleTextView.setText("ÊÕ»õµØÖ·¹ÜÀí");
+
+        mHeadTitleTextView = (TextView) findViewById(R.id.title_address);
+        mHeadTitleTextView.setText("¹ÜÀíÊÕ»õµØÖ·");
     }
 
     private void loadingAddressListData() {
@@ -166,7 +153,7 @@ public class address_listActivity extends BaseActivity {
                 try {
                     String jsonString = new String(responseBody);
                     Log.d("addresslist",jsonString);
-                    // System.out.println("addlistjsonString" + jsonString);
+
                     JSONObject jsonObjects = new JSONObject(jsonString)
                             .getJSONObject("datas");
                     String add_list = jsonObjects.getString("address_list");
@@ -174,18 +161,14 @@ public class address_listActivity extends BaseActivity {
                             new TypeToken<List<AddressBean>>() {
                             }.getType());
 
-                    addressAdapter.setData(addressList);
-                    listView.setAdapter(addressAdapter);
-                    addressAdapter.notifyDataSetChanged();
+                    mRecyclerAddressListAdapter.setData(addressList);
+                    mRecyclerAddressListAdapter.notifyDataSetChanged();
+
                     if (addressList.size() > 0) {
                         progressActivity.showContent();
                     } else {
-                        //ï¿½ï¿½ï¿½ï¿½ï¿½Ð©ï¿½ï¿½Í¼ï¿½ã²»ï¿½ï¿½ï¿½ï¿½ï¿½Ø¡ï¿?
-                       /* List<Integer> skipIds = new ArrayList<Integer>();
-					    skipIds.add(R.id.layout_bottom);*/
-                        Drawable emptyDrawable = getResources().getDrawable(
-                                R.drawable.ic_empty);
-                        progressActivity.showEmpty(emptyDrawable,"µØÖ·Îª¿Õ","Äã»¹Ã»ÓÐÌí¼ÓÊÕ»õµØÖ·");
+                        // Ä¿Ç°»¹Ã»ÓÐµØÖ·
+                       showAddressEmpty();
                     }
                 } catch (Exception e) {
                 }
@@ -216,8 +199,6 @@ public class address_listActivity extends BaseActivity {
             @Override
             public void onFinish() {
                 super.onFinish();
-                // ï¿½ï¿½ï¿½Ü³É¹ï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½Ü£ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø±Õµï¿?
-                // mNetProgressBar.setVisibility(View.GONE);
             }
         });
     }
@@ -344,6 +325,11 @@ public class address_listActivity extends BaseActivity {
                 }).show();
     }
 
+    private void showAddressEmpty(){
+        Drawable emptyDrawable = getResources().getDrawable(
+                R.drawable.ic_empty);
+        progressActivity.showEmpty(emptyDrawable,"µØÖ·Îª¿Õ","Äã»¹Ã»ÓÐÌí¼ÓÊÕ»õµØÖ·");
+    }
     /**
      *   ¼ÆËã¾àÀë³¬ÊÐµÄ¾àÀë
      * @param latitude
@@ -357,4 +343,75 @@ public class address_listActivity extends BaseActivity {
         return distance;
     }
 
+    // °´·µ»Ø¼ü·µ»Ø
+    public void backPress(View view){
+        finish();
+    }
+
+    // É¾³ýµØÖ·
+    private void AddressDelete(String address_id) {
+        RequestParams requestParams = new RequestParams();
+        String key = UserManager.getUserInfo().getKey();
+        requestParams.add("key", key);
+        requestParams.add("address_id", address_id);
+        HttpUtil.post(HttpUtil.URL_ADDRESS_DETELE, requestParams, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers,
+                                  byte[] responseBody) {
+                try {
+                    String jsonString = new String(responseBody);
+                    try {
+                        JSONObject jsonObject = new JSONObject(jsonString)
+                                .getJSONObject("datas");
+                        String errStr = jsonObject.getString("error");
+                        if (errStr != null) {
+                            ToastUtils.showMessage(mContext, errStr);
+                        }
+                    } catch (Exception e) {
+                        if (new JSONObject(jsonString).getString("datas")
+                                .equals("1")) {
+                            ToastUtils.showMessage(mContext, R.string.delete_success);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers,
+                                  byte[] responseBody, Throwable error) {
+                // TODO Auto-generated method stub
+                ToastUtils.showMessage(mContext, R.string.get_informationData_failure);
+            }
+        });
+    }
+
+    // recyclerView Item µÄµã»÷ÊÂ¼þ
+    @Override
+    public void onItemClick(int index) {
+        Log.d("index",index+"");
+        if(freight_hash.equals("")){
+        }else {
+            mPos = index;
+            ChangeAddressListData(mPos);
+        }
+    }
+
+    @Override
+    public void onAddressDeleteClick(int position) {
+        Log.d("index",position+"");
+
+        AddressBean addressBean = addressList.remove(position);
+        if (addressBean != null) {
+            AddressDelete(addressBean.getAddress_id());
+        }else {
+            ToastUtils.showMessage(mContext,getString(R.string.delete_failure));
+        }
+        mRecyclerAddressListAdapter.setData(addressList);
+        Log.d("size",addressList.size()+"ÊýÁ¿");
+        if(addressList.size()==0){
+            showAddressEmpty();
+        }
+    }
 }
