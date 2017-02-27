@@ -2,6 +2,7 @@ package shop.trqq.com.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,14 +20,14 @@ import shop.trqq.com.bean.Type;
 import shop.trqq.com.ui.Base.UIHelper;
 
 public class Pro_type_adapter extends BaseAdapter {
-    // ¶¨ÒåContext
+    // ï¿½ï¿½ï¿½ï¿½Context
     private LayoutInflater mInflater;
     private ArrayList<Type> list;
     private Context context;
     private Type type;
     private ArrayList<GoodClassBean> typeList;
-    private String[] color = {"#F84462", "#44BCF8", "#FF0080", "#DA44F8",
-            "#F88044", "#8044F8"};
+    private String[] color = {"#90ca2b", "#ca2b2b", "#2baeca", "#2bc4ca","#852bca",
+            "#ca2b63","#2bca90","#aaca2b","#ca2bc4","#ca2b2b","#2bcaa3","#ca582b"};
 
     public Pro_type_adapter(Context context, ArrayList<Type> list,
                             ArrayList<GoodClassBean> typeList) {
@@ -64,17 +65,16 @@ public class Pro_type_adapter extends BaseAdapter {
             convertView = mInflater.inflate(R.layout.list_pro_type_item, null);
             // view.icon=(ImageView)convertView.findViewById(R.id.typeicon);
             view.name = (TextView) convertView.findViewById(R.id.typename);
-            view.name.setBackgroundColor(Color.parseColor(color[new Random()
-                    .nextInt(6)]));
+            view.mCardView = (CardView) convertView.findViewById(R.id.cardview);
+            view.mCardView.setCardBackgroundColor(Color.parseColor(color[new Random().nextInt(12)]));
             convertView.setTag(view);
-            // ·ÖÀàÁÐ±í¼àÌý
+            // ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½ï¿½ï¿½ï¿½
             convertView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     UIHelper.showShop(context, "", typeList.get(position)
                             .getGc_id(), "", "");
                 }
-
             });
         } else {
             view = (MyView) convertView.getTag();
@@ -95,6 +95,7 @@ public class Pro_type_adapter extends BaseAdapter {
     private class MyView {
         private ImageView icon;
         private TextView name;
+        private CardView mCardView;
     }
 
 }

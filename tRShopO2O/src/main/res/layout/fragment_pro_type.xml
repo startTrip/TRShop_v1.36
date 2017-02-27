@@ -3,7 +3,9 @@
     android:id="@+id/gridview_fragment"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/activity_bg">
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+    android:background="@color/address_bg">
 
     <!--
          <com.jcwl.jdshop.ui.PullUpDownListView
@@ -20,10 +22,12 @@
     <TextView
         android:id="@+id/toptype"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_alignParentTop="true"
-        android:layout_margin="15dp"
-        android:textSize="18sp" />
+        android:layout_marginRight="10dp"
+        android:gravity="center_vertical"
+        android:textColor="@color/text_color"
+        android:textSize="12sp" />
 
     <shop.trqq.com.widget.MyGridView
         android:id="@+id/listView"

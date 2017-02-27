@@ -227,18 +227,17 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
-                    <ImageButton
+                    <ImageView
                         android:id="@+id/index_1_btn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/nav_1" />
+                        android:src="@mipmap/wan_neng_ju_jian_kang_guan_classification_area_normal" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="万能居健康馆"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/micro_text_size" />
+                        style="@style/HomeClassifyTv" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -248,18 +247,17 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
-                    <ImageButton
+                    <ImageView
                         android:id="@+id/index_2_btn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/nav_2" />
+                        android:src="@mipmap/tairunjiudian_classificationarea_normal" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="泰润酒店"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/micro_text_size" />
+                        style="@style/HomeClassifyTv" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -273,14 +271,13 @@
                         android:id="@+id/index_3_btn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/nav_3" />
+                        android:background="@mipmap/dalangtaoshacanting_classificationarea_normal" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="大浪淘沙餐厅"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/micro_text_size" />
+                        style="@style/HomeClassifyTv" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -290,18 +287,17 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
-                    <ImageButton
+                    <ImageView
                         android:id="@+id/index_4_btn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/nav_4" />
+                        android:src="@mipmap/zhanluelianmeng_classification_area_normal" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="战略联盟商家"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/micro_text_size" />
+                        style="@style/HomeClassifyTv" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -309,7 +305,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="30dp"
                 android:baselineAligned="false"
                 android:gravity="center"
                 android:orientation="horizontal">
@@ -331,8 +327,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="所有店铺"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/micro_text_size" />
+                        style="@style/HomeClassifyTv" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -352,8 +348,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="所有的商品"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/micro_text_size" />
+                        style="@style/HomeClassifyTv" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -373,8 +368,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="万能居超市"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/micro_text_size" />
+                        style="@style/HomeClassifyTv" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -388,15 +382,15 @@
                         android:id="@+id/index_8_btn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/nav_8" />
+                        android:background="@mipmap/gengduo_classificationarea_normal" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="反馈留言 "
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/micro_text_size" />
+                        android:text="更多 "
+                        style="@style/HomeClassifyTv" />
                 </LinearLayout>
+
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

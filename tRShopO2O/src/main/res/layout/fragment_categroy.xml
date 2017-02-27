@@ -5,7 +5,7 @@
     android:background="@color/app_background"
     android:orientation="vertical">
 
-    <include layout="@layout/item_title_bar" />
+    <include layout="@layout/home_action_bar" />
 
     <com.vlonjatg.progressactivity.ProgressActivity xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:progressActivity="http://schemas.android.com/apk/res-auto"
@@ -28,9 +28,8 @@
 
             <ScrollView
                 android:id="@+id/tools_scrlllview"
-                android:layout_width="fill_parent"
+                android:layout_width="86dp"
                 android:layout_height="fill_parent"
-                android:layout_weight="3"
                 android:fadingEdge="none"
                 android:scrollbars="none"
                 android:fillViewport="false">
@@ -41,14 +40,18 @@
                     android:layout_height="fill_parent"
                     android:gravity="center_horizontal"
                     android:orientation="vertical" />
+
             </ScrollView>
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/goods_pager"
+                android:background="@color/address_bg"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1" />
+
         </LinearLayout>
+
     </com.vlonjatg.progressactivity.ProgressActivity>
 
 </LinearLayout>

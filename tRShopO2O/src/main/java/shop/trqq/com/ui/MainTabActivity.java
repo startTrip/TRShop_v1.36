@@ -40,7 +40,7 @@ import shop.trqq.com.util.UpdateManager;
 import shop.trqq.com.util.YkLog;
 
 /**
- * @author Weiss 锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷MainTabActivity
+ * @author Weiss MainTabActivity
  */
 public class MainTabActivity extends BaseFragmentActivity {
     private static final String TAG = "MainTabActivity";
@@ -107,9 +107,11 @@ public class MainTabActivity extends BaseFragmentActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         // 初始化百度云推送
         PushManager.startWork(appContext, PushConstants.LOGIN_TYPE_API_KEY,
                 Utils.getMetaValue(MainTabActivity.this, "api_key"));
+
         // Push: 设置tag调用方式，英文逗号分开,发布时注释
         List<String> tags = Utils.getTagsList("five");
         PushManager.setTags(getApplicationContext(), tags);

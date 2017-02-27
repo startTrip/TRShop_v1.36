@@ -45,8 +45,6 @@ public class ListViewHomeAdapter extends MultiItemCommonAdapter<HomeBean>
     private static final String TAG = "ListViewHomeAdapter";
     private Handler mHandler;
 
-    // private AutoScrollViewPager viewPager;
-    // private CirclePageIndicator indicator;
     private InfiniteIndicatorLayout indicator;
     private int index;
 
@@ -183,35 +181,6 @@ public class ListViewHomeAdapter extends MultiItemCommonAdapter<HomeBean>
         }
     }
 
-    // @Override
-    // public int getItemViewType(int position) {
-    // if (mData.get(position).getAdv_list() != null) {
-    // return TYPE_ADV_LIST;
-    // } else if (mData.get(position).getHome1() != null) {
-    // return TYPE_HOME1;
-    // } else if (mData.get(position).getHome2() != null) {
-    // return TYPE_HOME2;
-    // } else if (mData.get(position).getHome3() != null) {
-    // return TYPE_HOME3;
-    // } else if (mData.get(position).getHome4() != null) {
-    // return TYPE_HOME4;
-    // } else if (mData.get(position).getGoods() != null) {
-    // return TYPE_GOODS;
-    // } else if (mData.get(position).getGoods1() != null) {
-    // return TYPE_GOODS1;
-    // } else if (mData.get(position).getGoods2() != null) {
-    // return TYPE_GOODS2;
-    // }
-    // return super.getItemViewType(position);// return 0;
-    // }
-    //
-    // // 设置一共多少样式
-    // @Override
-    // public int getViewTypeCount() {
-    // // TODO Auto-generated method stub
-    // return 9;
-    // }
-
     // getview里面的一个方法
     @Override
     public void convert(ViewHolder holder, final HomeBean homeBean) {
@@ -243,7 +212,6 @@ public class ListViewHomeAdapter extends MultiItemCommonAdapter<HomeBean>
                                             @Override
                                             public void onSliderClick(
                                                     BaseSliderView slider) {
-                                                // TODO Auto-generated method stub
                                                 Home1Bean bean = (Home1Bean) textSliderView
                                                         .getBundle()
                                                         .getSerializable("extra");

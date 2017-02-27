@@ -22,6 +22,34 @@
 
     </style>
 
+    <style name="HomeClassifyTv">
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textSize">@dimen/micro_text_size</item>
+
+    </style>
+
+
+    <style name="home_img_style">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:scaleType">fitXY</item>
+        <item name="android:src">@drawable/icon_downloading</item>
+    </style>
+
+  <style name="home_title">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:text">标题</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+
     <style name="chat_content_date_style">
         <item name="android:minHeight">50dp</item>
         <item name="android:gravity">left|center</item>
@@ -32,6 +60,7 @@
         <item name="android:focusable">true</item>
         <item name="android:background">#bfbfbf</item>
     </style>
+
 
     <style name="chat_text_name_style">
         <item name="android:textColor">#818181</item>

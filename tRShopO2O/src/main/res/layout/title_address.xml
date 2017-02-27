@@ -24,4 +24,9 @@
             android:textColor="@color/text_color"
             android:textSize="@dimen/medium_text_size"
             />
+
+        <View
+            android:layout_alignParentBottom="true"
+            style="@style/dividerline"/>
+
 </RelativeLayout>

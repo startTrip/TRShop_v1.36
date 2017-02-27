@@ -19,7 +19,7 @@
     <color name="text_color">#232323</color>
     <color name="edit_press">#cc2922</color>
     <color name="search_edit">#cdcdcd</color>
-
+    <color name="divideline">#eeeeee</color>
 
 
     <color name="bg_Gray_light">#EEEEEE</color>

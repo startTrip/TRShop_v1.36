@@ -2,20 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+              android:background="@color/address_bg"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/other_title"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
+        android:gravity="center_vertical"
         android:text="标题"
-        android:textColor="@color/black_text_color"
-        android:textSize="17sp" />
+        android:textColor="@color/text_color"
+        android:textSize="15sp" />
 
     <cn.lightsky.infiniteindicator.InfiniteIndicatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/indicator_sale_circle"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="126dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         app:indicator_type="indicator_default" />
 </LinearLayout>

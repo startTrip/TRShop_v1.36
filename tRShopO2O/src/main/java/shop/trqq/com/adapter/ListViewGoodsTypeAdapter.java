@@ -49,12 +49,7 @@ public class ListViewGoodsTypeAdapter extends CommonAdapter<GoodClassBean> {
                 R.layout.fragment_pro_type);
         YkLog.i(TAG, "第三级分类列表适配器构造方法");
         gson = new Gson();
-        /*
-		 * json=AppConfig.getSharedPreferences(mContext).getString("typeList",
-		 * ""); try { typeList = gson.fromJson(json, new
-		 * TypeToken<List<GoodClassBean>>() { }.getType()); } catch (Exception
-		 * e) { // TODO Auto-generated catch block e.printStackTrace(); }
-		 */
+
     }
 
     // String[] 转 ArrayList<String>

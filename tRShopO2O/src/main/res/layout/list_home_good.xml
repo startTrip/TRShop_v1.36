@@ -2,6 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+              android:background="@color/address_bg"
+              android:paddingTop="10dp"
     android:orientation="vertical">
 
     <TextView
@@ -15,12 +17,14 @@
 
     <shop.trqq.com.widget.MyGridView
         android:id="@+id/home_goods_GridView"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:horizontalSpacing="6dp"
+        android:horizontalSpacing="10dp"
         android:numColumns="2"
         android:scrollbars="none"
-        android:verticalSpacing="6dp" />
+        android:verticalSpacing="10dp" />
 
 </LinearLayout>

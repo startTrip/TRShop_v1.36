@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/header_relativelayout"
     android:layout_width="match_parent"
-    android:layout_height="45dip"
+    android:layout_height="45dp"
     android:background="@color/pink_bg_color"
     android:focusable="true"
     android:focusableInTouchMode="true"
@@ -102,6 +102,20 @@
             android:textSize="18sp"
             android:visibility="gone" />
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/title_back"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
+        android:clickable="true"
+        android:gravity="center"
+        android:onClick="onClick"
+        android:padding="5dp"
+        android:scaleType="center"
+        android:src="@mipmap/ic_back_title"
+        android:visibility="gone"
+        />
 
     <ProgressBar
         android:id="@+id/head_progressBar"

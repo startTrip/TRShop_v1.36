@@ -179,6 +179,7 @@ public class Fragment_Home extends Fragment implements OnClickListener {
     }
 
     private void initViews() {
+
         listViewHomeAdapter = new ListViewHomeAdapter(mContext, mHandler, true);
         footView = inflater.inflate(R.layout.item_load_more, null);
         mLoadMoreButton = (Button) footView.findViewById(R.id.loadMore_button);
@@ -191,6 +192,7 @@ public class Fragment_Home extends Fragment implements OnClickListener {
         mHomePullToRefreshListView.setAdapter(listViewHomeAdapter);
         progressActivity.showLoading();
         loadOnlineInformationData();
+
         mHomePullToRefreshListView
                 .setOnRefreshListener(new OnRefreshListener<ListView>() {
                     @Override
@@ -220,7 +222,6 @@ public class Fragment_Home extends Fragment implements OnClickListener {
     public void loadData() {
         mHomePullToRefreshListView.setRefreshing(false);
     }
-
 
 
     /**
@@ -342,7 +343,7 @@ public class Fragment_Home extends Fragment implements OnClickListener {
                     other_goods.setTitle(title);
                     other_goods.setItem(goodList);
                     other.setOther2(other_goods);
-                    homeDataList.add(2, other);
+                    homeDataList.add(1, other);
                     //homeDataList.add(other);
                     listViewHomeAdapter.setData(homeDataList);
                     listViewHomeAdapter.notifyDataSetChanged();
@@ -424,7 +425,7 @@ public class Fragment_Home extends Fragment implements OnClickListener {
                     other_goods.setTitle(title);
                     other_goods.setItem(goodList);
                     other.setOther(other_goods);
-                    homeDataList.add(2, other);
+                    homeDataList.add(1, other);
                     //homeDataList.add(other);
                     listViewHomeAdapter.setData(homeDataList);
                     listViewHomeAdapter.notifyDataSetChanged();
@@ -474,8 +475,8 @@ public class Fragment_Home extends Fragment implements OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
 
-            case R.id.scanning:
-            case R.id.search_content:
+            case R.id.home_search:
+                case R.id.search_content:
                 // Ìø×ªËÑË÷Activity
                 UIHelper.showSearch(mContext);
                 break;

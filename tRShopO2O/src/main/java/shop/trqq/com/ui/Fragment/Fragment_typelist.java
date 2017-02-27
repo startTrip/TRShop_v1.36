@@ -74,6 +74,7 @@ public class Fragment_typelist extends ListFragment {
     }
 
     private void loadOnlineTYPEListData(String gc_id) {
+
         RequestParams requestParams = new RequestParams();
         String uri = HttpUtil.URL_GOODSCLASS + "&gc_id=" + gc_id;
         HttpUtil.get(uri, requestParams, new AsyncHttpResponseHandler() {

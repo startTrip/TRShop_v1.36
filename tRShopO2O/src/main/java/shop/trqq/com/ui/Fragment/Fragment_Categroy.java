@@ -39,7 +39,7 @@ import shop.trqq.com.ui.Base.UIHelper;
 import shop.trqq.com.util.HttpUtil;
 import shop.trqq.com.util.ToastUtils;
 
-public class Fragment_Categroy extends Fragment {
+public class Fragment_Categroy extends Fragment implements OnClickListener {
     private View rootView;// 缓存Fragment view
     private Context mContext;
     private String toolsList[];
@@ -57,10 +57,9 @@ public class Fragment_Categroy extends Fragment {
     // 加载进度
     private ProgressActivity progressActivity;
     // 标题栏标题
-    private TextView mHeadTitleTextView;
-    private EditText mHeadEditText;
-    private ImageView mHeadRightImg;
-    private LinearLayout mRightLayout;
+    private ImageView mScanView;
+    private EditText mEt_Search;
+    private ImageView mIv_Search;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -93,27 +92,16 @@ public class Fragment_Categroy extends Fragment {
      * 初始化标题栏视图
      */
     private void initTitleBarView() {
-        mHeadRightImg = (ImageView) rootView
-                .findViewById(R.id.head_right_imageView);
-        // mHeadTitleTextView = (TextView)
-        // rootView.findViewById(R.id.head_title_textView);
-        mRightLayout = (LinearLayout) rootView
-                .findViewById(R.id.head_right_img_linearLayout);
-        mHeadEditText = (EditText) rootView.findViewById(R.id.head_search_edit);
 
-        mHeadEditText.setVisibility(View.VISIBLE);
-        mHeadRightImg.setImageResource(R.drawable.barcode_normal);
-        // mHeadRightImg.setVisibility(View.VISIBLE);
-        mRightLayout.setVisibility(View.VISIBLE);
-        mHeadEditText.setFocusable(false);
-        mHeadEditText.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                UIHelper.showSearch(mContext);
-            }
-        });
-        mHeadRightImg.setOnClickListener(new OnClickListener() {
+        mScanView =(ImageView) rootView.findViewById(R.id.scanning);
+        mEt_Search = (EditText) rootView.findViewById(R.id.search_content);
+        mIv_Search = (ImageView)rootView.findViewById(R.id.home_search);
+        mEt_Search.setFocusable(false);
+        // 搜索的监听
+        mEt_Search.setOnClickListener(this);
+        mIv_Search.setOnClickListener(this);
+
+        mScanView.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -122,8 +110,7 @@ public class Fragment_Categroy extends Fragment {
                 startActivityForResult(openCameraIntent, 0);
             }
         });
-        LinearLayout tLinearLayout=(LinearLayout) rootView
-                .findViewById(R.id.header_relativelayout);
+
 //        SystemBarHelper.immersiveStatusBar(getActivity(),0);
 //        SystemBarHelper.setHeightAndPadding(getActivity(), tLinearLayout);
     }
@@ -229,6 +216,7 @@ public class Fragment_Categroy extends Fragment {
     private View.OnClickListener toolsItemListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+
             shop_pager.setCurrentItem(v.getId());
 
         }
@@ -314,13 +302,12 @@ public class Fragment_Categroy extends Fragment {
     private void changeTextColor(int id) {
         for (int i = 0; i < toolsTextViews.length; i++) {
             if (i != id) {
-                toolsTextViews[i]
-                        .setBackgroundResource(android.R.color.transparent);
-                toolsTextViews[i].setTextColor(0xff000000);
+                toolsTextViews[i].setBackgroundResource(android.R.color.white);
+                toolsTextViews[i].setTextColor(getResources().getColor(R.color.text_color));
             }
         }
-        toolsTextViews[id].setBackgroundResource(android.R.color.white);
-        toolsTextViews[id].setTextColor(0xffff5d5e);
+        toolsTextViews[id].setBackgroundResource(R.color.address_bg);
+        toolsTextViews[id].setTextColor(getResources().getColor(R.color.edit_press));
     }
 
     /**
@@ -364,5 +351,21 @@ public class Fragment_Categroy extends Fragment {
      */
     private int getViewheight(View view) {
         return view.getBottom() - view.getTop();
+    }
+
+    // 点击的监听事件
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+
+            case R.id.scanning:
+            case R.id.search_content:
+                // 跳转搜索Activity
+                UIHelper.showSearch(mContext);
+                break;
+            case R.id.search_voice:
+
+                break;
+        }
     }
 }

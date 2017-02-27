@@ -4,20 +4,24 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/item_title_bar" />
+    <include layout="@layout/layout_actionbar_search" />
     <LinearLayout
         android:id="@+id/search_history"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:orientation="vertical">
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/medium_text_size"
+        android:textSize="@dimen/micro_text_size"
         android:background="@color/white"
+        android:textColor="@color/text_color"
         android:padding="10dp"
         android:text="搜索历史"/>
-    <co.lujun.androidtagview.TagContainerLayout xmlns:AndroidTagView="http://schemas.android.com/apk/res-auto"
+
+    <co.lujun.androidtagview.TagContainerLayout
+        xmlns:AndroidTagView="http://schemas.android.com/apk/res-auto"
         android:id="@+id/tagcontainerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -49,11 +53,13 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/medium_text_size"
+            android:textSize="@dimen/micro_text_size"
             android:padding="10dp"
-            android:text="热门搜索"/>
+            android:text="热门搜索"
+            android:textColor="@color/text_color"
+            />
         <!-- xmlns:ptr="http://schemas.android.com/apk/res-auto" -->
         <co.lujun.androidtagview.TagContainerLayout xmlns:AndroidTagView="http://schemas.android.com/apk/res-auto"
             android:id="@+id/search_layout"
@@ -71,20 +77,30 @@
             AndroidTagView:tag_theme="random"
             AndroidTagView:vertical_interval="10dp" />
         </LinearLayout>
-        <TextView
+
+        <LinearLayout
             android:id="@+id/search_voice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
             android:layout_alignParentBottom="true"
-            android:background="@color/gray_bg_color"
-            android:padding="10dp"
+            android:layout_centerHorizontal="true"
+            android:background="@color/address_bg"
             android:gravity="center"
-            android:layout_marginBottom="10dp"
-            android:drawablePadding="10dp"
-            android:drawableLeft="@drawable/microphone"
-            android:text="点击 说出你想要的宝贝"
-            />
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@mipmap/yuyin_voice_searchbar_normal"
+                android:drawablePadding="10dp"
+                android:gravity="center"
+                android:padding="10dp"
+                android:textSize="12sp"
+                android:textColor="@color/text_color"
+                android:text="点击 说出你想要的宝贝"
+                />
+
+        </LinearLayout>
         <!--
              <RelativeLayout
             android:layout_width="match_parent"

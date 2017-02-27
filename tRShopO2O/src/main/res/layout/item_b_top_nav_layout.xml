@@ -2,25 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/lottery_list_selector_disabled_holo_light"
+    android:background="@drawable/selector_classify_bg"
     android:orientation="vertical">
+
+   <View
+       android:layout_width="match_parent"
+       android:layout_height="0.5dp"
+       android:background="@color/divideline"/>
 
     <TextView
         android:id="@+id/text"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
         android:gravity="center"
-        android:paddingBottom="15dp"
-        android:paddingTop="15dp"
-        android:textColor="@android:color/black"
+        android:textColor="@color/text_color"
         android:textSize="@dimen/text_mid_size" />
-
-    <ImageView
-        android:id="@+id/line"
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:background="@color/gray_line_color"
-        android:contentDescription="@null"
-        android:visibility="visible" />
 
 </LinearLayout>

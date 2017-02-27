@@ -52,7 +52,8 @@ public class GoCartGoods {
          * goods_num : 1
          * goods_image : 126_05270745977349933.jpg
          * bl_id : 0
-         * goods_image_url : http://shop.trqq.com/data/upload/shop/store/goods/126/126_05270745977349933_240.jpg
+         * goods_image_url : http://shop.trqq.
+         * /data/upload/shop/store/goods/126/126_05270745977349933_240.jpg
          * goods_sum : 8.30
          */
 

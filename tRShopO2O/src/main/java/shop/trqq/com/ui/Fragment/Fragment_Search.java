@@ -71,7 +71,7 @@ public class Fragment_Search extends Fragment {
     private TagContainerLayout mTagContainerLayout,search_layout;
     private LinearLayout search_history;
     List<String> list1;
-    private TextView search_voice;
+    private LinearLayout search_voice;
     // ”Ô“ÙÃ˝–¥∂‘œÛ
     private SpeechRecognizer mIat;
     // ”Ô“ÙÃ˝–¥UI
@@ -100,7 +100,7 @@ public class Fragment_Search extends Fragment {
                 .findViewById(R.id.tagcontainerLayout);
         search_layout= (TagContainerLayout) rootView
                 .findViewById(R.id.search_layout);
-        search_voice= (TextView) rootView
+        search_voice= (LinearLayout) rootView
                 .findViewById(R.id.search_voice);
         search_history= (LinearLayout) rootView
                 .findViewById(R.id.search_history);
@@ -189,15 +189,13 @@ public class Fragment_Search extends Fragment {
      */
     private void initTitleBarView() {
         mHeadRightText = (TextView) rootView
-                .findViewById(R.id.head_right_textView);
-        mHeadEditText = (EditText) rootView.findViewById(R.id.head_search_edit);
-        mHeadEditText.setVisibility(View.VISIBLE);
-        mHeadRightText.setText("À—À˜");
-        mHeadRightText.setVisibility(View.VISIBLE);
+                .findViewById(R.id.tv_search);
+        mHeadEditText = (EditText) rootView.findViewById(R.id.search_content);
+
         mHeadRightText.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
+
                 String str = mHeadEditText.getText().toString();
                 for (int i = 0; i < list1.size(); i++) {
                     if (list1.get(i).equals(str)) {
@@ -223,8 +221,7 @@ public class Fragment_Search extends Fragment {
                         "", "", "");
             }
         });
-        LinearLayout tLinearLayout=(LinearLayout) rootView
-                .findViewById(R.id.header_relativelayout);
+
 //        SystemBarHelper.immersiveStatusBar(getActivity(),0);
 //        SystemBarHelper.setHeightAndPadding(getActivity(), tLinearLayout);
     }
